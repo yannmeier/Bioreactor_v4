@@ -25,8 +25,8 @@ There are already a few external extra modules:
 - gas flux and mix control with analogic valves, also works as a stand alone (in development phase)$
 
 References:
-https://www.arduino.cc/en/Main/ArduinoBoardLeonardo
-https://github.com/greiman/NilRTOS-Arduino
+-https://www.arduino.cc/en/Main/ArduinoBoardLeonardo
+-https://github.com/greiman/NilRTOS-Arduino
 
 #Mechanics
 
@@ -38,6 +38,7 @@ In parallel to the development of the version 4 of the Bioreactor, a version 5, 
 more powerful SAMD21 (Cortex M0+ ARM) MCU and FreeRTOS is currently being studied.
 
 References:
-https://www.arduino.cc/en/Main/ArduinoBoardZero
-http://www.freertos.org/Atmel_SAMD20_RTOS.html
+-https://www.arduino.cc/en/Main/ArduinoBoardZero
+-http://www.freertos.org/Atmel_SAMD20_RTOS.html
+-https://www.kickstarter.com/projects/rabidprototypes/neutrino-the-tiny-32-bit-arduino-zero-compatible/updates
 
