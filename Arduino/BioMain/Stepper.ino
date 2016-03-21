@@ -57,26 +57,27 @@ void executeStep(uint16_t numberSteps, boolean forward, byte port1, byte port2) 
 
     switch (counter % 4) {
     case 0:
-      //This is RED
+      //This is RED & BLUE
       digitalWrite(port1, LOW);
       digitalWrite(port2,LOW);
       break;
-    case 2:   // 1 or 2
+    case 1:   // 1 or 2
       //This is BLUE
       digitalWrite(port1, LOW);
       digitalWrite(port2,HIGH);
       break;
-    case 3:   // 2 or 3
+    case 2:   // 2 or 3
       //This is Black
       digitalWrite(port1, HIGH);
       digitalWrite(port2,HIGH);
       break;
-    case 1:   // 3 or 1
+    case 3:   // 3 or 1
       //This is Green
       digitalWrite(port1, HIGH);
       digitalWrite(port2,LOW);
       break;
     }
+    //    nilThdSleepMilliseconds(500);
     nilThdSleepMilliseconds(24-(getParameter(PARAM_STEPPER_SPEED)%22));
   } 
 

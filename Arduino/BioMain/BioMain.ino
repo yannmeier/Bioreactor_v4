@@ -24,13 +24,11 @@
 
 // THIS SHOULD BE THE ONLY PARAMETER THAT CHANGES !!!!
 
-//#define TYPE_ETHERNET_GENERAL 1   // card that allows to control the pH, motor, ...
 #define TYPE_ZIGBEE_GENERAL     1   // card to control the basic functions: pH, motor, temperature
 //#define TYPE_ZIGBEE_GAS      1  // card to control the gas
-//#define TYPE_PRECISE_PID    1
-
-//#define TYPE_OLD_PIN_CONFIG     1   //define this if you use the card with the old pin configuration
-//(old=until integratedBertha v1.0)
+//#define TYPE_PH
+//#define TYPE_GAS
+//#define TYPE_LCD
 
 /******************
  * OPERATION MODE
@@ -42,38 +40,18 @@
 /********************
  * PIN&ADRESS MAPPING
  *********************/
-#ifdef TYPE_ETHERNET_GENERAL
-#define PWM1    6//D6 OC4D
-#define PWM2    8//D8 PCINT4
-#define PWM3    9//D9 OC4B, OC1A, PCINT5
-#define PWM4    5//D5 OC4A  
-#define PWM5    11//D11 OC0A, OC1C, PCINT7
-#define IO1     21//A3
-#define IO2     20//A2
-#define IO3     19//A1
-#define IO4     22//A4
-#define IO5     18//A0
-#else 
-#define PWM1    6//D6 OC4D
-#define PWM3    9//D9 OC4B, OC1A, PCINT5
-#define PWM4    5//D5 OC4A  
-#define PWM5    11//D11 OC0A, OC1C, PCINT7
-#define IO1     21//A3
-#define IO2     20//A2
-#define IO3     19//A1
-#define IO4     22//A4
-#ifdef TYPE_OLD_PIN_CONFIG
-#define PWM2    8//D8 A8 PCINT4
-#define IO5     18//D18 A0
-#else
-#define PWM2    10//D10 A10
-#define IO5     8 //D8 A8
-#endif
-#endif
-
 //I2C addresses 
 #define I2C_FLUX          106//B01101000
 #define I2C_PH            104//B01101000
+
+//Pin definition
+#define D4   4  //temp probe
+#define D6   6  //temp smd
+#define D13  13 //blink
+#define D18  18 //stepper
+#define D19  19 //stepper
+#define D20  20 //food in
+#define D21  21 //food out
 
 
 /**************************************
@@ -81,33 +59,20 @@
  **************************************/
 
 #ifdef TYPE_ZIGBEE_GENERAL
-#define MODEL_ZIGBEE       1
-//#define PH_CTRL_OLD        1
-#define PH_CTRL_I2C        1
-//#define PH_STRUCT          1
-#define PH_TABLE           1
-#define PH_CTRL            1
-  #define TAP_BASE           PWM4
-  #define TAP_ACID           IO4
+//#define MODEL_ZIGBEE       1
 #define THR_STEPPER        1
-#define STEPPER            {IO5,PWM5}     
-#define FOOD_CTRL          1   // food control use direct relay connected to one output using relay board
-#define FOOD_IN            PWM1
-#define FOOD_OUT           IO1
-#define WEIGHT             11 //integrated weight sensor
+#define STEPPER            {D18,D19}     
+//#define FOOD_CTRL          1   // food control use direct relay connected to one output using relay board
+  #define FOOD_IN            D20
+  #define FOOD_OUT           D21
+  #define WEIGHT             11 //integrated weight sensor
 #define TEMPERATURE_CTRL   1
-#define TEMP_LIQ           23
-#ifdef TYPE_OLD_PIN_CONFIG
-  #define TEMP_PLATE       10 //D10 A10
-#else
-  #define TEMP_PLATE       18 //D18 A0
-#endif
-#define TEMP_PID           7
-#define THR_LINEAR_LOGS    1
+  #define TEMP_LIQ         D4
+  #define TEMP_PLATE       D6 
+//#define TEMP_PID           7
+//#define THR_LINEAR_LOGS    1
 #define THR_MONITORING     1  // starts the blinking led and the watch dog counter 
-#define MONITORING_LED     13
-#define MASTER_PIN         IO2
-#define MASTER_PWM         PWM2
+#define MONITORING_LED     D13
 #endif
 
 #ifdef TYPE_ZIGBEE_GAS
@@ -118,36 +83,6 @@
 #define MONITORING_LED     13
 //#define MASTER_PIN         IO4
 //#define MASTER_PWM         PWM4
-#endif
-
-#ifdef TYPE_PRECISE_PID
-  #define TEMPERATURE_CTRL   1
-  #define TEMP_LIQ           23 //D23 A5
-  #define TEMP_PLATE         18 //D18 A0
-  #define TEMP_SAMPLE        20 //D20 A2
-  #define TEMP_PID_HOT       7
-  #define TEMP_PID_COLD      8
-  #define THR_MONITORING     1  // starts the blinking led and the watch dog counter 
-  #define MONITORING_LED     13
-#endif
-
-#ifdef TYPE_ETHERNET_GENERAL
-#define PH_CTRL           1
-#define TAP_BASE          PWM4
-#define TAP_ACID          IO4
-#define MODEL_ETHERNET    1
-#define FOOD_CTRL         1
-#define I2C_RELAY_FOOD    32 //B00100000
-//#define I2C_RELAY_TAP     36 //B00100100
-#define WEIGHT            1 //Analog port 1
-#define TEMPERATURE_CTRL  1
-#define TEMP_LIQ          IO1  
-#define TEMP_PLATE        IO2    
-//#define TEMP_PID          PWM4 CONFLICT WITH PH!!!
-#define TEMP_PID          PWM3
-#define THR_LINEAR_LOGS   1
-#define MONITORING_LED    13
-#define THR_MONITORING    1
 #endif
 
 #ifdef MODE_CALIBRATE
@@ -381,11 +316,7 @@ void setup() {
   Serial.begin(9600);
   delay(1000);
   setupParameters();
-  
-  pinMode(PWM4,OUTPUT);
-  digitalWrite(PWM4,LOW);
-  pinMode(IO4,OUTPUT);
-  digitalWrite(IO4,LOW);
+ 
   
   
 #ifdef THR_LINEAR_LOGS

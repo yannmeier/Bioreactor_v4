@@ -72,11 +72,7 @@ NIL_THREADS_TABLE_ENTRY(NULL, ThreadTap, NULL, waThreadTap, sizeof(waThreadTap))
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadTemp, NULL, waThreadTemp, sizeof(waThreadTemp))  
 #ifdef TEMP_PID                      
 NIL_THREADS_TABLE_ENTRY(NULL, Thread_PID, NULL, waThread_PID, sizeof(waThread_PID))  
-#endif   
-#ifdef TEMP_PID_COLD     
-/*NIL_THREADS_TABLE_ENTRY(NULL, Thread_Stabilized, NULL, waThread_Stabilized, sizeof(waThread_Stabilized))*/
-NIL_THREADS_TABLE_ENTRY(NULL, Thread_HOT_N_COLD, NULL, waThread_HOT_N_COLD, sizeof(waThread_HOT_N_COLD))  
-#endif    
+#endif       
 #endif
 
 #ifdef FOOD_CTRL
@@ -93,10 +89,6 @@ NIL_THREADS_TABLE_ENTRY(NULL, ThreadWire, NULL, waThreadWire, sizeof(waThreadWir
 
 #ifdef THR_ETHERNET
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadEthernet, NULL, waThreadEthernet, sizeof(waThreadEthernet))
-#endif
-
-#ifdef PH_CTRL_OLD
-NIL_THREADS_TABLE_ENTRY(NULL, ThreadPH, NULL, waThreadPH, sizeof(waThreadPH))
 #endif
 
 #ifdef THR_MONITORING

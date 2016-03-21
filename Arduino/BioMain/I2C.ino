@@ -58,23 +58,8 @@ NIL_THREAD(ThreadWire, arg) {
     #endif
   };
 #endif
-
-#ifdef PH_CTRL_I2C
-  #ifdef PH_STRUCT
-    MypH ph;
-    Mytap tap;
-  #endif
-  
-  #ifdef PH_TABLE
-    //would replace the structures by simple arrays
-    //NB: 'value' does not need to be a float at any time
-    static int pH[5]={0,0,671,1038,0}; 
-    static unsigned long tap[3]={millis(),millis(),TAP_STATE_CLOSED};  //check if necessary to set it as unsigned  
-  #endif
-  
-  pH_init();                      //init structures and digital pins
+                    
   nilThdSleepMilliseconds(10000); //wait for probe warm-up
-#endif
 
   while(true) {
 
@@ -103,17 +88,7 @@ NIL_THREAD(ThreadWire, arg) {
 
     /*********
      *  pH
-     *********/
-    #ifdef  PH_CTRL_I2C
-       #ifdef PH_STRUCT
-         pH_state_machine(&ph,&tap);   
-       #endif
-       
-       #ifdef PH_TABLE
-         pH_state_machine(pH,tap); 
-       #endif
-    #endif
-    
+     *********/    
 
     #ifdef GAS_CTRL
       getAnemometer(gas_wire_write);
