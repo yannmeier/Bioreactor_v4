@@ -1,4 +1,11 @@
-#ifdef FOOD_CTRL
+#if defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
+
+#include "HX711.h"
+
+//to be redefined
+#define calibration_factor -7050.0 //This value is obtained using the SparkFun_HX711_Calibration sketch
+HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
+
 
 #define WEIGHT_STATUS_NORMAL    0
 #define WEIGHT_STATUS_WAITING   1
@@ -8,13 +15,8 @@
 #define WEIGHT_STATUS_ERROR     7
 
 //#define EVENT_LOGGING 
-//#define WEIGHT_DEBUG 1 //define this if you want to display the measured input from weight sensor
+#define WEIGHT_DEBUG 1 //define this if you want to display the measured input from weight sensor
 //#define EXTERNAL_WEIGHT_DEBUG
-
-#ifdef I2C_RELAY_FOOD
-int cycleCounter=0;
-#define PUMP_SLOWDOWN_RATIO          10  // this would open for 5s and then wait the ratio
-#endif
 
 #ifdef WEIGHT_DEBUG
 NIL_WORKING_AREA(waThreadWeight, 64);    // minimum of 32 !
@@ -33,9 +35,10 @@ NIL_THREAD(ThreadWeight, arg) {
     digitalWrite(MASTER_PIN,LOW);
   #endif
   
-  //read or get back the last value ?
-  //int weight = (int)((float)getParameter(PARAM_WEIGHT_FACTOR)/(float)1000.0*(float)(analogRead(WEIGHT))-(float)getParameter(PARAM_WEIGHT_OFFSET));
-  int weight = getParameter(PARAM_WEIGHT);
+  scale.set_scale(calibration_factor); //This value is obtained by using the SparkFun_HX711_Calibration sketch, TO BE CHANGED
+  scale.tare();	//Assuming there is no weight on the scale at start up, reset the scale to 0
+  
+  int weight = int(getParameter(PARAM_WEIGHT));
   byte weight_status=0;
   unsigned long tsinceLastEvent=0; // when was the last food cycle
   unsigned long lastCycleMillis=millis(); // when was the last food cycle
@@ -53,7 +56,6 @@ NIL_THREAD(ThreadWeight, arg) {
   all_off();   
         
   //get to the last log status, in the worst case just 18 seconds lag with current state
-  //(1log every 10 seconds and watchdog with 8 seconds to reset)
   if (getParameter(PARAM_WEIGHT_STATUS)!=-1) {
     weight_status=(((uint16_t)getParameter(PARAM_WEIGHT_STATUS)) >> 13);
     tsinceLastEvent=(((uint16_t)getParameter(PARAM_WEIGHT_STATUS))&0b0001111111111111)*60000;
@@ -71,7 +73,7 @@ NIL_THREAD(ThreadWeight, arg) {
     #endif
     
     //moving average calibrated weight (parameters 'P' and 'Q' for factor and offset)
-    weight = (int)((float)0.95*weight+0.05*((float)getParameter(PARAM_WEIGHT_FACTOR)/(float)1000.0*analogRead(WEIGHT)-(float)getParameter(PARAM_WEIGHT_OFFSET)));
+    weight = (int)((float)0.8*weight+0.2*/*((float)getParameter(PARAM_WEIGHT_FACTOR)/(float)1000.0*/45.3*scale.get_units()/*-(float)getParameter(PARAM_WEIGHT_OFFSET))*/);
     
     #ifdef EXTERNAL_WEIGHT_DEBUG
       wireWrite(110,0b10010000);
@@ -242,17 +244,5 @@ void all_off(){
     digitalWrite(MASTER_PIN,LOW);
   #endif
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 

@@ -52,6 +52,8 @@
 #define D19  19 //stepper
 #define D20  20 //food in
 #define D21  21 //food out
+#define D22  22
+#define D23  23
 
 
 /**************************************
@@ -65,7 +67,8 @@
 //#define FOOD_CTRL          1   // food control use direct relay connected to one output using relay board
   #define FOOD_IN            D20
   #define FOOD_OUT           D21
-  #define WEIGHT             11 //integrated weight sensor
+  #define WEIGHT_DATA        D22
+  #define WEIGHT_CLK         D23 //integrated weight sensor
 #define TEMPERATURE_CTRL   1
   #define TEMP_LIQ         D4
   #define TEMP_PLATE       D6 
@@ -187,7 +190,7 @@
 
 //*************************************
 
-#ifdef FOOD_CTRL       
+#if defined(WEIGHT_DATA) && defined(WEIGHT_CLK) 
 #define PARAM_WEIGHT_FACTOR          15  // Weight calibration: conversion factor between digital unit and milligrams (weight=FACTOR*dig_unit)
 #define PARAM_WEIGHT_OFFSET          16  // Weight calibration: digital offset value when bioreactor is empty
 
@@ -312,13 +315,11 @@ uint16_t autoreboot=0;
  *********/
 
 void setup() {
-  delay(2000);
+  delay(1000);
   Serial.begin(9600);
   delay(1000);
   setupParameters();
- 
-  
-  
+    
 #ifdef THR_LINEAR_LOGS
   setupMemory();
   recoverLastEntryN();

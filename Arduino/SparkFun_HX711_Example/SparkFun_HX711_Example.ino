@@ -27,8 +27,8 @@
 
 #define calibration_factor -7050.0 //This value is obtained using the SparkFun_HX711_Calibration sketch
 
-#define DOUT  3
-#define CLK  2
+#define DOUT 22
+#define CLK  23
 
 HX711 scale(DOUT, CLK);
 

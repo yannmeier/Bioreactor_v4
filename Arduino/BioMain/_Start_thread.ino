@@ -75,7 +75,7 @@ NIL_THREADS_TABLE_ENTRY(NULL, Thread_PID, NULL, waThread_PID, sizeof(waThread_PI
 #endif       
 #endif
 
-#ifdef FOOD_CTRL
+#if defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadWeight, NULL, waThreadWeight, sizeof(waThreadWeight))
 #endif
 
