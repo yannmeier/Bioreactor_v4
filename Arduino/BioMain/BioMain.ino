@@ -1,31 +1,22 @@
 /**************
  * LIBRAIRIES
  **************/
-
 //MultiThread
 #include <NilRTOS.h>
-
 //Lib to access memory with SPI
 #include <SPI.h>
-
-// Library that allows to start the watch dog allowing automatic reboot in case of crash
-// The lowest priority thread should take care of the watch dog
+// Library that allows to start the watch dog
 #include <avr/wdt.h>
-
 // http://www.arduino.cc/playground/Code/Time
 // We need to deal with EPOCH
 #include <Time.h>
 
-
-
 /******************
  * DEFINE CARD TYPE
  ******************/
+//ONLY PARAMETER THAT CHANGES 
 
-// THIS SHOULD BE THE ONLY PARAMETER THAT CHANGES !!!!
-
-#define TYPE_ZIGBEE_GENERAL     1   // card to control the basic functions: pH, motor, temperature
-//#define TYPE_ZIGBEE_GAS      1  // card to control the gas
+#define TYPE_MAIN     1   // card to control the basic functions: food, motor, temperature
 //#define TYPE_PH
 //#define TYPE_GAS
 //#define TYPE_LCD
@@ -41,51 +32,52 @@
  * PIN&ADRESS MAPPING
  *********************/
 //I2C addresses 
-#define I2C_FLUX          106//B01101000
-#define I2C_PH            104//B01101000
+#define I2C_FLUX          106//B01101000 --> to be redefined (AT32u4 slave)
+#define I2C_PH            104//B01101000 --> to be redefined
 
 //Pin definition
 #define D4   4  //temp probe
 #define D6   6  //temp smd
+#define D10  10 //memory select
+#define D11  11 //slave at32u4 for LCD
+#define D12  12 //temp control
 #define D13  13 //blink
 #define D18  18 //stepper
 #define D19  19 //stepper
 #define D20  20 //food in
 #define D21  21 //food out
-#define D22  22
-#define D23  23
+#define D22  22 //weight data
+#define D23  23 //weight clock
 
 
 /**************************************
  * ACTIVE THREAD DEPENDING CARD TYPE
  **************************************/
-
-#ifdef TYPE_ZIGBEE_GENERAL
-//#define MODEL_ZIGBEE       1
-#define THR_STEPPER        1
+#ifdef TYPE_MAIN
+//#define MODEL_ZIGBEE       1       //change to LoRA
 #define STEPPER            {D18,D19}     
-//#define FOOD_CTRL          1   // food control use direct relay connected to one output using relay board
-  #define FOOD_IN            D20
-  #define FOOD_OUT           D21
-  #define WEIGHT_DATA        D22
-  #define WEIGHT_CLK         D23 //integrated weight sensor
+#define FOOD_IN            D20
+#define FOOD_OUT           D21
+#define WEIGHT_DATA        D22
+#define WEIGHT_CLK         D23        //need to redefine the calibratiin parameters and process (see "HX711")
 #define TEMPERATURE_CTRL   1
   #define TEMP_LIQ         D4
-  #define TEMP_PLATE       D6 
-//#define TEMP_PID           7
-//#define THR_LINEAR_LOGS    1
-#define THR_MONITORING     1  // starts the blinking led and the watch dog counter 
-#define MONITORING_LED     D13
+  #define TEMP_PCB         D6 
+  #define TEMP_PID         D12
+#define THR_LINEAR_LOGS    1
+  #define FLASH_SELECT     D10       //to be used to protect / unprotect the memory write (see "Logger")
+#define THR_MONITORING     1  
+  #define MONITORING_LED   D13
+//#define  LCD_SLAVE         D11     //Define here if the LCD screen is used or not (SPI THD)
 #endif
 
-#ifdef TYPE_ZIGBEE_GAS
+
+#ifdef TYPE_GAS
 #define MODEL_ZIGBEE       1
 #define GAS_CTRL           1
 #define THR_LINEAR_LOGS 	1
 #define THR_MONITORING     1  // starts the blinking led and the watch dog counter
 #define MONITORING_LED     13
-//#define MASTER_PIN         IO4
-//#define MASTER_PWM         PWM4
 #endif
 
 #ifdef MODE_CALIBRATE
@@ -102,23 +94,11 @@
  * SERIAL, LOGGER AND DEBUGGER
  ************************/
 
-// #define EEPROM_DUMP   1   // Gives the menu allowing to dump the EEPROM
-
-#define THR_SERIAL        1
-
+//#define EEPROM_DUMP   1 //Gives the menu allowing to dump the EEPROM
+#define THR_SERIAL    1
 #ifdef MODEL_ZIGBEE
-#define THR_ZIGBEE      1 // communication process on Serial1
+  #define THR_ZIGBEE  1 // communication process on Serial1 --> change to LoRa
 #endif
-
-// NOT USED ANYMORE - USE Qualifier instead (directly from the menu)
-// #define CARD_ID1 0xFE   // card ID should be stored as a parameter as am int !!!!
-// #define CARD_ID2 0xAC
-
-
-//Define here if the LCD screen is used or not
-//#define I2C_LCD B00100111
-//WIRE_LCD_16_2 B00100111
-//WIRE_LCD_20_4 B00100110
 
 /*******************************
  * THREADS AND PARAMETERS PRESENT IN EACH CARD 
@@ -129,37 +109,6 @@
 // #define DEBUG_LOGS          1
 #endif
 
-
-#ifdef MODEL_ETHERNET
-//#define THR_ETHERNET        1
-// #define DEBUG_ETHERNET      1
-#endif
-
-
-/**********************
- * NETWORK PARAMETERS
- * // Enter a MAC address and IP address for the Arduino controller below.
- * // The IP address is reserved on the routher for this Arduino controller.
- * // CAUTION
- * // Each different boards should have a different IP in the range 172.17.0.100 - 172.17.0.200
- * // and a different MAC address
- ***********************/
-//#define IP {172, 17, 0 , 103}
-//#define MAC {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xAB}
-//#define IP {172, 17, 0 , 107}
-//#define MAC {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xAA}
-//#define IP {172, 17, 0 , 105}
-//#define MAC {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}
-//#define IP {172, 17, 0 ,101}                          //stepper
-//#define MAC {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}      //stepper
-//#define IP {172, 17, 0 ,103}                             
-//#define MAC {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEE}        
-#define IP {172, 17, 0 ,104}                          //bertha 104
-#define MAC {0xDE, 0xAD, 0xBE, 0xEF, CARD_ID1, CARD_ID2}      //bertha 104
-//#define IP {10, 0, 0 ,105}                          //pH
-//#define MAC {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}      //pH
-
-
 /*******************************
  * CARD DEFINITION (HARD CODED)
  *******************************/
@@ -169,7 +118,7 @@
 
 #ifdef     TEMPERATURE_CTRL
 #define PARAM_TEMP_LIQ             0   // temperature of the solution
-#define PARAM_TEMP_PLATE           1   // temperature of the heating plate
+#define PARAM_TEMP_PCB             1   // temperature of the heating plate
 #define PARAM_TARGET_LIQUID_TEMP   26  // target temperature of the liquid
 #define PARAM_TEMP_MAX             27  // maximal temperature of the plate
 #ifdef TEMP_SAMPLE
@@ -278,7 +227,6 @@
 /******************
  * FLAG DEFINITION
  ******************/
-
 #define PARAM_STATUS       25
 
 #define FLAG_STEPPER_CONTROL     0   // need to be set to 1 for control of engine
@@ -304,33 +252,28 @@
 /*********
  * Autoreboot parameters
  *********/
-#define AUTOREBOOT 36000 // we will reboot automatically every 1h ... bad trick to prevent some crash problems of ethernet ...
+#define AUTOREBOOT 36000 // we will reboot automatically every 1h ... bad trick to prevent some crash problems of ethernet --> chang that
 uint16_t autoreboot=0;
 // the delay may be prolongated if we received request on the ethernet
-
 
 
 /*********
  * SETUP
  *********/
-
 void setup() {
   delay(1000);
   Serial.begin(9600);
   delay(1000);
   setupParameters();
     
-#ifdef THR_LINEAR_LOGS
+  #ifdef THR_LINEAR_LOGS
   setupMemory();
   recoverLastEntryN();
   loadLastEntryToParameters();
-#endif
+  #endif
 
   setSafeConditions(false);
   nilSysBegin();
-
 }
 
-void loop() {
-
-}
+void loop() {}

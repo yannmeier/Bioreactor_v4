@@ -22,8 +22,8 @@
 
 #define EVENT_TEMP_LIQ_FAILED        50
 #define EVENT_TEMP_LIQ_RECOVER       51
-#define EVENT_TEMP_PLATE_FAILED      52
-#define EVENT_TEMP_PLATE_RECOVER     53
+#define EVENT_TEMP_PCB_FAILED      52
+#define EVENT_TEMP_PCB_RECOVER     53
 #define EVENT_TEMP_STEPPER_FAILED    54
 #define EVENT_TEMP_STEPPER_RECOVER   55
 #define EVENT_TEMP_SAMPLE_FAILED    54
@@ -46,7 +46,7 @@ void resetParameters() {
   
 #ifdef     TEMPERATURE_CTRL
   setAndSaveParameter(PARAM_TEMP_LIQ, ERROR_VALUE);
-  setAndSaveParameter(PARAM_TEMP_PLATE, ERROR_VALUE);
+  setAndSaveParameter(PARAM_TEMP_PCB, ERROR_VALUE);
   setAndSaveParameter(PARAM_TARGET_LIQUID_TEMP, 3000);
   setAndSaveParameter(PARAM_TEMP_MAX, 0);
   #ifdef TEMP_PID

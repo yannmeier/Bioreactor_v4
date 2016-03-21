@@ -40,8 +40,7 @@ void printIP(Print* output, uint8_t* tab, uint8_t s, byte format){
 }
 
 
-/*
-  SerialEvent occurs whenever a new data comes in the
+/* SerialEvent occurs whenever a new data comes in the
  hardware serial RX.  This routine is run between each
  time loop() runs, so using delay inside loop can delay
  response.  Multiple bytes of data may be available.
@@ -59,9 +58,6 @@ void printIP(Print* output, uint8_t* tab, uint8_t s, byte format){
  h : help
  l : show the log file
  */
-
-
-
 
 void printResult(char* data, Print* output) {
   boolean theEnd=false;
@@ -83,7 +79,7 @@ void printResult(char* data, Print* output) {
       printHelp(output);
     }
     else if (inChar=='i') { // show i2c (wire) information
-#if defined(GAS_CTRL) || defined(I2C_LCD) || defined(PH_CTRL) || defined(I2C_RELAY_FOOD)
+#if defined(GAS_CTRL) || defined(PH_CTRL)
       wireInfo(output); 
 #else  //not elsif !!
       noThread(output);

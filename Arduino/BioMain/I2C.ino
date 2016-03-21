@@ -1,20 +1,9 @@
-#if defined(GAS_CTRL) || defined(I2C_LCD) || defined(PH_CTRL) || defined(I2C_RELAY_FOOD) || defined(PH_CTRL_I2C)
+#if defined(GAS_CTRL) || defined(PH_CTRL) || defined(PH_CTRL_I2C)
 
 #include <Wire.h>
 /*
-   MCP23008 (DEFAULT RELAY):
- - B00100XXX - Start address(32)
- relay box
- - B00100100 - First relay boxPARAM_PH
- - B00100101 - Second relay box
- LCD display
- - B00100111 - 2 x 16 LCD display
- - B00100110 - 4 x 20 LCD display
- 8 OUTPUT EXTENSION
- - B00100010 - EXT_1 (34)
- - B00100011 - EXT_2 (35)
  FLUX
- - B1011 XXX R/W  (XXX is the user defined address and R/W the read/write byte)
+ - B1011 XXX R/W  (XXX is the user defined address and R/W the read/write byte) --> TBD
  PH METER
  - B????????
  */
@@ -22,9 +11,6 @@
 #define WIRE_MAX_DEVICES 5
 byte numberI2CDevices=0;
 byte wireDeviceID[WIRE_MAX_DEVICES];
-#ifdef I2C_RELAY_FOOD
-byte previousPumpRelayFlag=127;
-#endif
 
 NIL_WORKING_AREA(waThreadWire, 88); //min of 64 when pH present
 NIL_THREAD(ThreadWire, arg) {
@@ -34,8 +20,6 @@ NIL_THREAD(ThreadWire, arg) {
   byte aByte=0;
   byte* wireFlag32=&aByte;
   unsigned int wireEventStatus=0;
-  //boolean relayInitialized = false;
-  //TODO: PLUG IN / OUT CRASH THE SYSTEM !!! {
   Wire.begin();
 
 #ifdef I2C_LCD
@@ -67,24 +51,6 @@ NIL_THREAD(ThreadWire, arg) {
       wireUpdateList();
     }
     wireEventStatus++;
-
-    /*********
-     * RELAY
-     *********/
-    
-    #ifdef I2C_RELAY_FOOD
-         /*reads the status of the bioreactor. The four bits correspond to the 4 relays on the I2C relay card.
-         only the 2 last bits of these correspond to the filling/emptying pump, the others are not connected*/
-        if (previousPumpRelayFlag!=((getParameter(PARAM_STATUS)>>RELAY_PUMP_SHIFT) & 15)) { //15=0b00001111
-          previousPumpRelayFlag=((getParameter(PARAM_STATUS)>>RELAY_PUMP_SHIFT) & 15);
-          sendRelay(I2C_RELAY_FOOD,previousPumpRelayFlag, wireFlag32);
-        }
-    #endif
-
-
-    #ifdef I2C_LCD
-        updateLcd();
-    #endif
 
     /*********
      *  pH
@@ -245,7 +211,7 @@ boolean wireDeviceExists(byte id) {
   return false; 
 }
 
-
+/*
 void sendRelay(byte id, byte value, byte* flag) {
   if (wireDeviceExists(id)) {
     if (!wireFlagStatus(flag, id))
@@ -260,7 +226,7 @@ void sendRelay(byte id, byte value, byte* flag) {
   {
     clearWireFlag(flag, id);
   }
-}
+}*/ // to be removed
 
 
 // We will combine flags in a byte. Using pointer does not seems to improve

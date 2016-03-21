@@ -1,7 +1,6 @@
 #if defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
 
 #include "HX711.h"
-
 //to be redefined
 #define calibration_factor -7050.0 //This value is obtained using the SparkFun_HX711_Calibration sketch
 HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
@@ -15,7 +14,7 @@ HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
 #define WEIGHT_STATUS_ERROR     7
 
 //#define EVENT_LOGGING 
-#define WEIGHT_DEBUG 1 //define this if you want to display the measured input from weight sensor
+//#define WEIGHT_DEBUG 1 //define this if you want to display the measured input from weight sensor
 //#define EXTERNAL_WEIGHT_DEBUG
 
 #ifdef WEIGHT_DEBUG
@@ -29,14 +28,14 @@ NIL_THREAD(ThreadWeight, arg) {
   nilThdSleepMilliseconds(2000);
   
   //master pin is for communication with the Gas flux control board
-  #ifdef MASTER_PIN
+/*  #ifdef MASTER_PIN
     pinMode(MASTER_PIN,OUTPUT);
-    pinMode(MASTER_PWM,INPUT);
+    pinMode(MASTER_PWM,INPUT);    //to be changed by proper I2C communication
     digitalWrite(MASTER_PIN,LOW);
-  #endif
+  #endif */
   
   scale.set_scale(calibration_factor); //This value is obtained by using the SparkFun_HX711_Calibration sketch, TO BE CHANGED
-  scale.tare();	//Assuming there is no weight on the scale at start up, reset the scale to 0
+  //scale.tare();	//Assuming there is no weight on the scale at start up, reset the scale to 0
   
   int weight = int(getParameter(PARAM_WEIGHT));
   byte weight_status=0;
@@ -73,6 +72,9 @@ NIL_THREAD(ThreadWeight, arg) {
     #endif
     
     //moving average calibrated weight (parameters 'P' and 'Q' for factor and offset)
+    
+    //!\\ Need to reintroduce the calibration parameters //!\\
+    
     weight = (int)((float)0.8*weight+0.2*/*((float)getParameter(PARAM_WEIGHT_FACTOR)/(float)1000.0*/45.3*scale.get_units()/*-(float)getParameter(PARAM_WEIGHT_OFFSET))*/);
     
     #ifdef EXTERNAL_WEIGHT_DEBUG
@@ -132,9 +134,12 @@ NIL_THREAD(ThreadWeight, arg) {
       all_off();
       setParameterBit(PARAM_STATUS, FLAG_PH_CONTROL);        //pH      ON
       setParameterBit(PARAM_STATUS, FLAG_STEPPER_CONTROL);   //stepper ON
+      
+      /*
       #ifdef MASTER_PIN
-        digitalWrite(MASTER_PIN,HIGH);                   //gas control ON
-      #endif
+        digitalWrite(MASTER_PIN,HIGH);                   //gas control ON --> change for proper I2C
+      #endif */
+      
       //switching to Sedimentation phase
       if(( (uint16_t)(tsinceLastEvent/60000))>=getParameter(PARAM_MIN_FILLED_TIME)){
         weight_status=WEIGHT_STATUS_WAITING;
@@ -189,9 +194,12 @@ NIL_THREAD(ThreadWeight, arg) {
       all_off();
       setParameterBit(PARAM_STATUS, FLAG_RELAY_FILLING);     //filling  ON
       setParameterBit(PARAM_STATUS, FLAG_STEPPER_CONTROL);   //stepper  ON
+     
+     /* 
       #ifdef MASTER_PIN
-        digitalWrite(MASTER_PIN,HIGH);                       //gas ctrl ON
+        digitalWrite(MASTER_PIN,HIGH);                       //gas ctrl ON--> change for proper I2C
       #endif
+      */
      
       if (weight>=getParameter(PARAM_WEIGHT_MAX)) {
         weight_status=WEIGHT_STATUS_NORMAL;
@@ -209,8 +217,7 @@ NIL_THREAD(ThreadWeight, arg) {
     }
     
 
-    // There are 2 ways to control the food. Based on I2C relay or directly connected board with 2 relays   --> note that the I2C elays will be removed definitely on next version of the code
-    // If it is I2C, the process I2C will take care of it ... otherwise we need to take care of it here   
+    // Food control connected to the board via 2 pumps   
     #ifdef FOOD_IN 
       digitalWrite(FOOD_IN, getParameterBit(PARAM_STATUS, FLAG_RELAY_FILLING));
       delay(10);
@@ -221,12 +228,10 @@ NIL_THREAD(ThreadWeight, arg) {
       delay(10);
       //nilThdSleepMilliseconds(50);
     #endif
-
     tsinceLastEvent+=(millis()-lastCycleMillis);
     lastCycleMillis=millis();
   }
 }
-
 #endif
 
 
@@ -240,9 +245,11 @@ void all_off(){
   clearParameterBit(PARAM_STATUS, FLAG_PH_CONTROL);      //pH       OFF
   clearParameterBit(PARAM_STATUS, FLAG_RELAY_FILLING);   //filling  OFF
   clearParameterBit(PARAM_STATUS, FLAG_RELAY_EMPTYING);  //emptying ON
+  /*
   #ifdef MASTER_PIN
-    digitalWrite(MASTER_PIN,LOW);
+    digitalWrite(MASTER_PIN,LOW); --> change for proper I2C
   #endif
+  */
 }
 
 

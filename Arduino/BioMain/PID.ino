@@ -50,10 +50,10 @@ void pid_ctrl()
   }
   
   if((heatingRegOutput > exactPresentTime - heatingRegWindowStartTime) 
-    && (getParameter(PARAM_TEMP_PLATE)<getParameter(PARAM_TEMP_MAX))
-    && (getParameter(PARAM_TEMP_PLATE)<getParameter(PARAM_MAX_TEMPERATURE))
+    && (getParameter(PARAM_TEMP_PCB)<getParameter(PARAM_TEMP_MAX))
+    && (getParameter(PARAM_TEMP_PCB)<getParameter(PARAM_MAX_TEMPERATURE))
     && (getParameter(PARAM_TEMP_LIQ)<getParameter(PARAM_MAX_TEMPERATURE))
-    && (getParameter(PARAM_TEMP_PLATE) != 0xFF)
+    && (getParameter(PARAM_TEMP_PCB) != 0xFF)
     && (getParameter(PARAM_TEMP_LIQ)   !=0xFF))
   {
     digitalWrite(TEMP_PID, HIGH); 

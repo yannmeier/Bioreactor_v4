@@ -1,4 +1,4 @@
-#ifdef THR_STEPPER
+#ifdef STEPPER
 
 /****************************
  *  THREAD STEPPER MOTOR
@@ -77,7 +77,6 @@ void executeStep(uint16_t numberSteps, boolean forward, byte port1, byte port2) 
       digitalWrite(port2,LOW);
       break;
     }
-    //    nilThdSleepMilliseconds(500);
     nilThdSleepMilliseconds(24-(getParameter(PARAM_STEPPER_SPEED)%22));
   } 
 
