@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.3.0">
+<eagle version="7.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
@@ -10063,7 +10063,7 @@ Source: &lt;a href= "http://www.hirose.co.jp/cataloge_hp/e58605370.pdf"&gt;Data 
 <part name="R2" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="GND21" library="supply1" deviceset="GND" device=""/>
 <part name="C10" library="rcl" deviceset="C-EU" device="C1206" value="100nF"/>
-<part name="32U4" library="adafruit" deviceset="ATMEGA32U4" device="-AU" value="32U4"/>
+<part name="32U4" library="adafruit" deviceset="ATMEGA32U4" device="-AU" value="ATMEGA32U4"/>
 <part name="CX2" library="rcl" deviceset="C-EU" device="C1206" value="22pF"/>
 <part name="CX1" library="rcl" deviceset="C-EU" device="C1206" value="22pF"/>
 <part name="U$10" library="MyPOW" deviceset="VUSB" device=""/>
