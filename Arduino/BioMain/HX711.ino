@@ -98,7 +98,7 @@ NIL_THREAD(ThreadWeight, arg) {
         Serial.println(F("sb>ok"));
       }
 
-      if (weight<getParameter(PARAM_MIN_ABSOLUTE_WEIGHT) || weight>getParameter(PARAM_MAX_ABSOLUTE_WEIGHT)) {
+      if (weight<(0.80*getParameter(PARAM_WEIGHT_MIN)) || weight>(1.20*getParameter(PARAM_WEIGHT_MAX))) {
         all_off();
         weight_status=WEIGHT_STATUS_ERROR;
         #ifdef EVENT_LOGGING
@@ -141,7 +141,7 @@ NIL_THREAD(ThreadWeight, arg) {
       #endif */
       
       //switching to Sedimentation phase
-      if(( (uint16_t)(tsinceLastEvent/60000))>=getParameter(PARAM_MIN_FILLED_TIME)){
+      if(( (uint16_t)(tsinceLastEvent/60000))>=getParameter(PARAM_FILLED_TIME)){
         weight_status=WEIGHT_STATUS_WAITING;
         tsinceLastEvent=0; 
         #ifdef EVENT_LOGGING
@@ -179,7 +179,7 @@ NIL_THREAD(ThreadWeight, arg) {
         #endif
         // TURN ON ROTATION
         #ifdef EVENT_LOGGING
-          writeLog(EVENT_MOTOR_START, 0);  //need to move the event loggers
+          writeLog(EVENT_MOTOR_START, 0);    //need to move the event loggers
           nilThdSleepMilliseconds(10);
         #endif
         // turn on filling pump
@@ -194,12 +194,6 @@ NIL_THREAD(ThreadWeight, arg) {
       all_off();
       setParameterBit(PARAM_STATUS, FLAG_RELAY_FILLING);     //filling  ON
       setParameterBit(PARAM_STATUS, FLAG_STEPPER_CONTROL);   //stepper  ON
-     
-     /* 
-      #ifdef MASTER_PIN
-        digitalWrite(MASTER_PIN,HIGH);                       //gas ctrl ON--> change for proper I2C
-      #endif
-      */
      
       if (weight>=getParameter(PARAM_WEIGHT_MAX)) {
         weight_status=WEIGHT_STATUS_NORMAL;
@@ -217,24 +211,20 @@ NIL_THREAD(ThreadWeight, arg) {
     }
     
 
-    // Food control connected to the board via 2 pumps   
+    // Food control with 2 pumps   
     #ifdef FOOD_IN 
       digitalWrite(FOOD_IN, getParameterBit(PARAM_STATUS, FLAG_RELAY_FILLING));
       delay(10);
-      //nilThdSleepMilliseconds(50);
     #endif
     #ifdef FOOD_OUT 
       digitalWrite(FOOD_OUT, getParameterBit(PARAM_STATUS, FLAG_RELAY_EMPTYING));
       delay(10);
-      //nilThdSleepMilliseconds(50);
     #endif
     tsinceLastEvent+=(millis()-lastCycleMillis);
     lastCycleMillis=millis();
   }
 }
 #endif
-
-
 
 /********************
     Utilities
@@ -245,11 +235,6 @@ void all_off(){
   clearParameterBit(PARAM_STATUS, FLAG_PH_CONTROL);      //pH       OFF
   clearParameterBit(PARAM_STATUS, FLAG_RELAY_FILLING);   //filling  OFF
   clearParameterBit(PARAM_STATUS, FLAG_RELAY_EMPTYING);  //emptying ON
-  /*
-  #ifdef MASTER_PIN
-    digitalWrite(MASTER_PIN,LOW); --> change for proper I2C
-  #endif
-  */
 }
 
 

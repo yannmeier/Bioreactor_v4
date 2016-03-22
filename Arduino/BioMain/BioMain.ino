@@ -65,10 +65,10 @@
   #define TEMP_PCB         D6 
   #define TEMP_PID         D12
 #define THR_LINEAR_LOGS    1
-  #define FLASH_SELECT     D10       //to be used to protect / unprotect the memory write (see "Logger")
+  #define FLASH_SELECT     D10       //to be used to select the memory write (see "Logger")
 #define THR_MONITORING     1  
   #define MONITORING_LED   D13
-//#define  LCD_SLAVE         D11     //Define here if the LCD screen is used or not (SPI THD)
+//#define  LCD_SELECT        D11     //Define here if the LCD screen is used or not (SPI THD)
 #endif
 
 
@@ -117,60 +117,47 @@
 #endif
 
 #ifdef     TEMPERATURE_CTRL
-#define PARAM_TEMP_LIQ             0   // temperature of the solution
-#define PARAM_TEMP_PCB             1   // temperature of the heating plate
-#define PARAM_TARGET_LIQUID_TEMP   26  // target temperature of the liquid
+  #define PARAM_TEMP_LIQ      0   // temperature of the solution
+  #define PARAM_TEMP_PCB      1   // temperature of the heating plate
+  #define PARAM_TEMP_TARGET   26  // target temperature of the liquid
 #define PARAM_TEMP_MAX             27  // maximal temperature of the plate
 #ifdef TEMP_SAMPLE
   #define PARAM_TEMP_SAMPLE         2
 #endif
-#if defined (TEMP_PID) || defined (TEMP_PID_COLD)
-  #ifdef TYPE_PRECISE_PID
-  #define PARAM_AMBIENT_TEMP 32  //to autoswitch between modes
-  #define PARAM_PID_STATUS  31   // 0 for heating - 1 for cooling
-  #endif
-//for the regulation of temperature values btw 10 and 45 [s] are commun
-#define PARAM_HEATING_REGULATION_TIME_WINDOW  28 //in [ms]
-#define PARAM_MIN_TEMPERATURE                 29 // not used but could be used for safety
-#define PARAM_MAX_TEMPERATURE                 30 // not used but could be used for safety
+#if defined (TEMP_PID) 
+#define PARAM_TEMP_REG_TIME    28 //in [ms]
 #endif
 #endif
 
-
-//*************************************
+/*************************************/
 
 #if defined(WEIGHT_DATA) && defined(WEIGHT_CLK) 
-#define PARAM_WEIGHT_FACTOR          15  // Weight calibration: conversion factor between digital unit and milligrams (weight=FACTOR*dig_unit)
-#define PARAM_WEIGHT_OFFSET          16  // Weight calibration: digital offset value when bioreactor is empty
-
-#define PARAM_WEIGHT                 2 // weight in g of the content in the bioreactor
-#define PARAM_WEIGHT_MIN             31   // minimal weight  
-#define PARAM_WEIGHT_MAX             32   // maximal weight
-//hard coded safety value, TO BE CHANGED ONCE THE SENSOR IS CALIBRATED and conversion performed automatically !!!!!!!!!
-#define PARAM_MIN_ABSOLUTE_WEIGHT    33
-#define PARAM_MAX_ABSOLUTE_WEIGHT    34
-
-#define PARAM_SEDIMENTATION_TIME     35   // number of MINUTES to wait without rotation before starting emptying
-#define PARAM_MIN_FILLED_TIME        36   // minimal time in MINUTES to stay in the filled status
-#define PARAM_WEIGHT_STATUS          51   // current STATUS // BBBAAAAA AAAAAAAA : A = wait time in minutes, B = status
+#define PARAM_WEIGHT_FACTOR        15  // Weight calibration: conversion factor digital -> gr (weight=FACTOR*dig_unit)
+#define PARAM_WEIGHT_OFFSET        16  // Weight calibration: digital offset value when bioreactor is empty
+#define PARAM_WEIGHT               2   // in gr
+#define PARAM_WEIGHT_MIN           29    
+#define PARAM_WEIGHT_MAX           30  
+#define PARAM_SEDIMENTATION_TIME   35  // MINUTES to wait without rotation before emptying
+#define PARAM_FILLED_TIME          36  // MINUTES to stay in the filled state
+#define PARAM_WEIGHT_STATUS        23  // current STATUS // BBBAAAAA AAAAAAAA : A = wait time in minutes, B = status
 #endif
 
-//*************************************
+/*************************************/
 
 #ifdef    PH_CTRL
 #define PARAM_PH            3    // current pH
-#define PARAM_TARGET_PH     38   // desired pH
-#define PARAM_PH_FACTOR_A   39
-#define PARAM_PH_FACTOR_B   40
-#define PARAM_PH_STATE      41  // 0: Pause 1 : normal acquisition, 2 : purge of pipes,  4: calibration pH=4, 7: calibration pH=7, 10: calibration pH=10
-#define PARAM_REF_PH4		12
-#define PARAM_REF_PH7		13	
-#define PARAM_REF_PH10		14	
+#define PARAM_TARGET_PH     31   // desired pH
+#define PARAM_PH_FACTOR_A   32
+#define PARAM_PH_FACTOR_B   33
+#define PARAM_PH_STATE      24  // 0: Pause 1 : normal acquisition, 2 : purge of pipes,  4: calibration pH=4, 7: calibration pH=7, 10: calibration pH=10
+//#define PARAM_REF_PH4		12
+//#define PARAM_REF_PH7		13  --> TO BE REPLACED BY TEMPORRY VALUES IN THE CODE	
+//#define PARAM_REF_PH10	14	
 
-//not parameters, hard coded values, set the minimal delay between pH adjustements to 10 seconds
-#define PARAM_PH_ADJUST_DELAY      42    //delay between acid or base supplies
-#define PARAM_PH_OPENING_TIME      43    //1sec TAP opening when adjusting
-#define PARAM_PH_TOLERANCE         44    //correspond to a pH variation of 0.1
+//not parameters, hard coded values, set the minimal delay between pH adjustements to 10 seconds --> ???
+#define PARAM_PH_ADJUST_DELAY   38    //delay between acid or base supplies
+#define PARAM_PH_OPENING_TIME   39    //1sec TAP opening when adjusting
+#define PARAM_PH_TOLERANCE      34    //correspond to a pH variation of 0.1
 #endif
 
 //*************************************
@@ -265,13 +252,22 @@ void setup() {
   Serial.begin(9600);
   delay(1000);
   setupParameters();
-    
+  //get back the previous config  
   #ifdef THR_LINEAR_LOGS
   setupMemory();
   recoverLastEntryN();
   loadLastEntryToParameters();
   #endif
-
+  //disable SPI selected modules
+  #ifdef FLASH_SELECT 
+    pinMode(FLASH_SELECT,OUTPUT);
+    digitalWrite(FLASH_SELECT,HIGH);
+  #endif
+    #ifdef LCD_SELECT 
+    pinMode(LCD_SELECT,OUTPUT);
+    digitalWrite(LCD_SELECT,HIGH);
+  #endif
+  
   setSafeConditions(false);
   nilSysBegin();
 }

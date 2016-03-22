@@ -47,12 +47,10 @@ void resetParameters() {
 #ifdef     TEMPERATURE_CTRL
   setAndSaveParameter(PARAM_TEMP_LIQ, ERROR_VALUE);
   setAndSaveParameter(PARAM_TEMP_PCB, ERROR_VALUE);
-  setAndSaveParameter(PARAM_TARGET_LIQUID_TEMP, 3000);
+  setAndSaveParameter(PARAM_TEMP_TARGET, 3000);
   setAndSaveParameter(PARAM_TEMP_MAX, 0);
   #ifdef TEMP_PID
-  setAndSaveParameter(PARAM_HEATING_REGULATION_TIME_WINDOW, 5000);
-  setAndSaveParameter(PARAM_MIN_TEMPERATURE, 1000);  // not used but could be used for safety
-  setAndSaveParameter(PARAM_MAX_TEMPERATURE, 4000);  // not used but could be used for safety  
+  setAndSaveParameter(PARAM_TEMP_REG_TIME, 5000);
   #endif
 #endif
 

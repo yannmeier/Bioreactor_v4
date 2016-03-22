@@ -22,20 +22,15 @@
 #define ADDRESS_MAX   0x800000 // http://www.sst.com/dotAsset/40498.pdf&usd=2&usg=ALhdy294tEkn4s_aKwurdSetYTt_vmXQhw
 
 #define ADDRESS_LAST  (ADDRESS_MAX - ENTRY_SIZE_LINEAR_LOGS)
-
 #define SECTOR_SIZE       4096
 #define NB_ENTRIES_PER_SECTOR    (SECTOR_SIZE  / ENTRY_SIZE_LINEAR_LOGS)
 #define ADDRESS_SIZE  (ADDRESS_MAX  - ADDRESS_BEG)
-
-
 // The number of entires by types of logs (seconds, minutes, hours, commands/events)
 #define MAX_NB_ENTRIES    (ADDRESS_SIZE  / ENTRY_SIZE_LINEAR_LOGS)
-
 
 SEMAPHORE_DECL(lockFlashAccess, 1);
 
 SST sst=SST(4);
-
 
 //Determine the position of the last logs in the memory for
 // all type of logs (linear, RRD, commands/event)
@@ -60,10 +55,14 @@ void writeLog() {
 
 
 void writeLog(uint16_t event_number, uint16_t parameter_value) {
-#if ! defined ( THR_LINEAR_LOGS )
+  #ifdef FLASH_SELECT 
+  //select SPI module
+  digitalWrite(FLASH_SELECT,LOW);
+  #endif
+  
+  #if ! defined ( THR_LINEAR_LOGS )
   return;
-#endif
-
+  #endif
 
   if (!logActive) return;
 
@@ -74,10 +73,10 @@ void writeLog(uint16_t event_number, uint16_t parameter_value) {
   // test if it is the begining of one sector, and erase the sector of 4096 bytes if needed
 
   if(!(nextEntryID % NB_ENTRIES_PER_SECTOR)) {
-#ifdef DEBUG_LOGS
+  #ifdef DEBUG_LOGS
     Serial.print(F("ERASE sctr: "));
     Serial.println(findSectorOfN());
-#endif
+  #endif
     sst.flashSectorErase(findSectorOfN());
   }
 
@@ -111,6 +110,11 @@ void writeLog(uint16_t event_number, uint16_t parameter_value) {
   }
   nilThdSleepMilliseconds(5);
   nilSemSignal(&lockFlashAccess);
+  
+  #ifdef FLASH_SELECT 
+  //deselect SPI module
+  digitalWrite(FLASH_SELECT,HIGH);
+  #endif
 }
 
 /*
@@ -269,9 +273,6 @@ void recoverLastEntryN()
   logActive=true;
 }
 
-
-
-
 /*--------------------------
  Memory related functions
  ---------------------------*/
@@ -287,8 +288,6 @@ void setupMemory(){
 void printLastLog(Print* output) {
   printLogN(output, nextEntryID-1);
 }
-
-
 
 void formatFlash(Print* output) {
   busy_flag=true;
@@ -316,7 +315,6 @@ void formatFlash(Print* output) {
   nextEntryID=0;
   busy_flag=false;
 }
-
 
 //need revision !!!
 void validateFlash(Print* output) {
