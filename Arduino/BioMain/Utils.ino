@@ -193,7 +193,7 @@ void printResult(char* data, Print* output) {
         }
       }  
       else if (data[0]=='m') {
-#ifdef THR_LINEAR_LOGS
+        #ifdef THR_LINEAR_LOGS
         if (paramValuePosition>0) {
           long currentValueLong=atol(paramValue);
           if (( currentValueLong - nextEntryID ) < 0) {

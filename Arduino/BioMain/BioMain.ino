@@ -106,7 +106,7 @@
 
 #ifdef THR_LINEAR_LOGS
 #define LOG_INTERVAL          10  // define the interval in seconds between storing the log
-// #define DEBUG_LOGS          1
+#define DEBUG_LOGS          1
 #endif
 
 /*******************************
@@ -188,7 +188,7 @@
 #define PARAM_DESIRED_FLUX_GAS1    45
 #endif
 
-#ifdef  TAP_GAS2
+#ifdef  TAP_GAS2busy
 #define PARAM_FLUX_GAS2            5
 #define PARAM_AVG_FLUX_GAS2        9
 #define PARAM_DESIRED_FLUX_GAS2    46
@@ -254,16 +254,19 @@ void setup() {
   setupParameters();
   //get back the previous config  
   #ifdef THR_LINEAR_LOGS
+  #ifdef FLASH_SELECT 
+    pinMode(FLASH_SELECT,OUTPUT);
+    digitalWrite(FLASH_SELECT,LOW);
+  #endif
   setupMemory();
   recoverLastEntryN();
   loadLastEntryToParameters();
-  #endif
-  //disable SPI selected modules
   #ifdef FLASH_SELECT 
-    pinMode(FLASH_SELECT,OUTPUT);
     digitalWrite(FLASH_SELECT,HIGH);
   #endif
-    #ifdef LCD_SELECT 
+  #endif
+  //disable SPI modules
+  #ifdef LCD_SELECT 
     pinMode(LCD_SELECT,OUTPUT);
     digitalWrite(LCD_SELECT,HIGH);
   #endif
