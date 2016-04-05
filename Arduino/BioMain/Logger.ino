@@ -22,26 +22,11 @@
 #define MAX_NB_ENTRIES    (ADDRESS_SIZE  / ENTRY_SIZE_LINEAR_LOGS)
 
 SEMAPHORE_DECL(lockFlashAccess, 1);
-SST sst=SST(4);
+SST sst=SST(6); //B6
 
 uint32_t nextEntryID = 0;
 boolean logActive=false;
 boolean busy_flag=false;
-
-/*******************
-  SPI slave slect
-*******************/
-void selectFlash(){
-  #ifdef FLASH_SELECT 
-  digitalWrite(FLASH_SELECT,LOW);
-  #endif
-}
-
-void deselectFlash(){
-  #ifdef FLASH_SELECT 
-  digitalWrite(FLASH_SELECT,HIGH);
-  #endif
-}
 
 /*********************************************************************************** 
  Save logs in the Flash memory.
@@ -61,14 +46,12 @@ void writeLog(uint16_t event_number, uint16_t parameter_value) {
   return;
   #endif
   if (!logActive) return;
-  nilSemWait(&lockFlashAccess);
   /*****************************
             Slave Select
   ******************************/
-  selectFlash();   
-  delay(10);
-  /************************************************************************************
-    Test if it is the begining of one sector, erase the sector of 4096 bytes if needed
+  nilSemWait(&lockFlashAccess);
+/************************************************************************************
+    Test if it is the begining of one sector, erase the sector of 4096 bytes if needed  delay(2);
   ************************************************************************************/
   if((!(nextEntryID % NB_ENTRIES_PER_SECTOR))) {
     #ifdef DEBUG_LOGS
@@ -96,86 +79,86 @@ void writeLog(uint16_t event_number, uint16_t parameter_value) {
   ******************************/
   sst.flashReadInit(findAddressOfEntryN(nextEntryID));
   long writtenID=sst.flashReadNextInt32();
+  #ifdef DEBUG_LOGS  
+  Serial.println(F("nextEntryID "));
+  Serial.println(nextEntryID);
+  Serial.println(F("writtenID "));
+  Serial.println(writtenID);
+  #endif
   sst.flashReadFinish();
   if (writtenID==nextEntryID) {
     //Update the value of the next event log position in the memory
     nextEntryID++;
     #ifdef DEBUG_LOGS
-    Serial.print(F("nextEntry "));
-    Serial.println(nextEntryID);
+    Serial.print(F("OK"));
     #endif
-    sst.flashSectorErase(findSectorOfN());
+
   }
   
   #ifdef DEBUG_LOGS
-  else
-    Serial.print(F("Write Fail"));
+  else{
+    sst.flashSectorErase(findSectorOfN());
+    Serial.print(F("Fail"));
+  }
   #endif
   /*****************************
          Out and Deselect
   ******************************/
   nilThdSleepMilliseconds(5);
   nilSemSignal(&lockFlashAccess);
-  deselectFlash();
 }
 
 /******************************************************************************************
  Read the corresponding logs in the flash memory of the entry number (ID).
- result:          Array of uint8_t where the logs are stored. It should be a 32 bytes array
+ result: Array of uint8_t where the logs are stored. It should be a 32 bytes array
  for the 3 RRD logs and 12 bytes for the commands/events logs.  
+    }
+  }
+  formatFlash(output);
+  nextEntryID=0;
+}
+
+#ifdef LOG_INTERVAL
  *entryN: Log ID that will correspond to the logs address to be read and stored in result
  return:  Error flag: 0: no error occured
  EVENT_ERROR_NOT_FOUND_ENTRY_N: The log ID (entryN) was not found in the flash memory
  *****************************************************************************************/
 uint32_t printLogN(Print* output, uint32_t entryN) {
-
+   
   nilSemWait(&lockFlashAccess);
-  selectFlash();
-
-  if ((nextEntryID > MAX_NB_ENTRIES) && (entryN < (nextEntryID - MAX_NB_ENTRIES + NB_ENTRIES_PER_SECTOR))) // Start with the first that is on the card and skip a sector
+  // Are we asking for a log entry that is not on the card anymore ? Then we just start with the first that is on the card
+  // And we skip a sector ...
+  if ((nextEntryID > MAX_NB_ENTRIES) && (entryN < (nextEntryID - MAX_NB_ENTRIES + NB_ENTRIES_PER_SECTOR))) {
     entryN=nextEntryID - MAX_NB_ENTRIES + NB_ENTRIES_PER_SECTOR;
-  
-  uint32_t addressOfEntryN = findAddressOfEntryN(entryN);
-
+  }
+  sst.flashReadInit(findAddressOfEntryN(entryN));
   #ifdef DEBUG_LOGS
   Serial.print(F("entryN: "));
   Serial.println(entryN);
-  Serial.print(F("addrN: "));
-  Serial.println(addressOfEntryN);
   #endif
-
-  sst.flashReadInit(addressOfEntryN);
-
   byte checkDigit=0;
   for(byte i = 0; i < ENTRY_SIZE_LINEAR_LOGS; i++) {
     byte oneByte=sst.flashReadNextInt8();
     checkDigit^=toHex(output, oneByte);
   }
-  
   checkDigit^=toHex(output, (int)getQualifier());
   toHex(output, checkDigit);
   output->println("");
-
   sst.flashReadFinish();
   nilSemSignal(&lockFlashAccess);
-  deselectFlash();
   return entryN;
 }
 
 
 uint8_t loadLastEntryToParameters() {
   nilSemWait(&lockFlashAccess);
-  selectFlash();
   uint32_t addressOfEntryN = findAddressOfEntryN(nextEntryID-1);
   sst.flashReadInit(addressOfEntryN+8); // we skip entryID and epoch
-
   for(byte i = 0; i < NB_PARAMETERS_LINEAR_LOGS; i++) {
     setParameter(i,sst.flashReadNextInt16());
   }
-
-  sst.flashReadFinish();
+  sst.flashReadFinish(); 
   nilSemSignal(&lockFlashAccess);
-  deselectFlash();
 }
 
 
@@ -195,7 +178,7 @@ uint16_t findSectorOfN( ) {
 
 
 /******************************************************************************
- Returns the address corresponding to one log ID
+ Returns the address corresponding to one log ID nilThdSleepMilliseconds(5); nilThdSleepMilliseconds(5);
  entryNb:     Log ID 
  return:      Address of the first byte where the corresponding log is located
 *******************************************************************************/
@@ -211,7 +194,6 @@ uint32_t findAddressOfEntryN(uint32_t entryN)
 ******************************************************************************/
 void recoverLastEntryN() 
 {
-  selectFlash();
   uint32_t ID_temp = 0;
   uint32_t Time_temp = 0;
   uint32_t addressEntryN = ADDRESS_BEG;
@@ -221,7 +203,7 @@ void recoverLastEntryN()
   Serial.print(F("1st addr: "));
   Serial.println(ADDRESS_BEG);
   Serial.print(F("Max addr: "));
-  Serial.println(ADDRESS_LAST);
+  Serial.println(ADDRESS_LAST);  
   #endif
 
   while(addressEntryN<ADDRESS_LAST) 
@@ -267,7 +249,6 @@ void recoverLastEntryN()
   Serial.println(nextEntryID);
   #endif
   logActive=true;
-  deselectFlash();
   }
 
 /*****************************
@@ -276,7 +257,7 @@ void recoverLastEntryN()
 //Setup the memory for future use
 //Need to be used only onced at startup
 void setupMemory(){
-  SPI.begin();
+  SPI.begin(); 
   SPI.setDataMode(SPI_MODE0);
   SPI.setBitOrder(MSBFIRST);
   sst.init();
@@ -290,13 +271,14 @@ void formatFlash(Print* output) {
   busy_flag=true;
   setupMemory();
   output->println(F("Format flash"));
-  output->print(F("Sctr size: "));
+  output->print(F("Sctr size:"));
   output->println(SECTOR_SIZE);
-  output->print(F("Nb sctrs: "));
+  output->print(F("Nb sctrs:"));
   output->println(ADDRESS_MAX/SECTOR_SIZE);
   wdt_disable();
+  //selectFlash();
+  
   for (int i=0; i<ADDRESS_MAX/SECTOR_SIZE; i++) {
-    selectFlash();
     sst.flashSectorErase(i);
     if (i%16==0)
       output->print(".");
@@ -304,7 +286,7 @@ void formatFlash(Print* output) {
       output->println(""); 
     nilThdSleepMilliseconds(10);
   } 
-  deselectFlash();
+  //deselectFlash();
   wdt_enable(WDTO_8S);
   wdt_reset();
   output->println(F("OK"));
@@ -355,8 +337,10 @@ void validateFlash(Print* output) {
 
 NIL_WORKING_AREA(waThreadLogger, 0);
 NIL_THREAD(ThreadLogger, arg) {
+  nilThdSleepMilliseconds(2000);
   writeLog(EVENT_ARDUINO_BOOT,0);
   while(TRUE) {
+  
     nilThdSleepMilliseconds(LOG_INTERVAL*1000-millis()%1000+100); //by default the time is too short, we add 100ms not to have rounding pro
     if(!busy_flag)
       writeLog();

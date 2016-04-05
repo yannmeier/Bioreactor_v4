@@ -97,7 +97,7 @@
 //#define EEPROM_DUMP   1 //Gives the menu allowing to dump the EEPROM
 #define THR_SERIAL    1
 #ifdef MODEL_ZIGBEE
-  #define THR_ZIGBEE  1 // communication process on Serial1 --> change to LoRa
+//  #define THR_ZIGBEE  1 // communication process on Serial1 --> change to LoRa
 #endif
 
 /*******************************
@@ -106,7 +106,7 @@
 
 #ifdef THR_LINEAR_LOGS
 #define LOG_INTERVAL          10  // define the interval in seconds between storing the log
-#define DEBUG_LOGS          1
+//#define DEBUG_LOGS          1
 #endif
 
 /*******************************
@@ -256,14 +256,10 @@ void setup() {
   #ifdef THR_LINEAR_LOGS
   #ifdef FLASH_SELECT 
     pinMode(FLASH_SELECT,OUTPUT);
-    digitalWrite(FLASH_SELECT,LOW);
   #endif
   setupMemory();
   recoverLastEntryN();
   loadLastEntryToParameters();
-  #ifdef FLASH_SELECT 
-    digitalWrite(FLASH_SELECT,HIGH);
-  #endif
   #endif
   //disable SPI modules
   #ifdef LCD_SELECT 

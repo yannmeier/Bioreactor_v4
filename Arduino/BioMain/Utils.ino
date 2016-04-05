@@ -192,8 +192,11 @@ void printResult(char* data, Print* output) {
           output->println(a);
         }
       }  
+      /***********************************************
+      //display the logs sotcked in the flash memory
+      ***********************************************/
       else if (data[0]=='m') {
-        #ifdef THR_LINEAR_LOGS
+      #ifdef THR_LINEAR_LOGS
         if (paramValuePosition>0) {
           long currentValueLong=atol(paramValue);
           if (( currentValueLong - nextEntryID ) < 0) {
@@ -201,27 +204,25 @@ void printResult(char* data, Print* output) {
           } 
           else {
             byte endValue=MAX_MULTI_LOG;
-            if (currentValueLong > nextEntryID) {
+            if (currentValueLong > nextEntryID) 
               endValue=0;
-            } 
-            else if (( nextEntryID - currentValueLong ) < MAX_MULTI_LOG) {
-              endValue= nextEntryID - currentValueLong;
-            }
-            for (byte i=0; i<endValue; i++) {
+           else if (( nextEntryID - currentValueLong ) < MAX_MULTI_LOG) 
+              endValue= nextEntryID - currentValueLong;           
+           for (byte i=0; i<endValue; i++) {
               currentValueLong=printLogN(output,currentValueLong)+1;
               nilThdSleepMilliseconds(25);
-            }
+           }
           }
         } 
-        else {
-          // we will get the first and the last log ID
-          output->println(nextEntryID-1);
-        }
-#else
+        else
+          output->println(nextEntryID-1);// we will get the first and the last log ID
+      #else
         noThread(output);
-#endif
+      #endif
       }
-    }
+    
+  }
+
     else if ((inChar>47 && inChar<58) || inChar=='-') { // a number (could be negative)
       if (paramValuePosition<MAX_PARAM_VALUE_LENGTH) {
         paramValue[paramValuePosition]=inChar;
