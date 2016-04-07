@@ -1,4 +1,6 @@
-
+#include <LiquidCrystal.h>
+// initialize the library with the numbers of the interface pins
+LiquidCrystal lcd(10,9,8,6,12,A6);
 
 #define ENCODER_CLOCKWISE 0
 #define ENCODER_ANTI_CLOCKWISE 1
@@ -39,9 +41,11 @@ void loop() {
   rotating = true;  // reset the debouncer
 
   if (lastReportedPos != encoderPos) {
-    Serial.print("Index:");
-    Serial.println(encoderPos, DEC);
+    lcd.begin(20, 4);
+    lcd.print("Index:");
+    lcd.print(encoderPos, DEC);
     lastReportedPos = encoderPos;
+    lcd.blink();
   }
 
 }
