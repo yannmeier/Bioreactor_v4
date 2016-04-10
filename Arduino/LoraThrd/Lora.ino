@@ -19,11 +19,11 @@ void processLoraCommand(char command, char* data, Print* output) {
     readEEPROM(EE_LORA_APPSKEY, EE_LORA_APPSKEY+32, output);
     output->println("");
     break;
-  case 'm':
+  case 'n':
     if (data[0]!='\0') {
-      writeEEPROM(EE_LORA_MWKSKEY, data, 32);
+      writeEEPROM(EE_LORA_NWKSKEY, data, 32);
     } 
-    readEEPROM(EE_LORA_MWKSKEY, EE_LORA_MWKSKEY+32, output);
+    readEEPROM(EE_LORA_NWKSKEY, EE_LORA_NWKSKEY+32, output);
     output->println("");
     break;
   }
@@ -146,7 +146,7 @@ void sendLoraMessage(char* message, Print* output) {
 }
 
 void printNwksKey(Print* output) {
-  readEEPROM(EE_LORA_MWKSKEY, EE_LORA_MWKSKEY+32, output);
+  readEEPROM(EE_LORA_NWKSKEY, EE_LORA_NWKSKEY+32, output);
 }
 
 void printAppsKey(Print* output) {

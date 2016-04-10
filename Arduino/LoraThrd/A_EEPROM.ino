@@ -7,12 +7,12 @@
 #include <EXROM.h>
 
 
-#define MAX_PARAM 26   // If the MAX_PARAM change you need to change the pointer in the EEPROM
+#define MAX_PARAM                52   // If the MAX_PARAM change you need to change the pointer in the EEPROM
 #define EE_START_PARAM           0 // We save the parameter from byte 0 of EEPROM
 #define EE_LAST_PARAM            (MAX_PARAM*2-1) // The last parameter is stored at byte 50-51
 
 
-#define EE_LORA_MWKSKEY          160  // 32 bytes
+#define EE_LORA_NWKSKEY          160  // 32 bytes
 #define EE_LORA_APPSKEY          192  // 32 bytes
 
 #define EE_TARGET_EVENT_TYPES    224 // 32 bytes

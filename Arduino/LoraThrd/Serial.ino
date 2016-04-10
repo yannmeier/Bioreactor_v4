@@ -63,7 +63,8 @@ void printResult(char* data, Print* output) {
           paramValue[paramValuePosition]='\0';
         }
       }
-    } else if (inChar>64 && inChar<92) { // an UPPERCASE character so we define the field
+    } 
+    else if (inChar>64 && inChar<92) { // an UPPERCASE character so we define the field
       // we extend however the code to allow 2 letters fields !!!
       if (paramCurrent>0) {
         paramCurrent*=26;
@@ -100,7 +101,7 @@ void printResult(char* data, Print* output) {
   // we will process the commands, it means it starts with lowercase
 
     switch (data[0]) {
-        case 'a':
+  case 'a':
     processLoraCommand(data[1], paramValue, output);
     break;
   case 'd':
@@ -142,7 +143,11 @@ void printResult(char* data, Print* output) {
 
 
 void serialPrintHelp(Print* output) {
-  //  output->println(F("(d)ebug"));
+  output->println(F("(ai) Lora init"));
+  output->println(F("(ar) Lora reset"));
+  output->println(F("(as) Lora send message"));
+  output->println(F("(aa) Lora set appskey"));
+  output->println(F("(an) Lora set nwkskey"));
   output->println(F("(e)poch"));
   output->println(F("(f)ree mem"));
   output->println(F("(h)elp"));
@@ -152,6 +157,7 @@ void serialPrintHelp(Print* output) {
   output->println(F("(s)ettings"));
   output->println(F("(z) eeprom"));
 }
+
 
 
 
