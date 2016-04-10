@@ -1,6 +1,35 @@
 
 #define LORA_RESET_PIN 9
 
+void processLoraCommand(char command, char* data, Print* output) {
+  switch (command) {
+  case 'i':
+    infoLora(output);
+    break;
+  case 'r':
+    resetLora(output);
+    break;
+  case 's':
+    sendLoraMessage(data, output);
+    break;
+  case 'a':
+    if (data[0]!='\0') {
+      writeEEPROM(EE_LORA_APPSKEY, data, 32);
+    } 
+    readEEPROM(EE_LORA_APPSKEY, EE_LORA_APPSKEY+32, output);
+    output->println("");
+    break;
+  case 'm':
+    if (data[0]!='\0') {
+      writeEEPROM(EE_LORA_MWKSKEY, data, 32);
+    } 
+    readEEPROM(EE_LORA_MWKSKEY, EE_LORA_MWKSKEY+32, output);
+    output->println("");
+    break;
+  }
+}
+
+
 
 void resetLora(Print* output) {
   pinMode(9, OUTPUT); // we put the reset to pin 9
@@ -18,7 +47,7 @@ void infoLora(Print* output) {
   infoSysLora("hweui", output);
 
   output->println(F("MAC"));
-    infoMacLora("devaddr", output);
+  infoMacLora("devaddr", output);
   infoMacLora("deveui", output);
   infoMacLora("appeui", output);
   infoMacLora("dr", output);
@@ -105,11 +134,15 @@ void initLora(Print* output) {
 }
 
 void sendLoraMessage(char* message, Print* output) {
+  Serial1.println(F("radio set pwr -3"));
+  loraAnswer(300, output);
   Serial1.println(F("mac join abp"));
   loraAnswer(1000, output);
-  Serial1.print(F("mac tx uncnf 1 "));
-  Serial1.println(message);
-  loraAnswer(300, output);
+  Serial.println("SEND");
+  Serial1.println(F("mac tx uncnf 1 414243"));
+  Serial.println("DONE");
+  // Serial1.println(message,HEX);
+  loraAnswer(2000, output);
 }
 
 void printNwksKey(Print* output) {
@@ -119,6 +152,11 @@ void printNwksKey(Print* output) {
 void printAppsKey(Print* output) {
   readEEPROM(EE_LORA_APPSKEY, EE_LORA_APPSKEY+32, output);
 }
+
+
+
+
+
 
 
 
