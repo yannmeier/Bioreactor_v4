@@ -41,8 +41,8 @@ NIL_THREAD(ThreadTemp, arg) {
   byte errorTempLiq = false;
 #endif
 
-#ifdef TEMP_PLATE
-  OneWire oneWire2(TEMP_PLATE);
+#ifdef TEMP_PCB
+  OneWire oneWire2(TEMP_PCB);
   byte errorTempPlate = false;
 #endif
 
@@ -69,12 +69,8 @@ NIL_THREAD(ThreadTemp, arg) {
     getTemperature(oneWire1, PARAM_TEMP_LIQ, 0, EVENT_TEMP_LIQ_FAILED, EVENT_TEMP_LIQ_RECOVER);
 #endif
 
-#ifdef TEMP_PLATE
-    getTemperature(oneWire2, PARAM_TEMP_PLATE, 1, EVENT_TEMP_PLATE_FAILED, EVENT_TEMP_PLATE_RECOVER);
-#endif
-
-#ifdef TEMP_SAMPLE
-    getTemperature(oneWire3, PARAM_TEMP_SAMPLE, 1, EVENT_TEMP_SAMPLE_FAILED, EVENT_TEMP_SAMPLE_RECOVER);
+#ifdef TEMP_PCB
+    getTemperature(oneWire2, PARAM_TEMP_PCB, 1, EVENT_TEMP_PCB_FAILED, EVENT_TEMP_PCB_RECOVER);
 #endif
 
 #ifdef TEMP_STEPPER

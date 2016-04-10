@@ -48,7 +48,7 @@ void setup() {
   // set up the LCD's number of columns and rows: 
   lcd.begin(20, 4);
   // Print a message to the LCD.
-  lcd.print("hello, world!");
+  lcd.println("hello World!");
 }
 
 void loop() {

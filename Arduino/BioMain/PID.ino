@@ -40,20 +40,18 @@ void pid_ctrl()
 {
   float exactPresentTime;
   heatingRegInput = getParameter(PARAM_TEMP_LIQ);
-  heatingRegSetpoint = getParameter(PARAM_TARGET_LIQUID_TEMP);
+  heatingRegSetpoint = getParameter(PARAM_TEMP_TARGET);
   heatingRegPID.Compute();                                   // the computation takes only 30ms!
   // turn the output pin on/off based on pid output
   exactPresentTime = millis();
-  if (exactPresentTime - heatingRegWindowStartTime > getParameter(PARAM_HEATING_REGULATION_TIME_WINDOW)) { 
+  if (exactPresentTime - heatingRegWindowStartTime > getParameter(PARAM_TEMP_REG_TIME)) { 
     //time to shift the Relay Window
-    heatingRegWindowStartTime += getParameter(PARAM_HEATING_REGULATION_TIME_WINDOW);
+    heatingRegWindowStartTime += getParameter(PARAM_TEMP_REG_TIME);
   }
   
   if((heatingRegOutput > exactPresentTime - heatingRegWindowStartTime) 
-    && (getParameter(PARAM_TEMP_PLATE)<getParameter(PARAM_TEMP_MAX))
-    && (getParameter(PARAM_TEMP_PLATE)<getParameter(PARAM_MAX_TEMPERATURE))
-    && (getParameter(PARAM_TEMP_LIQ)<getParameter(PARAM_MAX_TEMPERATURE))
-    && (getParameter(PARAM_TEMP_PLATE) != 0xFF)
+    && (getParameter(PARAM_TEMP_PCB)<getParameter(PARAM_TEMP_MAX))
+    && (getParameter(PARAM_TEMP_PCB) != 0xFF)
     && (getParameter(PARAM_TEMP_LIQ)   !=0xFF))
   {
     digitalWrite(TEMP_PID, HIGH); 
@@ -62,18 +60,14 @@ void pid_ctrl()
   {
     digitalWrite(TEMP_PID, LOW); 
   } 
-
 }
 
 
-
-
 // see the rest of oliver's code for sanity checks
-
 void heatingSetup()
 {
   //tell the PID to range between 0 and the full window size
-  heatingRegPID.SetOutputLimits(0, getParameter(PARAM_HEATING_REGULATION_TIME_WINDOW));          //what is heating regulation time windows ???
+  heatingRegPID.SetOutputLimits(0, getParameter(PARAM_TEMP_REG_TIME));          //what is heating regulation time windows ???
   //turn the PID on, cf. PID library
   heatingRegPID.SetMode(AUTOMATIC);                 
   //set PID sampling time to 10000ms                   //possibly set a timer condition with a nilsleep instead

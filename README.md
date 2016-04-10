@@ -9,7 +9,8 @@ an ATmega32u4 MCU relying on nilRTOS and external boards for interfacing
 to extra sensors and/or LCD screeens.
 
 The main board comes with the following features:
-- stepper motor control
+- stepper motor control with Neodimium magnet
+- Load cell based on HX711
 - PID heater control
 - DS18B20+ temperature sensing
 - LoRaWAN mid-range wireless communication
@@ -27,6 +28,12 @@ There are already a few external extra modules:
 References:
 -https://www.arduino.cc/en/Main/ArduinoBoardLeonardo
 -https://github.com/greiman/NilRTOS-Arduino
+
+Revision notes:
+Bioreactor V4.2:
+- Changed operating frequency from 16MHz to 8MHz
+- Changed operating voltage from 5V to 3.3V
+- Removed 5V regulation
 
 #Mechanics
 
