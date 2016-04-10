@@ -30,8 +30,5 @@ uint8_t toHex(Print* output, long value) {
 }
 
 
-Print* getOutput() {
-  return &Serial; 
-}
 
 

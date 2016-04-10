@@ -2,8 +2,7 @@
 
 // LORA required 32 characters + the command
 
-#define SERIAL_BUFFER_LENGTH    36
-#define MAX_PARAM_VALUE_LENGTH  32
+
 
 char serialBuffer[SERIAL_BUFFER_LENGTH];
 byte serialBufferPosition=0;
@@ -45,7 +44,7 @@ NIL_THREAD(ThreadSerial, arg) {
 void printResult(char* data, Print* output) {
   boolean theEnd=false;
   byte paramCurrent=0; // Which parameter are we defining
-  char paramValue[MAX_PARAM_VALUE_LENGTH];
+  char paramValue[SERIAL_MAX_PARAM_VALUE_LENGTH];
   byte paramValuePosition=0;
   byte i=0;
   boolean inValue=false;
@@ -53,13 +52,15 @@ void printResult(char* data, Print* output) {
   while (!theEnd) {
     byte inChar=data[i];
     i++;
-    if (inChar=='\0' || i==SERIAL_BUFFER_LENGTH) theEnd=true;
-
-    if ((inChar>47 && inChar<58) || inChar=='-' || inValue) { // a number (could be negative)
-      if (paramValuePosition<MAX_PARAM_VALUE_LENGTH) {
+    if (i==SERIAL_BUFFER_LENGTH) theEnd=true;
+    if (inChar=='\0') {
+      theEnd=true;
+    }
+    else if ((inChar>47 && inChar<58) || inChar=='-' || inValue) { // a number (could be negative)
+      if (paramValuePosition<SERIAL_MAX_PARAM_VALUE_LENGTH) {
         paramValue[paramValuePosition]=inChar;
         paramValuePosition++;
-        if (paramValuePosition<MAX_PARAM_VALUE_LENGTH) {
+        if (paramValuePosition<SERIAL_MAX_PARAM_VALUE_LENGTH) {
           paramValue[paramValuePosition]='\0';
         }
       }
@@ -104,6 +105,14 @@ void printResult(char* data, Print* output) {
   case 'a':
     processLoraCommand(data[1], paramValue, output);
     break;
+  case 'c':
+    if (paramValuePosition>0) {
+      printCompactParameters(output, atoi(paramValue));
+    } 
+    else {
+      printCompactParameters(output);
+    } 
+    break; 
   case 'd':
     getDebuggerLog(output);
     break;
@@ -143,11 +152,13 @@ void printResult(char* data, Print* output) {
 
 
 void serialPrintHelp(Print* output) {
-  output->println(F("(ai) Lora init"));
+  output->println(F("(ai) Lora info"));
   output->println(F("(ar) Lora reset"));
   output->println(F("(as) Lora send message"));
   output->println(F("(aa) Lora set appskey"));
   output->println(F("(an) Lora set nwkskey"));
+  output->println(F("(ad) Lora set devaddr"));
+  output->println(F("(c)ompact settings"));
   output->println(F("(e)poch"));
   output->println(F("(f)ree mem"));
   output->println(F("(h)elp"));
@@ -157,6 +168,10 @@ void serialPrintHelp(Print* output) {
   output->println(F("(s)ettings"));
   output->println(F("(z) eeprom"));
 }
+
+
+
+
 
 
 

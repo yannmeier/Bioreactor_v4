@@ -122,9 +122,19 @@ uint8_t printCompactParameters(Print* output, byte number) {
     int value=getParameter(i);
     checkDigit^=toHex(output, value);
   }
+  checkDigit^=toHex(output, (int)getQualifier());
   toHex(output, checkDigit);
+  output->println("");
 }
 
+/* The qualifier represents the card ID and is stored just after the last parameter */
+uint16_t getQualifier() {
+  return eeprom_read_word((uint16_t*)(EE_QUALIFIER));
+}
+
+void setQualifier(uint16_t value) {
+  eeprom_write_word((uint16_t*)(EE_QUALIFIER), value);
+}
 
 
 

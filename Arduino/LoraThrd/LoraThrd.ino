@@ -8,7 +8,8 @@
 // http://www.arduino.cc/playground/Code/Time
 #include <Time.h>
 
-
+#define SERIAL_BUFFER_LENGTH    36
+#define SERIAL_MAX_PARAM_VALUE_LENGTH  32
 
 #define THR_MONITORING     14  // will also take care of the watch dog
 

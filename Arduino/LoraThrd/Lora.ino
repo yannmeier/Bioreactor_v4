@@ -8,6 +8,7 @@ void processLoraCommand(char command, char* data, Print* output) {
     break;
   case 'r':
     resetLora(output);
+    initLora(output);
     break;
   case 's':
     sendLoraMessage(data, output);
@@ -16,14 +17,21 @@ void processLoraCommand(char command, char* data, Print* output) {
     if (data[0]!='\0') {
       writeEEPROM(EE_LORA_APPSKEY, data, 32);
     } 
-    readEEPROM(EE_LORA_APPSKEY, EE_LORA_APPSKEY+32, output);
+    printAppsKey(output);
     output->println("");
     break;
   case 'n':
     if (data[0]!='\0') {
       writeEEPROM(EE_LORA_NWKSKEY, data, 32);
     } 
-    readEEPROM(EE_LORA_NWKSKEY, EE_LORA_NWKSKEY+32, output);
+    printNwksKey(output);
+    output->println("");
+    break;
+  case 'd':
+    if (data[0]!='\0') {
+      writeEEPROM(EE_LORA_DEVADDR, data, 8);
+    } 
+    printDevAddr(output);
     output->println("");
     break;
   }
@@ -127,22 +135,26 @@ void initLora(Print* output) {
   loraAnswer(300, output);
   Serial1.println(F("mac set adr on"));  
   loraAnswer(300, output);
-  Serial1.println(F("mac set devaddr 02031202"));
+  Serial1.print(F("mac set devaddr "));
+  printDevAddr(&Serial1);
+  Serial1.println("");
   loraAnswer(300, output);
   Serial1.println(F("mac save"));  
   loraAnswer(3000, output);
 }
 
-void sendLoraMessage(char* message, Print* output) {
-  Serial1.println(F("radio set pwr -3"));
-  loraAnswer(300, output);
+void sendLoraMessage(char* data, Print* output) {
+
   Serial1.println(F("mac join abp"));
   loraAnswer(1000, output);
-  Serial.println("SEND");
-  Serial1.println(F("mac tx uncnf 1 414243"));
-  Serial.println("DONE");
+  Serial1.print(F("mac tx uncnf 1 "));
+  for (byte i=0; i<SERIAL_MAX_PARAM_VALUE_LENGTH; i++) {
+    if (data[i]=='\0') break;
+    toHex(&Serial1, data[i]);
+  }
+  Serial1.println("");
   // Serial1.println(message,HEX);
-  loraAnswer(2000, output);
+  loraAnswer(5000, output);
 }
 
 void printNwksKey(Print* output) {
@@ -152,6 +164,11 @@ void printNwksKey(Print* output) {
 void printAppsKey(Print* output) {
   readEEPROM(EE_LORA_APPSKEY, EE_LORA_APPSKEY+32, output);
 }
+
+void printDevAddr(Print* output) {
+  readEEPROM(EE_LORA_DEVADDR, EE_LORA_DEVADDR+8, output);
+}
+
 
 
 
