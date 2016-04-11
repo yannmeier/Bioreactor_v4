@@ -5,8 +5,8 @@
 // The lowest priority thread should take care of the watch dog
 #include <avr/wdt.h>
 
-#define ONE_WIRE      1
-#if ONE:WIRE
+// #define ONE_WIRE      1
+#if ONE_dWIRE
 #include <OneWire.h>
 #endif
 

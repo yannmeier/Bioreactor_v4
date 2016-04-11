@@ -45,6 +45,7 @@ void printResult(char* data, Print* output) {
   boolean theEnd=false;
   byte paramCurrent=0; // Which parameter are we defining
   char paramValue[SERIAL_MAX_PARAM_VALUE_LENGTH];
+  paramValue[0]='\0';
   byte paramValuePosition=0;
   byte i=0;
   boolean inValue=false;
@@ -140,9 +141,11 @@ void printResult(char* data, Print* output) {
   case 'l':
     getLoggerLog(output);
     break;
+#ifdef ONE_WIRE
   case 'o':
     oneWireInfo(output);
     break;
+#endif
   case 's':
     printParameters(output);
     break;
@@ -155,39 +158,18 @@ void printResult(char* data, Print* output) {
 
 
 void serialPrintHelp(Print* output) {
-  output->println(F("(ai) Lora info"));
-  output->println(F("(ar) Lora reset"));
-  output->println(F("(as) Lora send message"));
-  output->println(F("(ap) Lora send parameters"));
-  output->println(F("(aa) Lora set appskey"));
-  output->println(F("(an) Lora set nwkskey"));
-  output->println(F("(ad) Lora set devaddr"));
+  output->println(F("Lor(a) help"));
   output->println(F("(c)ompact settings"));
   output->println(F("(e)poch"));
   output->println(F("(f)ree mem"));
   output->println(F("(h)elp"));
   output->println(F("(i)nitialize parameters"));
+#ifdef ONE_WIRE
   output->println(F("(o)ne-wire"));
+#endif
   //  output->println(F("(l)og"));
   //  output->println(F("(q)ualifier"));
   output->println(F("(s)ettings"));
   output->println(F("(z) eeprom"));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

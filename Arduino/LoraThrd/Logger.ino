@@ -114,5 +114,3 @@ void print2Digits(Print* output, int number) {
   output->print(number);
 }
 
-
-

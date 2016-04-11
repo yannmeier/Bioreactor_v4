@@ -42,7 +42,10 @@ void processLoraCommand(char command, char* data, Print* output) {
     printDevAddr(output);
     output->println("");
     break;
+  default:
+    printLoraHelp(output);
   }
+
 }
 
 
@@ -161,19 +164,14 @@ void sendLoraMessage(char* data, Print* output) {
     toHex(&Serial1, data[i]);
   }
   Serial1.println("");
-  // Serial1.println(message,HEX);
   loraAnswer(5000, output);
 }
-
 
 void sendLoraCompactParameters(Print* output, byte number) {
   Serial1.println(F("mac join abp"));
   loraAnswer(1000, output);
   Serial1.print(F("mac tx uncnf 1 "));
-  for (byte i=0; i<SERIAL_MAX_PARAM_VALUE_LENGTH; i++) {
-    printCompactParameters(&Serial1, 26);
-  }
-  Serial1.println("");
+  printCompactParameters(&Serial1, 1);
   loraAnswer(5000, output);
 }
 
@@ -190,30 +188,14 @@ void printDevAddr(Print* output) {
   readEEPROM(EE_LORA_DEVADDR, EE_LORA_DEVADDR+8, output);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void printLoraHelp(Print* output) {
+  output->println(F("LoRa help"));
+  output->println(F("(ai) Info"));
+  output->println(F("(ar) Reset"));
+  output->println(F("(as) Send message"));
+  output->println(F("(ap) Send parameters"));
+  output->println(F("(aa) set appskey"));
+  output->println(F("(an) set nwkskey"));
+  output->println(F("(ad) set devaddr"));
+}
 
