@@ -5,6 +5,11 @@
 // The lowest priority thread should take care of the watch dog
 #include <avr/wdt.h>
 
+#define ONE_WIRE      1
+#if ONE:WIRE
+#include <OneWire.h>
+#endif
+
 // http://www.arduino.cc/playground/Code/Time
 #include <Time.h>
 
@@ -22,14 +27,15 @@ void setup() {
   setupLogger();
   setupDebugger();
   setupParameters();
- 
-Serial1.begin(57600);
+
+  Serial1.begin(57600);
   nilSysBegin();
 }
 
 
 void loop() {
 }
+
 
 
 

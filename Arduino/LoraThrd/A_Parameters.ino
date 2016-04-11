@@ -18,7 +18,7 @@
 
 #define PARAM_1        0
 
-
+#define PARAM_TEMP_1   1
 
 //When parameters are set (and saved) an event is recorded (256-281 : A-Z + .... (if more parameters than 26))
 #define EVENT_SAVE_ALL_PARAMETER     255

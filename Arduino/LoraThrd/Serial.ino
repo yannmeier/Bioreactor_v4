@@ -140,6 +140,9 @@ void printResult(char* data, Print* output) {
   case 'l':
     getLoggerLog(output);
     break;
+  case 'o':
+    oneWireInfo(output);
+    break;
   case 's':
     printParameters(output);
     break;
@@ -163,11 +166,13 @@ void serialPrintHelp(Print* output) {
   output->println(F("(f)ree mem"));
   output->println(F("(h)elp"));
   output->println(F("(i)nitialize parameters"));
+  output->println(F("(o)ne-wire"));
   //  output->println(F("(l)og"));
   //  output->println(F("(q)ualifier"));
   output->println(F("(s)ettings"));
   output->println(F("(z) eeprom"));
 }
+
 
 
 
