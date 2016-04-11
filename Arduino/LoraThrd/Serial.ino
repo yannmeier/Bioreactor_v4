@@ -158,6 +158,7 @@ void serialPrintHelp(Print* output) {
   output->println(F("(ai) Lora info"));
   output->println(F("(ar) Lora reset"));
   output->println(F("(as) Lora send message"));
+  output->println(F("(ap) Lora send parameters"));
   output->println(F("(aa) Lora set appskey"));
   output->println(F("(an) Lora set nwkskey"));
   output->println(F("(ad) Lora set devaddr"));
@@ -172,6 +173,7 @@ void serialPrintHelp(Print* output) {
   output->println(F("(s)ettings"));
   output->println(F("(z) eeprom"));
 }
+
 
 
 

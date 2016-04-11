@@ -46,6 +46,11 @@ NIL_THREADS_TABLE_ENTRY(NULL, ThreadAction3, NULL, waThreadAction3, sizeof(waThr
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadAction4, NULL, waThreadAction4, sizeof(waThreadAction4))
 #endif
 
+#ifdef THR_LORA_SEND
+NIL_THREADS_TABLE_ENTRY(NULL, ThreadLoraSend, NULL, waThreadLoraSend, sizeof(waThreadLoraSend))
+#endif
+
+
 #ifdef ONE_WIRE
   NIL_THREADS_TABLE_ENTRY(NULL, ThreadTemp, NULL, waThreadTemp, sizeof(waThreadTemp))     
 #endif

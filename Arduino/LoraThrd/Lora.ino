@@ -13,6 +13,14 @@ void processLoraCommand(char command, char* data, Print* output) {
   case 's':
     sendLoraMessage(data, output);
     break;
+  case 'p':
+    if (data[0]=='\0') {
+      sendLoraCompactParameters(output, MAX_PARAM);
+    } 
+    else {
+      sendLoraCompactParameters(output, atoi(data));
+    }
+    break;
   case 'a':
     if (data[0]!='\0') {
       writeEEPROM(EE_LORA_APPSKEY, data, 32);
@@ -157,6 +165,19 @@ void sendLoraMessage(char* data, Print* output) {
   loraAnswer(5000, output);
 }
 
+
+void sendLoraCompactParameters(Print* output, byte number) {
+  Serial1.println(F("mac join abp"));
+  loraAnswer(1000, output);
+  Serial1.print(F("mac tx uncnf 1 "));
+  for (byte i=0; i<SERIAL_MAX_PARAM_VALUE_LENGTH; i++) {
+    printCompactParameters(&Serial1, 26);
+  }
+  Serial1.println("");
+  loraAnswer(5000, output);
+}
+
+
 void printNwksKey(Print* output) {
   readEEPROM(EE_LORA_NWKSKEY, EE_LORA_NWKSKEY+32, output);
 }
@@ -168,6 +189,7 @@ void printAppsKey(Print* output) {
 void printDevAddr(Print* output) {
   readEEPROM(EE_LORA_DEVADDR, EE_LORA_DEVADDR+8, output);
 }
+
 
 
 
