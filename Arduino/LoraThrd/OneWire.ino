@@ -1,5 +1,3 @@
-#include <OneWire.h>
-
 
 #define OW_TEMP_1             8
 
@@ -44,15 +42,11 @@ NIL_THREAD(ThreadTemp, arg) {
 
   while(true){
 #ifdef OW_TEMP_1
-    //  getTemperature(oneWire1, PARAM_TEMP_1);
+      getTemperature(oneWire1, PARAM_TEMP_1);
 #endif
-
 
     nilThdSleepMilliseconds(2000);
   }
-
-
-
 }
 
 void getTemperature(OneWire &ow, int parameter) {
