@@ -74,6 +74,10 @@ NIL_THREADS_TABLE_ENTRY(NULL, ThreadWeight, NULL, waThreadWeight, sizeof(waThrea
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadSerial, NULL, waThreadSerial, sizeof(waThreadSerial))
 #endif
 
+#ifdef LCD_SELECT
+NIL_THREADS_TABLE_ENTRY(NULL, ThreadLCD, NULL, waThreadLCD, sizeof(waThreadLCD))
+#endif
+
 #if defined(GAS_CTRL) || defined(I2C_LCD) || defined(PH_CTRL) || defined(I2C_RELAY_FOOD)
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadWire, NULL, waThreadWire, sizeof(waThreadWire))
 #endif

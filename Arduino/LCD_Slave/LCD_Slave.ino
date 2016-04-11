@@ -1,7 +1,8 @@
 #include <LiquidCrystal.h>
+#include <SPI.h>
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(10,9,8,6,12,A6);
- 
+
 
 #define ENCODER_CLOCKWISE      0
 #define ENCODER_ANTI_CLOCKWISE 1
@@ -19,6 +20,7 @@ volatile unsigned int encoderParamSelect = 0;  // a counter for the configuratio
 volatile unsigned int encoderMenuSelect  = MENU_SENSOR;  // a counter for the menu slection dial
 volatile unsigned int encoderTempValue   = 0;  // a counter to store a temporary value before to set it
 volatile unsigned int encoderLastValue   = 0;  // a counter to store a previous temporary value 
+static boolean spi_interrupt=false;
 static boolean To_Be_Refreshed = true;   // call the Refresh function on the next main loop call
 static boolean rotating=false;        // debounce management
 static boolean pushing  =true;        // debounce management
@@ -26,7 +28,35 @@ static boolean pushing  =true;        // debounce management
 boolean A_set = false;              
 boolean B_set = false;
 
+/************************************************
+         Arduino SPI Slave Functions
+*************************************************/
+//#define LCD_SELECT RXLED //pin SS (D8)
+char buf [100];
+volatile byte pos;
+volatile boolean process_it;
 
+void SPI_slave_init()
+{
+  pinMode(SS,INPUT);     //switch the slave select pin to input mode
+  digitalWrite(SS,HIGH); //turn on internal pull-up
+  // turn on SPI in slave mode
+  SPCR |= bit (SPE);
+  SPI.setDataMode(SPI_MODE0);
+  SPI.setBitOrder(MSBFIRST);
+  // have to send on master in, *slave out*
+  pinMode(MISO, OUTPUT);
+  // get ready for an interrupt 
+  pos = 0;   // buffer empty
+  process_it = false;
+  // now turn on interrupts
+  SPI.attachInterrupt();
+}
+
+
+/************************************************
+       Main function to refresh the LCD
+*************************************************/
 void Menu_Refresh()
 {  
   switch(encoderMenuSelect){
@@ -67,9 +97,8 @@ void Values_Refresh()
       return;
   }
 }
-
 /********************************************
-       "Menu Display" Function Set
+       "Menu Display" Utilities Set
 *********************************************/
 void Display_Menu_Selector()
 {
@@ -147,17 +176,17 @@ void Display_Menu_Calibr() //all is to be implemented
 {
   lcd.begin(20, 4);
     lcd.setCursor(0,0);
-    lcd.print("0)Back");
+    lcd.print(F("0)Back"));
     lcd.setCursor(10,0);
-    lcd.print("1)Tare");
+    lcd.print(F("1)Tare"));
     lcd.setCursor(0,1);
-    lcd.print("2)Sp:");
+    lcd.print(F("2)Sp:"));
     lcd.setCursor(10,1);
-    lcd.print("3)Of:");
+    lcd.print(F("3)Of:"));
     lcd.setCursor(0,2);
-    lcd.print("4)Calibration Proc");  
+    lcd.print(F("4)Calibration Proc"));  
     lcd.setCursor(0,3);
-    lcd.print("gr:");
+    lcd.print(F("gr:"));
     lcd.setCursor(10*((encoderTempValue%5)%2),(encoderTempValue%5)/2);
 }
 
@@ -186,6 +215,7 @@ void setup() {
   attachInterrupt(INT_BUTTON, doEncoderButton, CHANGE);
   //Serial communication start
   Serial.begin(9600);  
+  SPI_slave_init();
   lcd.begin(20, 4);
 }
 
@@ -198,6 +228,18 @@ void loop() {
   lcd.blink();  
   delay(10);
   rotating = true; 
+  
+ 
+ //test code for SPI slave protocol
+    if (process_it)
+    {
+    lcd.begin(20, 4);
+    buf [pos] = 0;  
+    lcd.print (buf);
+    pos = 0;
+    process_it = false;
+    }  // end of flag set*/
+  
 }
 
 /***************************************************************
@@ -205,7 +247,7 @@ void loop() {
 ****************************************************************/
 // Interrupt on A changing state
 void doEncoderA(){
-  delay(1);
+//  delay(10);
   if ( rotating ) 
     delay(20);//debounce
     if( digitalRead(ENCODER_CLOCKWISE) != A_set ) {  // debounce once more
@@ -218,9 +260,9 @@ void doEncoderA(){
 
 // Interrupt on B changing state, same as A above
 void doEncoderB(){
-  delay(20);
+//  delay(10);
   if ( rotating )
-    delay(10);
+    delay(20);
     if( digitalRead(ENCODER_ANTI_CLOCKWISE) != B_set ) {
       B_set = !B_set;
       //  adjust counter - 1 if B leads A
@@ -250,9 +292,7 @@ void doEncoderButton(){
       if((encoderTempValue%5)==0)
           encoderMenuSelect=MENU_SELECTOR;
       
-    }
-       
-
+    }  
     pushing=false;     //debouncer  
     To_Be_Refreshed=1; //refresh flag
   }
@@ -261,4 +301,18 @@ void doEncoderButton(){
   delay(10);
 }
 
+
+// SPI interrupt routine
+ISR (SPI_STC_vect)
+{
+  byte c = SPDR;  // grab byte from SPI Data Register
+  // add to buffer if room
+  if (pos < sizeof buf)
+  {
+    buf [pos++] = c;
+    // example: newline means time to process buffer
+    if (c == '\n')
+      process_it = true; 
+    }  // end of room available
+}  // end of interrupt routine SPI_STC_vect
 

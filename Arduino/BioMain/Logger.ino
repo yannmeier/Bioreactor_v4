@@ -97,7 +97,6 @@ void writeLog(uint16_t event_number, uint16_t parameter_value) {
   
   #ifdef DEBUG_LOGS
   else{
-    sst.flashSectorErase(findSectorOfN());
     Serial.print(F("Fail"));
   }
   #endif

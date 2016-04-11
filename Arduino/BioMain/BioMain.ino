@@ -68,7 +68,7 @@
   #define FLASH_SELECT     D10       //to be used to select the memory write (see "Logger")
 #define THR_MONITORING     1  
   #define MONITORING_LED   D13
-//#define  LCD_SELECT        D11     //Define here if the LCD screen is used or not (SPI THD)
+ #define  LCD_SELECT        D11     //Define here if the LCD screen is used or not (SPI THD)
 #endif
 
 
@@ -106,7 +106,7 @@
 
 #ifdef THR_LINEAR_LOGS
 #define LOG_INTERVAL          10  // define the interval in seconds between storing the log
-//#define DEBUG_LOGS          1
+#define DEBUG_LOGS          1
 #endif
 
 /*******************************
@@ -263,8 +263,7 @@ void setup() {
   #endif
   //disable SPI modules
   #ifdef LCD_SELECT 
-    pinMode(LCD_SELECT,OUTPUT);
-    digitalWrite(LCD_SELECT,HIGH);
+    setupLCD();
   #endif
   
   setSafeConditions(false);

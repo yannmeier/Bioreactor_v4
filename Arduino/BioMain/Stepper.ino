@@ -15,7 +15,7 @@
 
 //We define here the number of step executed during every call to the thread
 // Maximum 65535 !!!!
-#define NB_STEP_CALL  2400
+#define NB_STEP_CALL  24000
 
 
 //Prototypes
@@ -54,7 +54,8 @@ void executeStep(uint16_t numberSteps, boolean forward, byte port1, byte port2) 
     else { 
       counter--;
     }
-
+    
+    if((getParameter(PARAM_STEPPER_SPEED)%101)!=0){
     switch (counter % 4) {
     case 0:
       //This is RED & BLUE
@@ -77,8 +78,12 @@ void executeStep(uint16_t numberSteps, boolean forward, byte port1, byte port2) 
       digitalWrite(port2,LOW);
       break;
     }
-    nilThdSleepMilliseconds(24-(getParameter(PARAM_STEPPER_SPEED)%22));
+    nilThdSleepMicroseconds(2000-18*(getParameter(PARAM_STEPPER_SPEED)%101));
   } 
+  
+  else  nilThdSleepMilliseconds(100);
+  
+  }
 
 }
 
