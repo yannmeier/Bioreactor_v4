@@ -55,7 +55,8 @@
  **************************************/
 #ifdef TYPE_MAIN
 //#define MODEL_ZIGBEE       1       //change to LoRA
-#define STEPPER            {D18,D19}     
+#define STEPPER            {D18,D19}
+#define FOOD_CTRL          1
 #define FOOD_IN            D20
 #define FOOD_OUT           D21
 #define WEIGHT_DATA        D22
@@ -106,14 +107,14 @@
 
 #ifdef THR_LINEAR_LOGS
 #define LOG_INTERVAL          10  // define the interval in seconds between storing the log
-#define DEBUG_LOGS          1
+//#define DEBUG_LOGS          1
 #endif
 
 /*******************************
  * CARD DEFINITION (HARD CODED)
  *******************************/
 #ifdef STEPPER
-  #define PARAM_STEPPER_SPEED       37   // motor speed
+  #define PARAM_STEPPER_SPEED       18   // motor speed, parameter S (!!!!!TO BE REPROGRAMMED IN RPM!!!!!!!)
 #endif
 
 #ifdef     TEMPERATURE_CTRL
@@ -121,9 +122,9 @@
   #define PARAM_TEMP_PCB      1   // temperature of the heating plate
   #define PARAM_TEMP_TARGET   26  // target temperature of the liquid
 #define PARAM_TEMP_MAX             27  // maximal temperature of the plate
-#ifdef TEMP_SAMPLE
-  #define PARAM_TEMP_SAMPLE         2
-#endif
+//#ifdef TEMP_SAMPLE
+//  #define PARAM_TEMP_SAMPLE         2
+//#endif
 #if defined (TEMP_PID) 
 #define PARAM_TEMP_REG_TIME    28 //in [ms]
 #endif

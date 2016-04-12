@@ -2,7 +2,7 @@
 
 #include "HX711.h"
 //to be redefined
-#define calibration_factor -7050.0 //This value is obtained using the SparkFun_HX711_Calibration sketch
+#define calibration_factor -7050.10 //This value is obtained using the SparkFun_HX711_Calibration sketch
 HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
 
 
@@ -26,11 +26,9 @@ NIL_WORKING_AREA(waThreadWeight, 32);    // minimum of 32 !
 NIL_THREAD(ThreadWeight, arg) {
   
   nilThdSleepMilliseconds(2000);
-  
-  //master pin is for communication with the Gas flux control board
 /*  #ifdef MASTER_PIN
     pinMode(MASTER_PIN,OUTPUT);
-    pinMode(MASTER_PWM,INPUT);    //to be changed by proper I2C communication
+    pinMode(MASTER_PWM,INPUT);    //to be changed by proper I2C communication //master pin is for communication with the Gas flux control board
     digitalWrite(MASTER_PIN,LOW);
   #endif */
   
@@ -63,7 +61,6 @@ NIL_THREAD(ThreadWeight, arg) {
     weight_status=WEIGHT_STATUS_ERROR;
 
   while(true){ 
-    
     //sensor read 
     #ifdef MODE_CALIBRATE
       nilThdSleepMilliseconds(10); //in calibration mode, we have much faster weight changes.
@@ -72,18 +69,14 @@ NIL_THREAD(ThreadWeight, arg) {
     #endif
     
     //moving average calibrated weight (parameters 'P' and 'Q' for factor and offset)
-    
-    //!\\ Need to reintroduce the calibration parameters //!\\
-    
-    weight = (int)((float)0.8*weight+0.2*/*((float)getParameter(PARAM_WEIGHT_FACTOR)/(float)1000.0*/45.3*scale.get_units()/*-(float)getParameter(PARAM_WEIGHT_OFFSET))*/);
+    weight = (uint16_t)((float)0.8*weight+0.2*((float)getParameter(PARAM_WEIGHT_FACTOR)/(float)1000.0)*scale.get_units()-(float)getParameter(PARAM_WEIGHT_OFFSET));
     
     #ifdef EXTERNAL_WEIGHT_DEBUG
       wireWrite(110,0b10010000);
       nilThdSleepMilliseconds(6);
       Serial.println(wireReadFourBytesToInt(110));
     #endif
-    
-    
+      
     /***********************************************
              Standby and Error management
     ************************************************/

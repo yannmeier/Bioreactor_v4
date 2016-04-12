@@ -3,7 +3,6 @@
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(10,9,8,6,12,A6);
 
-
 #define ENCODER_CLOCKWISE      0
 #define ENCODER_ANTI_CLOCKWISE 1
 #define ENCODER_BUTTON         7
@@ -16,14 +15,13 @@ LiquidCrystal lcd(10,9,8,6,12,A6);
 #define MENU_CONFIG         2
 #define MENU_CALIBRATION    3
 
-volatile unsigned int encoderParamSelect = 0;  // a counter for the configuration dial & Calibration dial 
+//volatile unsigned int encoderParamSelect = 0;  // a counter for the configuration dial & Calibration dial ---> not used !!!!!
 volatile unsigned int encoderMenuSelect  = MENU_SENSOR;  // a counter for the menu slection dial
 volatile unsigned int encoderTempValue   = 0;  // a counter to store a temporary value before to set it
 volatile unsigned int encoderLastValue   = 0;  // a counter to store a previous temporary value 
-static boolean spi_interrupt=false;
-static boolean To_Be_Refreshed = true;   // call the Refresh function on the next main loop call
-static boolean rotating=false;        // debounce management
-static boolean pushing  =true;        // debounce management
+static boolean To_Be_Refreshed = true; // call the Refresh function on the next main loop call
+static boolean rotating=false;         // debounce management
+static boolean pushing  =true;         // debounce management
 // interrupt service routine variables
 boolean A_set = false;              
 boolean B_set = false;
@@ -32,9 +30,10 @@ boolean B_set = false;
          Arduino SPI Slave Functions
 *************************************************/
 //#define LCD_SELECT RXLED //pin SS (D8)
-char buf [100];
+byte buf [100];
 volatile byte pos;
-volatile boolean process_it;
+volatile boolean process_it=false;
+volatile boolean first_return=false;    
 
 void SPI_slave_init()
 {
@@ -53,6 +52,29 @@ void SPI_slave_init()
   SPI.attachInterrupt();
 }
 
+/**************************************************
+                Data Parsing
+***************************************************/
+char current_day;
+char current_month;
+char current_hour;
+char current_minutes;
+uint16_t param [26];
+
+void buffer_parser(){
+  
+  for(int i=0;i<26;i++)
+    param[i]=((buf[2*i+8]<<8)&(0xFF00))+(buf[2*i+9]&(0x00FF));
+  
+}
+
+void epoch_to_time(){
+;
+}
+
+void time_to_epoch(){
+;
+}
 
 /************************************************
        Main function to refresh the LCD
@@ -84,9 +106,9 @@ void Values_Refresh()
     case MENU_SELECTOR:
       Display_Value_Selector();
       break;
-    /*case MENU_SENSOR:
+    case MENU_SENSOR:
       Display_Value_Sensor();
-      break;*/
+      break;
     case MENU_CONFIG:
       Display_Value_Config();
       break;
@@ -140,6 +162,23 @@ void Display_Menu_Sensor()
     lcd.print(F("gr:"));
 }
 
+void Display_Value_Sensor()
+{
+  //display liquid temperature
+  lcd.setCursor(3,0);
+  lcd.print(param[0]);
+  //display motor speed in RPM
+  lcd.setCursor(14,0);
+  lcd.print(param[18]);      //--> motor speed to be moved in the first 26 parameters (eg S)
+  //display weight
+  lcd.setCursor(3,2);
+  lcd.print(param[2]); 
+  
+/* if(encoderTempValue!=encoderLastValue){ //--> should remove the blinking in sensor display mode
+    lcd.setCursor(10*((encoderTempValue%8)%2),(encoderTempValue%8)/2);
+    encoderLastValue=encoderTempValue;
+  }*/
+}
 
 void Display_Menu_Config()
 {
@@ -224,22 +263,19 @@ void loop() {
   //refresh the menu if needed
   if(To_Be_Refreshed)
     Menu_Refresh();
-  Values_Refresh();
+  if (process_it)
+    {
+      buffer_parser();
+      Values_Refresh();
+      pos = 0;
+      process_it = false;
+    }    
   lcd.blink();  
   delay(10);
   rotating = true; 
   
  
- //test code for SPI slave protocol
-    if (process_it)
-    {
-    lcd.begin(20, 4);
-    buf [pos] = 0;  
-    lcd.print (buf);
-    pos = 0;
-    process_it = false;
-    }  // end of flag set*/
-  
+
 }
 
 /***************************************************************
@@ -309,10 +345,14 @@ ISR (SPI_STC_vect)
   // add to buffer if room
   if (pos < sizeof buf)
   {
-    buf [pos++] = c;
+     buf [pos++] = c;
     // example: newline means time to process buffer
     if (c == '\n')
-      process_it = true; 
+      first_return=true;
+    if (c=='\n' && first_return==true)  
+      process_it = true;
+    else
+      first_return=false; 
     }  // end of room available
 }  // end of interrupt routine SPI_STC_vect
 

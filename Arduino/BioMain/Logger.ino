@@ -24,7 +24,7 @@
 SEMAPHORE_DECL(lockFlashAccess, 1);
 SST sst=SST(6); //B6
 
-uint32_t nextEntryID = 0;
+static uint32_t nextEntryID = 0;
 boolean logActive=false;
 boolean busy_flag=false;
 
@@ -146,6 +146,19 @@ uint32_t printLogN(Print* output, uint32_t entryN) {
   sst.flashReadFinish();
   nilSemSignal(&lockFlashAccess);
   return entryN;
+}
+
+
+void Last_Log_To_SPI_buff(byte* buff) {
+   
+  nilSemWait(&lockFlashAccess);
+  sst.flashReadInit(findAddressOfEntryN(nextEntryID-1));
+  for(byte i = 0; i < ENTRY_SIZE_LINEAR_LOGS; i++) {
+    byte oneByte=sst.flashReadNextInt8();
+    buff[i]=oneByte;
+  }
+  sst.flashReadFinish();
+  nilSemSignal(&lockFlashAccess);
 }
 
 
