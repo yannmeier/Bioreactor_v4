@@ -53,8 +53,8 @@ NIL_THREAD(ThreadWeight, arg) {
     #endif
     
     //moving average calibrated weight (parameters 'P' and 'Q' for factor and offset)
-    weight = (uint16_t)((float)0.8*weight+0.2*(((float)getParameter(PARAM_WEIGHT_FACTOR)/(float)1000.0)*scale.get_units()-(float)getParameter(PARAM_WEIGHT_OFFSET)));
-    
+    weight = /*(uint16_t)((float)0.8*weight+0.2**/scale.get_units();//);//(((float)getParameter(PARAM_WEIGHT_FACTOR)/*(float)1000.0)*/*scale.get_units()/1000-(float)getParameter(PARAM_WEIGHT_OFFSET)));
+    Serial.println(scale.get_units());
      
     /***********************************************
              Standby and Error management

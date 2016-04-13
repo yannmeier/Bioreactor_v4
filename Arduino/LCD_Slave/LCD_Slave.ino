@@ -48,7 +48,7 @@ boolean B_set = false;
          Arduino SPI Slave Functions
 *************************************************/
 //#define LCD_SELECT RXLED //pin SS (D8)
-byte buf [2*MAX_PARAM];
+byte buf [2*MAX_PARAM+2];
 volatile byte pos;
 volatile boolean process_it=false;
 volatile boolean first_return=false;    
@@ -81,10 +81,9 @@ uint16_t param [MAX_PARAM];
 uint32_t epoch;
 
 void buffer_parser(){
-  
-  epoch=((buf[4]<<24) + (buf[5]<<16) + (buf[6]<<8) + buf[7]);
+ //  epoch=((buf[4]<<24) + (buf[5]<<16) + (buf[6]<<8) + buf[7]);
   for(int i=0;i<26;i++)
-    param[i]=((buf[2*i+8]<<8)&(0xFF00))+(buf[2*i+9]&(0x00FF));
+    param[i]=((buf[2*i]<<8)&(0xFF00))+(buf[2*i+1]&(0x00FF));
   
 }
 
@@ -151,8 +150,8 @@ void Display_Menu_Selector()
 void Display_Value_Selector()
 {     
  if(encoderTempValue!=encoderLastValue){
- //   lcd.setCursor(16,0);
- //   lcd.print((encoderTempValue%3)+1);
+    lcd.setCursor(16,0);
+    lcd.print((encoderTempValue%3)+1);
     lcd.setCursor(0,(encoderTempValue%3)+1);
     encoderLastValue=encoderTempValue;
   }

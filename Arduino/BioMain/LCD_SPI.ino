@@ -42,7 +42,7 @@ NIL_THREAD(ThreadLCD, arg) {
   SPI.transfer('\n');                  //double return at end of com  
   SPI.transfer('\n');
   digitalWrite(LCD_SELECT, HIGH);      // disable LCD_SS
-  nilThdSleepMilliseconds(1000);
+  nilThdSleepMilliseconds(100);
   }
 }
 
