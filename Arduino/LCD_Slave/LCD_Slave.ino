@@ -60,16 +60,26 @@ char current_month;
 char current_hour;
 char current_minutes;
 uint16_t param [26];
+uint32_t epoch;
 
 void buffer_parser(){
   
+  epoch=((buf[4]<<24) + (buf[5]<<16) + (buf[6]<<8) + buf[7]);
   for(int i=0;i<26;i++)
     param[i]=((buf[2*i+8]<<8)&(0xFF00))+(buf[2*i+9]&(0x00FF));
   
 }
 
-void epoch_to_time(){
-;
+//convert unix time stamp to readable date format
+void epoch_to_time(){   
+/*  struct tm * timeinfo;
+  char buffer [80];
+  timeinfo = sTime(&epoch);
+
+  strftime (buffer,80,"Now it's %I:%M%p.",timeinfo);
+  puts (buffer);
+*/
+ 
 }
 
 void time_to_epoch(){
