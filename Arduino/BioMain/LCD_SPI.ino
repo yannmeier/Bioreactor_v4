@@ -13,33 +13,34 @@ void setupLCD(){
   #endif
 }
 
-byte buff[64];
+void Last_Params_To_SPI_buff(byte* buff) { 
+  for(byte i = 0; i < MAX_PARAM; i++) {
+    buff[2*i]=(byte)((getParameter(i)>>8)&(0x00FF));
+    buff[2*i+1]=(byte)((getParameter(i))&(0x00FF));
+  }
+}
+
+byte buff[2*MAX_PARAM];
 /***********************************************
         SPI Slave thread for SPI
 ************************************************/
-NIL_WORKING_AREA(waThreadLCD, 24); // minimum 128
+NIL_WORKING_AREA(waThreadLCD, 24);
 NIL_THREAD(ThreadLCD, arg) {
 
   nilThdSleepMilliseconds(1000);
   while(true) {
-  
-  Last_Log_To_SPI_buff(buff);
-  // enable Slave Select
-  digitalWrite(LCD_SELECT, LOW);    // SS is pin 10
-  //Load Last Log Into SPI buffer
-  for(int i=0; i<sizeof(buff); i++){
+    //Last_Log_To_SPI_buff(buff);        //to display the last log in flash instead of the last Parameters
+  Last_Params_To_SPI_buff(buff);       //Load Last Parameters Into SPI buffer
+  digitalWrite(LCD_SELECT, LOW);       //enable Slave Select
+  for(int i=0; i<sizeof(buff); i++){ 
     SPI.transfer(char(buff[i]));
-    delayMicroseconds(10); //correct transmission error by adding a small delay before start & stop.
+    delayMicroseconds(5);              //correct transmission errors
   }
-  //double chariot return at end of communication  
+  SPI.transfer('\n');                  //double chariot return at end of communication  
   SPI.transfer('\n');
-  SPI.transfer('\n');
-  // disable Slave Select
-  digitalWrite(LCD_SELECT, HIGH);
-
+  digitalWrite(LCD_SELECT, HIGH);      // disable Slave Select
   nilThdSleepMilliseconds(1000);
   }
- 
 }
 
 

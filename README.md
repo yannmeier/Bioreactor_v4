@@ -34,6 +34,7 @@ Bioreactor V4.2:
 - Changed operating frequency from 16MHz to 8MHz
 - Changed operating voltage from 5V to 3.3V
 - Removed 5V regulation
+- Routed LoRa RST pin to MCU with additionnal pull-up
 
 #Mechanics
 
