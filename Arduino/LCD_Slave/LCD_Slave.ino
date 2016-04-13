@@ -3,6 +3,8 @@
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(10,9,8,6,12,A6);
 
+#define MAX_PARAM  52
+
 #define ENCODER_CLOCKWISE      0
 #define ENCODER_ANTI_CLOCKWISE 1
 #define ENCODER_BUTTON         7
@@ -30,7 +32,7 @@ boolean B_set = false;
          Arduino SPI Slave Functions
 *************************************************/
 //#define LCD_SELECT RXLED //pin SS (D8)
-byte buf [100];
+byte buf [2*MAX_PARAM];
 volatile byte pos;
 volatile boolean process_it=false;
 volatile boolean first_return=false;    
@@ -59,7 +61,7 @@ char current_day;
 char current_month;
 char current_hour;
 char current_minutes;
-uint16_t param [26];
+uint16_t param [MAX_PARAM];
 uint32_t epoch;
 
 void buffer_parser(){
@@ -68,22 +70,6 @@ void buffer_parser(){
   for(int i=0;i<26;i++)
     param[i]=((buf[2*i+8]<<8)&(0xFF00))+(buf[2*i+9]&(0x00FF));
   
-}
-
-//convert unix time stamp to readable date format
-void epoch_to_time(){   
-/*  struct tm * timeinfo;
-  char buffer [80];
-  timeinfo = sTime(&epoch);
-
-  strftime (buffer,80,"Now it's %I:%M%p.",timeinfo);
-  puts (buffer);
-*/
- 
-}
-
-void time_to_epoch(){
-;
 }
 
 /************************************************
