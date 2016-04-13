@@ -5,6 +5,22 @@ LiquidCrystal lcd(10,9,8,6,12,A6);
 
 #define MAX_PARAM  52
 
+#define PARAM_TEMP_LIQ             0   // temperature of the solution
+#define PARAM_TEMP_PCB             1   // temperature of the heating plate
+#define PARAM_WEIGHT               2   // in gr
+#define PARAM_WEIGHT_FACTOR        15  // Weight calibration: conversion factor digital -> gr (weight=FACTOR*dig_unit)
+#define PARAM_WEIGHT_OFFSET        16  // Weight calibration: digital offset value when bioreactor is empty
+#define PARAM_STEPPER_SPEED        18  // motor speed, parameter S (!!!!!TO BE REPROGRAMMED IN RPM!!!!!!!)
+#define PARAM_WEIGHT_STATUS        23  // current STATUS // BBBAAAAA AAAAAAAA : A = wait time in minutes, B = status
+#define PARAM_STATUS               25  
+#define PARAM_TEMP_TARGET          26  // target temperature of the liquid
+#define PARAM_TEMP_REG_TIME        28  //in [ms]
+#define PARAM_WEIGHT_MIN           29    
+#define PARAM_WEIGHT_MAX           30  
+#define PARAM_SEDIMENTATION_TIME   35  // MINUTES to wait without rotation before emptying
+#define PARAM_FILLED_TIME          36  // MINUTES to stay in the filled state
+
+
 #define ENCODER_CLOCKWISE      0
 #define ENCODER_ANTI_CLOCKWISE 1
 #define ENCODER_BUTTON         7
@@ -135,8 +151,8 @@ void Display_Menu_Selector()
 void Display_Value_Selector()
 {     
  if(encoderTempValue!=encoderLastValue){
-    lcd.setCursor(16,0);
-    lcd.print((encoderTempValue%3)+1);
+ //   lcd.setCursor(16,0);
+ //   lcd.print((encoderTempValue%3)+1);
     lcd.setCursor(0,(encoderTempValue%3)+1);
     encoderLastValue=encoderTempValue;
   }
@@ -162,13 +178,13 @@ void Display_Value_Sensor()
 {
   //display liquid temperature
   lcd.setCursor(3,0);
-  lcd.print(param[0]);
+  lcd.print(param[PARAM_TEMP_LIQ]);
   //display motor speed in RPM
   lcd.setCursor(14,0);
-  lcd.print(param[18]);      //--> motor speed to be moved in the first 26 parameters (eg S)
+  lcd.print(param[PARAM_STEPPER_SPEED]);      //--> motor speed to be moved in the first 26 parameters (eg S)
   //display weight
   lcd.setCursor(3,2);
-  lcd.print(param[2]); 
+  lcd.print(param[PARAM_WEIGHT]); 
   
 /* if(encoderTempValue!=encoderLastValue){ //--> should remove the blinking in sensor display mode
     lcd.setCursor(10*((encoderTempValue%8)%2),(encoderTempValue%8)/2);

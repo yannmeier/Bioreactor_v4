@@ -4,7 +4,8 @@
        LCD Control Functions
 ************************************/
 void setupLCD(){
-  pinMode(LCD_SELECT,OUTPUT); digitalWrite(LCD_SELECT, HIGH);
+  pinMode(LCD_SELECT,OUTPUT); 
+  digitalWrite(LCD_SELECT, HIGH);
   SPI.setClockDivider(SPI_CLOCK_DIV8);
   #ifndef FLASH_SELECT
   SPI.begin();
@@ -29,16 +30,18 @@ NIL_THREAD(ThreadLCD, arg) {
 
   nilThdSleepMilliseconds(1000);
   while(true) {
-    //Last_Log_To_SPI_buff(buff);        //to display the last log in flash instead of the last Parameters
+  #ifdef FLASH_SELECT
+    //Last_Log_To_SPI_buff(buff);        //Load last log in flash 
+  #endif
   Last_Params_To_SPI_buff(buff);       //Load Last Parameters Into SPI buffer
-  digitalWrite(LCD_SELECT, LOW);       //enable Slave Select
+  digitalWrite(LCD_SELECT, LOW);       //enable LCD_SS
   for(int i=0; i<sizeof(buff); i++){ 
     SPI.transfer(char(buff[i]));
     delayMicroseconds(5);              //correct transmission errors
   }
-  SPI.transfer('\n');                  //double chariot return at end of communication  
+  SPI.transfer('\n');                  //double return at end of com  
   SPI.transfer('\n');
-  digitalWrite(LCD_SELECT, HIGH);      // disable Slave Select
+  digitalWrite(LCD_SELECT, HIGH);      // disable LCD_SS
   nilThdSleepMilliseconds(1000);
   }
 }

@@ -19,7 +19,6 @@
 #define TYPE_MAIN     1   // card to control the basic functions: food, motor, temperature
 //#define TYPE_PH
 //#define TYPE_GAS
-//#define TYPE_LCD
 
 /******************
  * OPERATION MODE
@@ -60,16 +59,16 @@
 #define FOOD_IN            D20
 #define FOOD_OUT           D21
 #define WEIGHT_DATA        D22
-#define WEIGHT_CLK         D23        //need to redefine the calibratiin parameters and process (see "HX711")
+#define WEIGHT_CLK         D23     //need to redefine the calibration parameters and process (see "HX711")
 #define TEMPERATURE_CTRL   1
   #define TEMP_LIQ         D4
   #define TEMP_PCB         D6 
   #define TEMP_PID         D12
 #define THR_LINEAR_LOGS    1
-  #define FLASH_SELECT     D10       //to be used to select the memory write (see "Logger")
+  #define FLASH_SELECT     D10    //Flash SS_SPI
 #define THR_MONITORING     1  
   #define MONITORING_LED   D13
- #define  LCD_SELECT        D11     //Define here if the LCD screen is used or not (SPI THD)
+ #define  LCD_SELECT       D11    //LCD screen SS_SPI
 #endif
 
 
@@ -122,9 +121,6 @@
   #define PARAM_TEMP_PCB      1   // temperature of the heating plate
   #define PARAM_TEMP_TARGET   26  // target temperature of the liquid
 #define PARAM_TEMP_MAX             27  // maximal temperature of the plate
-//#ifdef TEMP_SAMPLE
-//  #define PARAM_TEMP_SAMPLE         2
-//#endif
 #if defined (TEMP_PID) 
 #define PARAM_TEMP_REG_TIME    28 //in [ms]
 #endif
@@ -253,17 +249,15 @@ void setup() {
   Serial.begin(9600);
   delay(1000);
   setupParameters();
-  //get back the previous config  
-  #ifdef THR_LINEAR_LOGS
+  
   #ifdef FLASH_SELECT 
     pinMode(FLASH_SELECT,OUTPUT);
-  #endif
   setupMemory();
   recoverLastEntryN();
-  loadLastEntryToParameters();
+  loadLastEntryToParameters();   //get back the previous config  
   #endif
-  //disable SPI modules
-  #ifdef LCD_SELECT 
+
+  #ifdef LCD_SELECT              //disable SPI modules 
     setupLCD();
   #endif
   
