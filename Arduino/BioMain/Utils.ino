@@ -1,12 +1,6 @@
 #define MAX_MULTI_LOG 10
 
 void printGeneralParameters(Print* output){
-#ifdef THR_ETHERNET
-  output->print(F("IP:"));
-  printIP(output, ip, 4, DEC);
-  output->print(F("MAC:"));
-  printIP(output, mac, 6, HEX);
-#endif
   output->print(F("EPOCH:"));
   output->println(now());
   output->print(F("millis:"));
@@ -27,18 +21,7 @@ void printGeneralParameters(Print* output){
   output->print(F("FlashID:"));
   sst.printFlashID(output);
 #endif
-
-
 }
-
-void printIP(Print* output, uint8_t* tab, uint8_t s, byte format){
-  for(int i=0; i<s; i++){
-    output->print(tab[i], format);
-    output->print(' ');
-  }
-  output->println("");
-}
-
 
 /* SerialEvent occurs whenever a new data comes in the
  hardware serial RX.  This routine is run between each
@@ -62,54 +45,43 @@ void printIP(Print* output, uint8_t* tab, uint8_t s, byte format){
 void printResult(char* data, Print* output) {
   boolean theEnd=false;
   byte paramCurrent=0; // Which parameter are we defining
-  // The maximal length of a parameter value. It is a int so the value must be between -32768 to 32767
-#define MAX_PARAM_VALUE_LENGTH 12
-  char paramValue[MAX_PARAM_VALUE_LENGTH];
+  char paramValue[SERIAL_MAX_PARAM_VALUE_LENGTH];
+  paramValue[0]='\0';
   byte paramValuePosition=0;
   byte i=0;
+  boolean inValue=false;
 
   while (!theEnd) {
     byte inChar=data[i];
     i++;
-    if (inChar=='\0' || i==SERIAL_BUFFER_LENGTH) theEnd=true;
-    if (inChar=='p') { // show settings
-      printGeneralParameters(output);
-    } 
-    else if (inChar=='h') {
-      printHelp(output);
+    if (i==SERIAL_BUFFER_LENGTH) theEnd=true;
+    if (inChar=='\0') {
+      theEnd=true;
     }
-    else if (inChar=='i') { // show i2c (wire) information
-#if defined(GAS_CTRL) || defined(PH_CTRL)
-      wireInfo(output); 
-#else  //not elsif !!
-      noThread(output);
-#endif
+    else if ((inChar>47 && inChar<58) || inChar=='-' || inValue) { // a number (could be negative)
+      if (paramValuePosition<SERIAL_MAX_PARAM_VALUE_LENGTH) {
+        paramValue[paramValuePosition]=inChar;
+        paramValuePosition++;
+        if (paramValuePosition<SERIAL_MAX_PARAM_VALUE_LENGTH) {
+          paramValue[paramValuePosition]='\0';
+        }
+      }
     } 
-    /*
-    else if (inChar=='o') { // show oneWire information
-     #if defined(TEMP_LIQ) || defined(TEMP_PLATE)
-     output->println("To implement");
-     //oneWireInfo(output); TODO
-     #else
-     noThread(output);
-     #endif
-     }
-     */
-    else if (inChar=='s') { // show settings
-      printParameters(output);
-    } 
-#ifdef EEPROM_DUMP
-    else if (inChar=='z') { // show debug info
-      getStatusEEPROM(output);
-    } 
-#endif
-    else if (inChar=='f') { // show settings
-      printFreeMemory(output);
-    } 
-    else if (inChar==',') { // store value and increment
+    else if (inChar>64 && inChar<92) { // an UPPERCASE character so we define the field
+      // we extend however the code to allow 2 letters fields !!!
+      if (paramCurrent>0) {
+        paramCurrent*=26;
+      }
+      paramCurrent+=inChar-64;
+      if (paramCurrent>MAX_PARAM) {
+        paramCurrent=0; 
+      }
+    }
+    if (inChar==',' || theEnd) { // store value and increment
       if (paramCurrent>0) {
         if (paramValuePosition>0) {
           setAndSaveParameter(paramCurrent-1,atoi(paramValue));
+          output->println(parameters[paramCurrent-1]);
         } 
         else {
           output->println(parameters[paramCurrent-1]);
@@ -118,138 +90,128 @@ void printResult(char* data, Print* output) {
           paramCurrent++;
           paramValuePosition=0;
           paramValue[0]='\0';
-        }
+        } 
       }
     }
-    else if (theEnd) {
-      // this is a carriage return;
-      if (paramCurrent>0) {
-        if (paramValuePosition>0) {
-          setAndSaveParameter(paramCurrent-1,atoi(paramValue));
-        } 
-        else {
-          output->println(parameters[paramCurrent-1]);
-        }
-      }
-      else if (data[0]=='c') {
-        if (paramValuePosition>0) {
-          printCompactParameters(output, atoi(paramValue));
-        } 
-        else {
-          printCompactParameters(output);
-        } 
-      }  
-#ifdef THR_LINEAR_LOGS
-      else if (data[0]=='d') {
-        if (paramValuePosition>0) {
-          if (atol(paramValue)==1234) {
-            //validateFlash(output);
-            formatFlash(output);
-          }
-        } 
-        else {
-          output->println(F("To format flash enter d1234"));
-        }
-      }
-#endif
-      else if (data[0]=='e') {
-        if (paramValuePosition>0) {
-          setTime(atol(paramValue));
-        } 
-        else {
-          output->println(now());
-        }
-      }
-      else if (data[0]=='l') {
-#ifdef THR_LINEAR_LOGS
-        if (paramValuePosition>0) {
-          printLogN(output,atol(paramValue));
-        } 
-        else {
-          printLastLog(output);
-        }
-#else
-        noThread(output);
-#endif
-      }
-      else if (data[0]=='r') {
-        if (paramValuePosition>0) {
-          if (atol(paramValue)==1234) {
-            resetParameters();
-            output->println(F("Reset done"));
-          }
-        } 
-        else {
-          output->println(F("To reset enter r1234"));
-        }
-      }
-      else if (data[0]=='q') {
-        if (paramValuePosition>0) {
-          setQualifier(atoi(paramValue));
-        } 
-        else {
-          uint16_t a=getQualifier();
-          output->println(a);
-        }
-      }  
-      /***********************************************
-      //display the logs sotcked in the flash memory
-      ***********************************************/
-      else if (data[0]=='m') {
-      #ifdef THR_LINEAR_LOGS
-        if (paramValuePosition>0) {
-          long currentValueLong=atol(paramValue);
-          if (( currentValueLong - nextEntryID ) < 0) {
-            printLogN(output,currentValueLong);
-          } 
-          else {
-            byte endValue=MAX_MULTI_LOG;
-            if (currentValueLong > nextEntryID) 
-              endValue=0;
-           else if (( nextEntryID - currentValueLong ) < MAX_MULTI_LOG) 
-              endValue= nextEntryID - currentValueLong;           
-           for (byte i=0; i<endValue; i++) {
-              currentValueLong=printLogN(output,currentValueLong)+1;
-              nilThdSleepMilliseconds(25);
-           }
-          }
-        } 
-        else
-          output->println(nextEntryID-1);// we will get the first and the last log ID
-      #else
-        noThread(output);
-      #endif
-      }
-    
+    if (data[0]>96 && data[0]<123 && (i>1 || data[1]<97 || data[1]>122)) { // we may have one or 2 lowercasee
+      inValue=true;
+    }
   }
 
-    else if ((inChar>47 && inChar<58) || inChar=='-') { // a number (could be negative)
-      if (paramValuePosition<MAX_PARAM_VALUE_LENGTH) {
-        paramValue[paramValuePosition]=inChar;
-        paramValuePosition++;
-        if (paramValuePosition<MAX_PARAM_VALUE_LENGTH) {
-          paramValue[paramValuePosition]='\0';
+  // we will process the commands, it means it starts with lowercase
+  switch (data[0]) {
+    case 'a':
+    processLoraCommand(data[1], paramValue, output);
+      break;
+    case 'c':
+      if (paramValuePosition>0) 
+        printCompactParameters(output, atoi(paramValue));
+      else   
+        printCompactParameters(output); 
+      break; 
+    #ifdef THR_LINEAR_LOGS
+    case 'd':
+      if (paramValuePosition>0) {
+        if (atol(paramValue)==1234)
+          formatFlash(output);
+      } 
+      else 
+        output->println(F("To format flash enter d1234"));
+      break;
+    #endif    
+    case 'e':
+      if (paramValuePosition>0) 
+        setTime(atol(paramValue));
+      else 
+        output->println(now());
+      break;
+    case 'f':
+      printFreeMemory(output);
+      break;
+    case 'h':
+      printHelp(output);
+      break;
+    case 'i':
+      #if defined(GAS_CTRL) || defined(PH_CTRL)
+        wireInfo(output); 
+      #else  //not elsif !!
+        noThread(output);
+      #endif
+      break;
+    case 'l':
+    #ifdef THR_LINEAR_LOGS
+      if (paramValuePosition>0) 
+        printLogN(output,atol(paramValue));
+      else 
+        printLastLog(output);
+   #else
+    noThread(output);
+#endif
+    break;
+  case 'm':
+#ifdef THR_LINEAR_LOGS
+    if (paramValuePosition>0) {
+      long currentValueLong=atol(paramValue);
+      if (( currentValueLong - nextEntryID ) < 0) {
+        printLogN(output,currentValueLong);
+      } 
+      else {
+        byte endValue=MAX_MULTI_LOG;
+        if (currentValueLong > nextEntryID) 
+          endValue=0;
+        else if (( nextEntryID - currentValueLong ) < MAX_MULTI_LOG) 
+          endValue= nextEntryID - currentValueLong;           
+        for (byte i=0; i<endValue; i++) {
+          currentValueLong=printLogN(output,currentValueLong)+1;
+          nilThdSleepMilliseconds(25);
         }
       }
     } 
-    else if (inChar>64 && inChar<92) { // a character so we define the field
-      // we extend however the code to allow 2 letters fields !!!
-      // we extend however the code to allow 2 letters fields !!
-      if (paramCurrent>0) {
-        paramCurrent*=26;
-      }
-      paramCurrent+=inChar-64;
-      if (paramCurrent>MAX_PARAM) {
-        paramCurrent=0; 
+    else
+      output->println(nextEntryID-1);// we will get the first and the last log ID
+#else
+    noThread(output);
+#endif
+    break;
+  case 'o':
+#if defined(TEMP_LIQ) || defined(TEMP_PCB)
+    oneWireInfo(output);
+#else
+    noThread(output);
+#endif
+  case 'p':
+    printGeneralParameters(output);
+    break;
+  case 'q':
+    if (paramValuePosition>0) {
+      setQualifier(atoi(paramValue));
+    } 
+    else {
+      uint16_t a=getQualifier();
+      output->println(a);
+    }
+  case 'r':
+    if (paramValuePosition>0) {
+      if (atol(paramValue)==1234) {
+        resetParameters();
+        output->println(F("Reset done"));
       }
     } 
+    else {
+      output->println(F("To reset enter r1234"));
+    }
+  case 's':
+    printParameters(output);
+    break;
+  case 'z':
+    getStatusEEPROM(output);
+    break;
   }
+  output->println("");
 }
 
 void printHelp(Print* output) {
   //return the menu
-  
-#ifndef TEMP_PID_COLD  
   output->println(F("(c)ompact settings"));
 #ifdef THR_LINEAR_LOGS
   output->println(F("(d)elete flash"));
@@ -260,29 +222,12 @@ void printHelp(Print* output) {
   output->println(F("(i)2c"));
   output->println(F("(l)og"));
   output->println(F("(m)ultiple log"));
-  // output->println(F("(o)ne-wire"));
+  output->println(F("(o)ne-wire"));
   output->println(F("(p)aram"));
   output->println(F("(q)ualifier"));
   output->println(F("(r)eset"));
   output->println(F("(s)ettings"));
-#ifdef EEPROM_DUMP
   output->println(F("(z) eeprom"));
-#endif
-
-#endif
-
-#ifdef TEMP_PID_COLD
-  output->println(F("(A) Cold temp"));
-  output->println(F("(B) Hot temp"));
-  output->println(F("(C) Sample temp"));
-  output->println(F("(AA) Target temp (>=10C <80C)"));
-  output->println(F("(AB) Max Temp"));
-  output->println(F("(AC) Windows time 2000ms COOL 5000ms hot"));
-  output->println(F("(AD) Min temp"));
-  output->println(F("(AE) Max absolute temp"));
-  output->println(F("(AF) Status 0=heating 1=cooling 2=ambient reg"));
-  output->println(F("(AG) Approx ambient temp (user set)"));
-#endif
 }
 
 
@@ -318,6 +263,8 @@ uint8_t toHex(Print* output, long value) {
   checkDigit^=toHex(output, (int)(value>>0&65535));
   return checkDigit;
 }
+
+
 
 
 

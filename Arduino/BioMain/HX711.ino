@@ -16,7 +16,7 @@ HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
 //#define WEIGHT_DEBUG 1 
 
 #ifdef WEIGHT_DEBUG
-NIL_WORKING_AREA(waThreadWeight, 64);    
+NIL_WORKING_AREA(waThreadWeight, 96);    
 #else
 NIL_WORKING_AREA(waThreadWeight, 32); // minimum of 32 !
 #endif
@@ -54,7 +54,7 @@ NIL_THREAD(ThreadWeight, arg) {
     
     //moving average calibrated weight (parameters 'P' and 'Q' for factor and offset)
     weight = /*(uint16_t)((float)0.8*weight+0.2**/scale.get_units();//);//(((float)getParameter(PARAM_WEIGHT_FACTOR)/*(float)1000.0)*/*scale.get_units()/1000-(float)getParameter(PARAM_WEIGHT_OFFSET)));
-    Serial.println(scale.get_units());
+    //Serial.println(scale.get_units());
      
     /***********************************************
              Standby and Error management

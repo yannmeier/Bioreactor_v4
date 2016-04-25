@@ -76,7 +76,7 @@ void printResult(char* data, Print* output) {
         paramCurrent=0; 
       }
     }
-    else if (inChar==',' || paramCurrent>0) { // store value and increment
+    if (inChar==',' || theEnd) { // store value and increment
       if (paramCurrent>0) {
         if (paramValuePosition>0) {
           setAndSaveParameter(paramCurrent-1,atoi(paramValue));
@@ -94,7 +94,7 @@ void printResult(char* data, Print* output) {
           debugger(1,inChar);
         }
       }
-    } 
+    }
     if (data[0]>96 && data[0]<123 && (i>1 || data[1]<97 || data[1]>122)) { // we may have one or 2 lowercasee
       inValue=true;
     }

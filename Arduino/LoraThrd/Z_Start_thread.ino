@@ -52,7 +52,7 @@ NIL_THREADS_TABLE_ENTRY(NULL, ThreadLoraSend, NULL, waThreadLoraSend, sizeof(waT
 
 
 #ifdef ONE_WIRE
-  NIL_THREADS_TABLE_ENTRY(NULL, ThreadTemp, NULL, waThreadTemp, sizeof(waThreadTemp))     
+NIL_THREADS_TABLE_ENTRY(NULL, ThreadTemp, NULL, waThreadTemp, sizeof(waThreadTemp))     
 #endif
 
 
@@ -63,6 +63,7 @@ NIL_THREADS_TABLE_ENTRY(NULL, ThreadMonitoring, NULL, waThreadMonitoring, sizeof
 
 
 NIL_THREADS_TABLE_END()
+
 
 
 

@@ -7,7 +7,6 @@ NIL_THREAD(ThreadLoraSend, arg) {
   resetLora(&Serial);
   initLora(&Serial);
   while (TRUE) {
-
     char buf [5];
     sprintf (buf, "%05i", getParameter(PARAM_TEMP_1));
     sendLoraMessage(buf, &Serial);

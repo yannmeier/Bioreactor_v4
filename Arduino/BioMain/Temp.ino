@@ -25,15 +25,8 @@
 
 #include <OneWire.h>
 
+
 byte oneWireAddress[8];
-
-void getTemperature(OneWire &ow, int parameter, byte errorBit, byte failedEvent, byte recoverEvent);
-
-byte errorTemperature=0;
-
-NIL_WORKING_AREA(waThreadTemp, 50);  // should be 50 without Serial.println
-NIL_THREAD(ThreadTemp, arg) {
-  nilThdSleepMilliseconds(200);
 #ifdef TEMPERATURE_CTRL
 
 #ifdef TEMP_LIQ
@@ -51,18 +44,15 @@ NIL_THREAD(ThreadTemp, arg) {
   byte errorTempSample = false;
 #endif
 
-
 #endif
 
+void getTemperature(OneWire &ow, int parameter, byte errorBit, byte failedEvent, byte recoverEvent);
 
-#ifdef STEPPER_CTRL
+byte errorTemperature=0;
 
-#ifdef TEMP_STEPPER
-  OneWire oneWire4(TEMP_STEPPER);
-  byte errorTempStepper = false;
-#endif
-
-#endif
+NIL_WORKING_AREA(waThreadTemp, 50);  // should be 50 without Serial.println
+NIL_THREAD(ThreadTemp, arg) {
+  nilThdSleepMilliseconds(200);
 
   while(true){
 #ifdef TEMP_LIQ
@@ -126,7 +116,20 @@ void getTemperature(OneWire &ow, int parameter, byte errorBit, byte failedEvent,
   }
 }  
 
-
+void oneWireInfo(Print* output) { // TODO
+  output->println(F("One wire device list"));
+  #ifdef TEMP_LIQ
+  oneWire1.reset_search();
+  while (oneWire1.search(oneWireAddress)) {
+    for(byte i = 0; i < 8; i++) {
+      output->print(' ');
+      output->print(oneWireAddress[i], HEX);
+    }
+    output->println("");
+    nilThdSleepMilliseconds(250);
+    #endif
+  }
+}
 
 #endif
 

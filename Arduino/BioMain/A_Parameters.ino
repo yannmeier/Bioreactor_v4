@@ -14,11 +14,10 @@
 
 #include <avr/eeprom.h>
 
-#ifdef EEPROM_DUMP
+
 #define EEPROM_MIN_ADDR            0
 #define EEPROM_MAX_ADDR          511
 #include <EEPROM.h> // should be removed and based only on avr/eeprom
-#endif
 
 #define MAX_PARAM 52   // If the MAX_PARAM change you need to change the pointer in the EEPROM
 
@@ -33,6 +32,13 @@
 
 #define EEPROM_MIN_ADDR            0
 #define EEPROM_MAX_ADDR          511
+
+
+#define EE_LORA_DEVADDR          150  // 8 bytes
+#define EE_LORA_NWKSKEY          158  // 32 bytes
+#define EE_LORA_APPSKEY          190  // 32 bytes
+#define EE_QUALIFIER             222
+
 
 // value that should not be taken into account
 // in case of error the parameter is set to this value
@@ -107,7 +113,7 @@ void printParameters(Print* output) {
   }
 }
 
-#ifdef EEPROM_DUMP
+
 // code from http://www.arduino.cc/playground/Code/EepromUtil
 void getStatusEEPROM(Print* output) {
   int bytesPerRow = 16;
@@ -140,7 +146,7 @@ void getStatusEEPROM(Print* output) {
     }
   }
 }
-#endif
+
 
 uint8_t printCompactParameters(Print* output) {
   printCompactParameters(output, MAX_PARAM);
@@ -165,11 +171,11 @@ uint8_t printCompactParameters(Print* output, byte number) {
 
 /* The qualifier represents the card ID and is stored just after the last parameter */
 uint16_t getQualifier() {
-  return eeprom_read_word((uint16_t*)(EE_START_PARAM+MAX_PARAM*2));
+  return eeprom_read_word((uint16_t*)(EE_QUALIFIER));
 }
 
 void setQualifier(uint16_t value) {
-  eeprom_write_word((uint16_t*)(EE_START_PARAM+MAX_PARAM*2), value);
+  eeprom_write_word((uint16_t*)(EE_QUALIFIER), value);
 }
 
 

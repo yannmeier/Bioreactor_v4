@@ -53,7 +53,7 @@
  * ACTIVE THREAD DEPENDING CARD TYPE
  **************************************/
 #ifdef TYPE_MAIN
-//#define MODEL_ZIGBEE       1       //change to LoRA
+#define THR_LORA         1
 #define STEPPER            {D18,D19}
 #define FOOD_CTRL          1
 #define FOOD_IN            D20
@@ -73,7 +73,6 @@
 
 
 #ifdef TYPE_GAS
-#define MODEL_ZIGBEE       1
 #define GAS_CTRL           1
 #define THR_LINEAR_LOGS 	1
 #define THR_MONITORING     1  // starts the blinking led and the watch dog counter
@@ -94,11 +93,8 @@
  * SERIAL, LOGGER AND DEBUGGER
  ************************/
 
-//#define EEPROM_DUMP   1 //Gives the menu allowing to dump the EEPROM
 #define THR_SERIAL    1
-#ifdef MODEL_ZIGBEE
-//  #define THR_ZIGBEE  1 // communication process on Serial1 --> change to LoRa
-#endif
+
 
 /*******************************
  * THREADS AND PARAMETERS PRESENT IN EACH CARD 
@@ -231,6 +227,10 @@
 #define FLAG_RELAY_NOTUSED3      14
 #define FLAG_RELAY_NOTUSED4      15
 #define RELAY_TAP_SHIFT          12 // We need to shift of 4 bits to get the value to send to relay board
+
+
+#define SERIAL_BUFFER_LENGTH    36
+#define SERIAL_MAX_PARAM_VALUE_LENGTH  32
 
 
 /*********

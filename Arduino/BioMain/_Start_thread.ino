@@ -41,8 +41,8 @@ NIL_THREAD(ThreadMonitoring, arg) {
 *****************************************************************/
 NIL_THREADS_TABLE_BEGIN()
 
-#ifdef THR_ZIGBEE
-NIL_THREADS_TABLE_ENTRY(NULL, ThreadZigbee, NULL, waThreadZigbee, sizeof(waThreadZigbee))
+#ifdef THR_LORA
+NIL_THREADS_TABLE_ENTRY(NULL, ThreadLora, NULL, waThreadLora, sizeof(waThreadLora))
 #endif
 
 #ifdef STEPPER
