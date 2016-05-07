@@ -54,11 +54,8 @@ void printResult(char* data, Print* output) {
   while (!theEnd) {
     byte inChar=data[i];
     i++;
-    if (i==SERIAL_BUFFER_LENGTH) theEnd=true;
-    if (inChar=='\0') {
-      theEnd=true;
-    }
-    else if ((inChar>47 && inChar<58) || inChar=='-' || inValue) { // a number (could be negative)
+    if (i==SERIAL_BUFFER_LENGTH || inChar=='\0') theEnd=true;
+    if ((inChar>47 && inChar<58) || inChar=='-' || inValue) { // a number (could be negative)
       if (paramValuePosition<SERIAL_MAX_PARAM_VALUE_LENGTH) {
         paramValue[paramValuePosition]=inChar;
         paramValuePosition++;
@@ -77,7 +74,7 @@ void printResult(char* data, Print* output) {
         paramCurrent=0; 
       }
     }
-    if (inChar==',' || theEnd) { // store value and increment
+    if (inChar==',' || paramCurrent>0 || theEnd) { // store value and increment
       if (paramCurrent>0) {
         if (paramValuePosition>0) {
           setAndSaveParameter(paramCurrent-1,atoi(paramValue));
