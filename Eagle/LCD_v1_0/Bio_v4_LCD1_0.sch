@@ -10104,15 +10104,19 @@ Source: &lt;a href= "http://www.hirose.co.jp/cataloge_hp/e58605370.pdf"&gt;Data 
 </variantdefs>
 <classes>
 <class number="0" name="default" width="0.2032" drill="0">
+<clearance class="0" value="0.25"/>
 </class>
 <class number="1" name="power" width="0.2032" drill="0.3048">
-<clearance class="1" value="0.1524"/>
+<clearance class="1" value="0.25"/>
 </class>
 <class number="2" name="VIN" width="0.4572" drill="0">
+<clearance class="2" value="0.25"/>
 </class>
 <class number="3" name="fine" width="0.254" drill="0">
+<clearance class="3" value="0.25"/>
 </class>
 <class number="4" name="aref" width="0.3556" drill="0">
+<clearance class="4" value="0.25"/>
 </class>
 </classes>
 <parts>
