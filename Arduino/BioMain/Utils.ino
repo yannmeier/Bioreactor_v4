@@ -97,9 +97,13 @@ void printResult(char* data, Print* output) {
 
   // we will process the commands, it means it starts with lowercase
   switch (data[0]) {
+    
+    #ifdef THR_LORA
     case 'a':
-    processLoraCommand(data[1], paramValue, output);
-      break;
+      processLoraCommand(data[1], paramValue, output);
+    break;
+    #endif
+      
     case 'c':
       if (paramValuePosition>0) 
         printCompactParameters(output, atoi(paramValue));
@@ -181,7 +185,7 @@ void printResult(char* data, Print* output) {
     break;
   case 'q':
     if (paramValuePosition>0) {
-      setQualifier(atoi(paramValue));
+      setQualifier(atoi(paramValue)); 
     } 
     else {
       uint16_t a=getQualifier();
