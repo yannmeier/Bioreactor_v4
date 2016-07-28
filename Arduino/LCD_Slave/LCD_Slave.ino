@@ -33,6 +33,8 @@ LiquidCrystal lcd(10,9,8,6,12,A6);
 #define MENU_CONFIG         2
 #define MENU_CALIBRATION    3
 
+#define SPI_OUT_BUF_SIZE    3
+
 //volatile unsigned int encoderParamSelect = 0;  // a counter for the configuration dial & Calibration dial ---> not used !!!!!
 volatile unsigned int encoderMenuSelect  = MENU_SENSOR;  // a counter for the menu slection dial
 volatile unsigned int encoderTempValue   = 0;  // a counter to store a temporary value before to set it
@@ -48,7 +50,12 @@ boolean B_set = false;
          Arduino SPI Slave Functions
 *************************************************/
 //#define LCD_SELECT RXLED //pin SS (D8)
-byte buf [2*MAX_PARAM+2];
+
+byte out_buf [SPI_OUT_BUF_SIZE];                  // buffer for output to motherboard 
+boolean write_to_master=false;                    // flag indicating if their is something to send to the motherboard
+boolean is_start=false;                           // flag indicating if it's the beginning of the communication with the motherboard
+
+byte buf [2*MAX_PARAM+2];     // buffer for input from motherboard
 volatile byte pos;
 volatile boolean process_it=false;
 volatile boolean first_return=false;    
@@ -87,6 +94,15 @@ void buffer_parser(){
   
 }
 
+/************************************************
+          SPI communication utilities
+*************************************************/
+void sendParameter(byte parameter, int value){
+  out_buf[0]=parameter;
+  out_buf[1]=(byte)((value>>8)&(0x00FF));
+  out_buf[2]=(byte)(value&(0x00FF));
+  write_to_master = true;     
+}
 /************************************************
        Main function to refresh the LCD
 *************************************************/
@@ -333,15 +349,17 @@ void doEncoderButton(){
     else if(encoderMenuSelect==MENU_CONFIG){
       if((encoderTempValue%8)==0)
         encoderMenuSelect=MENU_SELECTOR;
+       // TODO: add setting menu
     }  
     //calibration menu case
     else if(encoderMenuSelect==MENU_CALIBRATION){
       if((encoderTempValue%5)==0)
-          encoderMenuSelect=MENU_SELECTOR;
-      
+          encoderMenuSelect=MENU_SELECTOR;  
     }  
     pushing=false;     //debouncer  
     To_Be_Refreshed=1; //refresh flag
+
+    sendParameter('a', 1); //notify motherboard on button pressed
   }
   else 
     pushing=true;
@@ -353,17 +371,44 @@ void doEncoderButton(){
 ISR (SPI_STC_vect)
 {
   byte c = SPDR;  // grab byte from SPI Data Register
+  
+  /////////////////////
+  // Read entering byte
+  /////////////////////
+  
   // add to buffer if room
-  if (pos < sizeof buf)
+  if (pos < sizeof(buf))
   {
-     buf [pos++] = c;
-    // example: newline means time to process buffer
+     buf [pos] = c;                   //add byte to buffer
+                                        // example: newline means time to process buffer
     if (c == '\n')
       first_return=true;
     if (c=='\n' && first_return==true)  
       process_it = true;
     else
       first_return=false; 
-    }  // end of room available
+  }  // end of room available
+
+  //////////////
+  // Send answer
+  //////////////
+
+  if (!pos){                            // start sending out bytes when the first byte is received
+    is_start = true;  
+  }
+  
+  if (is_start && write_to_master){     // send bytes if begining of communication and if their is something...
+    SPDR = out_buf[pos];                // ...new to send to the master  
+    Serial.print("Sent a byte: ");
+    Serial.println(out_buf[pos]);
+    if(pos+1>=SPI_OUT_BUF_SIZE){
+      write_to_master=false;
+      is_start = false;
+    }
+  }
+  else
+    SPDR = 0;
+
+  pos++;
 }  // end of interrupt routine SPI_STC_vect
 
