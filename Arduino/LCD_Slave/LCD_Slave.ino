@@ -1,7 +1,15 @@
 #include <LiquidCrystal.h>
 #include <SPI.h>
 // initialize the library with the numbers of the interface pins
-LiquidCrystal lcd(10,9,8,6,12,A6);
+
+const int LCDD7 = A6;
+const int LCDD6 = 12;
+const int LCDD5 = 6;
+const int LCDD4 = 8;
+const int LCDE  = 9;
+const int LCDRS = 10;
+
+LiquidCrystal lcd(LCDRS,LCDE,LCDD4,LCDD5,LCDD6,LCDD7);
 
 #define MAX_PARAM  52
 
@@ -32,8 +40,9 @@ LiquidCrystal lcd(10,9,8,6,12,A6);
 #define MENU_SENSOR         1
 #define MENU_CONFIG         2
 #define MENU_CALIBRATION    3
+#define MENU_SET_VALUE      4
 
-#define SPI_OUT_BUF_SIZE    3
+#define SPI_OUT_BUF_SIZE    4
 
 //volatile unsigned int encoderParamSelect = 0;  // a counter for the configuration dial & Calibration dial ---> not used !!!!!
 volatile unsigned int encoderMenuSelect  = MENU_SENSOR;  // a counter for the menu slection dial
@@ -80,12 +89,12 @@ void SPI_slave_init()
 /**************************************************
                 Data Parsing
 ***************************************************/
-char current_day;
-char current_month;
-char current_hour;
-char current_minutes;
+//char current_day;
+//char current_month;
+//char current_hour;
+//char current_minutes;
 uint16_t param [MAX_PARAM];
-uint32_t epoch;
+//uint32_t epoch;
 
 void buffer_parser(){
  //  epoch=((buf[4]<<24) + (buf[5]<<16) + (buf[6]<<8) + buf[7]);
@@ -97,11 +106,19 @@ void buffer_parser(){
 /************************************************
           SPI communication utilities
 *************************************************/
-void sendParameter(byte parameter, int value){
-  out_buf[0]=parameter;
-  out_buf[1]=(byte)((value>>8)&(0x00FF));
-  out_buf[2]=(byte)(value&(0x00FF));
-  write_to_master = true;     
+
+
+/**
+ * Set parameter on motherboard through SPI communication. 
+ * int parameter : location of parameter in param list. Use defined parameters.
+ * int value : value to be set for the given parameter. 
+ */
+void sendParameter(int parameter, int value){
+  out_buf[0]=1;                                     // Start transmission with non_null byte
+  out_buf[1]=(byte)parameter;                       // Number of parameter to set
+  out_buf[2]=(byte)((value>>8)&(0x00FF));           // Value of parameter
+  out_buf[3]=(byte)(value&(0x00FF));
+  write_to_master = true;                           // notify SPI interrupt that it can start sending bytes as soon as the transmission starts
 }
 /************************************************
        Main function to refresh the LCD
@@ -231,10 +248,11 @@ void Display_Menu_Config()
 
 void Display_Value_Config()
 {     
- if(encoderTempValue!=encoderLastValue){
+  if(encoderTempValue!=encoderLastValue){
     lcd.setCursor(10*((encoderTempValue%8)%2),(encoderTempValue%8)/2);
     encoderLastValue=encoderTempValue;
   }
+  
 }
 
 
@@ -298,7 +316,7 @@ void loop() {
       process_it = false;
     }    
   lcd.blink();  
-  delay(10);
+  delay(20);
   rotating = true; 
   
  
@@ -347,9 +365,11 @@ void doEncoderButton(){
       encoderMenuSelect=MENU_SELECTOR;
     //setting parameters case
     else if(encoderMenuSelect==MENU_CONFIG){
-      if((encoderTempValue%8)==0)
+      if((encoderTempValue%8)==0){
         encoderMenuSelect=MENU_SELECTOR;
-       // TODO: add setting menu
+      } else {
+        encoderMenuSelect=MENU_SET_VALUE;  
+      }
     }  
     //calibration menu case
     else if(encoderMenuSelect==MENU_CALIBRATION){
@@ -359,7 +379,7 @@ void doEncoderButton(){
     pushing=false;     //debouncer  
     To_Be_Refreshed=1; //refresh flag
 
-    sendParameter('a', 1); //notify motherboard on button pressed
+    sendParameter(PARAM_STEPPER_SPEED, 50); //notify motherboard on button pressed
   }
   else 
     pushing=true;
