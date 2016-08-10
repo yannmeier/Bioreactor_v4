@@ -12,6 +12,7 @@ const int LCDRS = 10;
 LiquidCrystal lcd(LCDRS,LCDE,LCDD4,LCDD5,LCDD6,LCDD7);
 
 #define MAX_PARAM  52
+#define MAX_CONFIG_PARAM 7             // Maximum number of configurable parameters in the config menu
 
 #define PARAM_TEMP_LIQ             0   // temperature of the solution
 #define PARAM_TEMP_PCB             1   // temperature of the heating plate
@@ -22,6 +23,7 @@ LiquidCrystal lcd(LCDRS,LCDE,LCDD4,LCDD5,LCDD6,LCDD7);
 #define PARAM_WEIGHT_STATUS        23  // current STATUS // BBBAAAAA AAAAAAAA : A = wait time in minutes, B = status
 #define PARAM_STATUS               25  
 #define PARAM_TEMP_TARGET          26  // target temperature of the liquid
+#define PARAM_TEMP_MAX             27  // maximal temperature of the plate
 #define PARAM_TEMP_REG_TIME        28  //in [ms]
 #define PARAM_WEIGHT_MIN           29    
 #define PARAM_WEIGHT_MAX           30  
@@ -44,16 +46,64 @@ LiquidCrystal lcd(LCDRS,LCDE,LCDD4,LCDD5,LCDD6,LCDD7);
 
 #define SPI_OUT_BUF_SIZE    4
 
-//volatile unsigned int encoderParamSelect = 0;  // a counter for the configuration dial & Calibration dial ---> not used !!!!!
+
+/************************************************
+          Encoder position variables
+*************************************************/
+
 volatile unsigned int encoderMenuSelect  = MENU_SENSOR;  // a counter for the menu slection dial
 volatile unsigned int encoderTempValue   = 0;  // a counter to store a temporary value before to set it
 volatile unsigned int encoderLastValue   = 0;  // a counter to store a previous temporary value 
+
+/************************************************
+                Global Flags
+*************************************************/
+
 static boolean To_Be_Refreshed = true; // call the Refresh function on the next main loop call
 static boolean rotating=false;         // debounce management
 static boolean pushing  =true;         // debounce management
 // interrupt service routine variables
 boolean A_set = false;              
 boolean B_set = false;
+volatile boolean process_it=false;     // SPI buffer ready to be parsed ?
+volatile boolean first_return=false;   // is first return in ending of SPI com from master?
+
+/************************************************
+              Parameter Utilities
+*************************************************/
+
+typedef struct{
+  char* param_name = 0;
+  int param_name_length = 0;
+  int param_num = 0;    
+} parameter;
+
+parameter * config_menu_params [MAX_CONFIG_PARAM];
+
+void printParam(int pos){
+  if(pos>=0 && pos < MAX_CONFIG_PARAM){
+    parameter * param = config_menu_params[pos];
+    Serial.print("Param name: ");
+    Serial.println(param->param_name);
+    Serial.print("Param number: ");
+    Serial.println(param->param_num);  
+  }else{
+    Serial.println("Error: position of config variable is out of range.");  
+  }
+}
+
+void addParam(int pos, char * id, int id_length, int number){
+  if(pos>=0 && pos < MAX_CONFIG_PARAM){
+    parameter * new_param = (parameter *) malloc(id_length+2*sizeof(int));
+    new_param->param_name = id;
+    new_param->param_name_length = id_length;
+    new_param->param_num = number;
+    config_menu_params[pos] = new_param;  
+    printParam(pos);
+  }else{
+    Serial.println("Error: position of config variable is out of range.");  
+  }
+}
 
 /************************************************
          Arduino SPI Slave Functions
@@ -65,9 +115,7 @@ boolean write_to_master=false;                    // flag indicating if their is
 boolean is_start=false;                           // flag indicating if it's the beginning of the communication with the motherboard
 
 byte buf [2*MAX_PARAM+2];     // buffer for input from motherboard
-volatile byte pos;
-volatile boolean process_it=false;
-volatile boolean first_return=false;    
+volatile byte pos;            // position of incoming byte in SPI buffer
 
 void SPI_slave_init()
 {
@@ -89,18 +137,17 @@ void SPI_slave_init()
 /**************************************************
                 Data Parsing
 ***************************************************/
-//char current_day;
-//char current_month;
-//char current_hour;
-//char current_minutes;
 uint16_t param [MAX_PARAM];
-//uint32_t epoch;
 
 void buffer_parser(){
  //  epoch=((buf[4]<<24) + (buf[5]<<16) + (buf[6]<<8) + buf[7]);
-  for(int i=0;i<26;i++)
+  for(int i=0;i<30;i++){
     param[i]=((buf[2*i]<<8)&(0xFF00))+(buf[2*i+1]&(0x00FF));
-  
+//    Serial.print(i);
+//    Serial.print(": ");
+//    Serial.println(param[i]);
+  }
+//  Serial.println("********************************");
 }
 
 /************************************************
@@ -119,6 +166,9 @@ void sendParameter(int parameter, int value){
   out_buf[2]=(byte)((value>>8)&(0x00FF));           // Value of parameter
   out_buf[3]=(byte)(value&(0x00FF));
   write_to_master = true;                           // notify SPI interrupt that it can start sending bytes as soon as the transmission starts
+  
+  Serial.println("Sent param"); 
+  //TODO: add check digit
 }
 /************************************************
        Main function to refresh the LCD
@@ -159,6 +209,8 @@ void Values_Refresh()
     case MENU_CALIBRATION:
       Display_Value_Calibr();
       break;
+    case MENU_SET_VALUE:
+      Config_Set_Value();
     default:
       return;
   }
@@ -226,33 +278,59 @@ void Display_Value_Sensor()
 
 void Display_Menu_Config()
 {
-  lcd.begin(20, 4);
-    lcd.setCursor(0,0);
-    lcd.print(F("0)Bck"));
-    lcd.setCursor(10,0);
-    lcd.print(F("1)RPM"));
-    lcd.setCursor(0,1);
-    lcd.print(F("2)Tp:"));
-    lcd.setCursor(10,1);
-    lcd.print(F("3)T+:"));
-    lcd.setCursor(0,2);
-    lcd.print(F("4)W+:"));
-    lcd.setCursor(10,2);
-    lcd.print(F("5)W-:"));
-    lcd.setCursor(0,3);
-    lcd.print(F("6)Sd:"));
-    lcd.setCursor(10,3);
-    lcd.print(F("7)Md:"));
-    lcd.setCursor(10*((encoderTempValue%8)%2),(encoderTempValue%8)/2);
+  lcd.begin(20, 4);                             // Clear Screen
+  
+  lcd.setCursor(0,0);                           // print back button
+  lcd.print(F("0)Bck"));
+  
+  for(int param_pos = 0; param_pos < MAX_CONFIG_PARAM; param_pos++){  // print all parameters
+    lcd.setCursor(10*((param_pos+1)%2),(param_pos+1)/2);
+    lcd.print(param_pos+1);
+    lcd.print(")");
+    lcd.print(config_menu_params[param_pos]->param_name);
+    lcd.print(":");
+  }
+  
+}
+
+void Display_Param_Value(int value, int space, int x, int y){
+  lcd.setCursor(x, y);
+  lcd.print(value);
+  String value_string = String(value);
+  for(int i = 0; i<(space-value_string.length()); i++){
+    lcd.print(" ");  
+  }    
 }
 
 void Display_Value_Config()
 {     
-  if(encoderTempValue!=encoderLastValue){
-    lcd.setCursor(10*((encoderTempValue%8)%2),(encoderTempValue%8)/2);
-    encoderLastValue=encoderTempValue;
+  for(int param_num = 0; param_num < MAX_CONFIG_PARAM; param_num++){  // print all parameters
+    Display_Param_Value(param[config_menu_params[param_num]->param_num], 8-(config_menu_params[param_num]->param_name_length)-1, 10*((param_num+1)%2)+config_menu_params[param_num]->param_name_length+3, (param_num+1)/2);
   }
-  
+  lcd.setCursor(10*((encoderTempValue%8)%2),(encoderTempValue%8)/2);
+}
+
+void Config_Set_Value()
+{
+  byte param_num = (encoderTempValue%8)-1;
+  byte param_value_pos [2] = {10*((encoderTempValue%8)%2)+config_menu_params[param_num]->param_name_length+2, (encoderTempValue%8)/2}; // {char_num, line_num}
+  int temp_value = param[config_menu_params[param_num]->param_num];
+  lcd.setCursor(param_value_pos[0], param_value_pos[1]);
+  if(param_num >=0){
+    while(encoderMenuSelect==MENU_SET_VALUE){
+      if(encoderTempValue!=encoderLastValue){
+        if(encoderTempValue>encoderLastValue){
+          temp_value+=5;        
+        } else {
+          temp_value-=5;
+        }
+        Display_Param_Value(temp_value, 8-config_menu_params[param_num]->param_name_length-1, param_value_pos[0]+1, param_value_pos[1]);
+        lcd.setCursor(param_value_pos[0], param_value_pos[1]);
+        encoderLastValue = encoderTempValue;
+      }  
+    }
+    sendParameter(config_menu_params[param_num]->param_num, temp_value);
+  } 
 }
 
 
@@ -301,6 +379,17 @@ void setup() {
   Serial.begin(9600);  
   SPI_slave_init();
   lcd.begin(20, 4);
+  
+  // set configurable parameters
+  delay(3000);                        // let Serial init 
+  addParam(0, "RPM", 3, PARAM_STEPPER_SPEED);
+  addParam(1, "Tp", 2, PARAM_TEMP_TARGET);
+  addParam(2, "T+", 2, PARAM_TEMP_MAX);
+  addParam(3, "W+", 2, PARAM_WEIGHT_MAX);
+  addParam(4, "W-", 2, PARAM_WEIGHT_MIN);
+  addParam(5, "Sd", 2, PARAM_SEDIMENTATION_TIME);
+  addParam(6, "Md", 2, PARAM_STEPPER_SPEED);                          // unknown parameter number !!??
+  
 }
 
 // main loop, work is done by interrupt service routines, this one only prints stuff
@@ -370,7 +459,10 @@ void doEncoderButton(){
       } else {
         encoderMenuSelect=MENU_SET_VALUE;  
       }
-    }  
+    } 
+    else if (encoderMenuSelect==MENU_SET_VALUE)
+      encoderMenuSelect=MENU_CONFIG;
+      
     //calibration menu case
     else if(encoderMenuSelect==MENU_CALIBRATION){
       if((encoderTempValue%5)==0)
@@ -379,7 +471,7 @@ void doEncoderButton(){
     pushing=false;     //debouncer  
     To_Be_Refreshed=1; //refresh flag
 
-    sendParameter(PARAM_STEPPER_SPEED, 50); //notify motherboard on button pressed
+    //sendParameter(PARAM_STEPPER_SPEED, 30); //notify motherboard on button pressed
   }
   else 
     pushing=true;
@@ -419,8 +511,6 @@ ISR (SPI_STC_vect)
   
   if (is_start && write_to_master){     // send bytes if begining of communication and if their is something...
     SPDR = out_buf[pos];                // ...new to send to the master  
-    Serial.print("Sent a byte: ");
-    Serial.println(out_buf[pos]);
     if(pos+1>=SPI_OUT_BUF_SIZE){
       write_to_master=false;
       is_start = false;
