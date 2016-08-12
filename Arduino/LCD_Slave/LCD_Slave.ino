@@ -141,7 +141,7 @@ uint16_t param [MAX_PARAM];
 
 void buffer_parser(){
  //  epoch=((buf[4]<<24) + (buf[5]<<16) + (buf[6]<<8) + buf[7]);
-  for(int i=0;i<30;i++){
+  for(int i=0;i<26;i++){
     param[i]=((buf[2*i]<<8)&(0xFF00))+(buf[2*i+1]&(0x00FF));
 //    Serial.print(i);
 //    Serial.print(": ");
@@ -218,6 +218,15 @@ void Values_Refresh()
 /********************************************
        "Menu Display" Utilities Set
 *********************************************/
+void Display_Param_Value(int value, int space, int x, int y){
+  lcd.setCursor(x, y);
+  lcd.print(value);
+  String value_string = String(value);
+  for(int i = 0; i<(space-value_string.length()); i++){
+    lcd.print(" ");  
+  }    
+}
+
 void Display_Menu_Selector()
 {
   lcd.begin(20, 4);
@@ -261,19 +270,11 @@ void Display_Menu_Sensor()
 void Display_Value_Sensor()
 {
   //display liquid temperature
-  lcd.setCursor(3,0);
-  lcd.print(param[PARAM_TEMP_LIQ]);
+  Display_Param_Value(param[PARAM_TEMP_LIQ], 7, 3, 0);
   //display motor speed in RPM
-  lcd.setCursor(14,0);
-  lcd.print(param[PARAM_STEPPER_SPEED]);      //--> motor speed to be moved in the first 26 parameters (eg S)
+  Display_Param_Value(param[PARAM_STEPPER_SPEED], 6, 14, 0);
   //display weight
-  lcd.setCursor(3,2);
-  lcd.print(param[PARAM_WEIGHT]); 
-  
-/* if(encoderTempValue!=encoderLastValue){ //--> should remove the blinking in sensor display mode
-    lcd.setCursor(10*((encoderTempValue%8)%2),(encoderTempValue%8)/2);
-    encoderLastValue=encoderTempValue;
-  }*/
+  Display_Param_Value(param[PARAM_WEIGHT], 7, 3, 2);
 }
 
 void Display_Menu_Config()
@@ -293,14 +294,6 @@ void Display_Menu_Config()
   
 }
 
-void Display_Param_Value(int value, int space, int x, int y){
-  lcd.setCursor(x, y);
-  lcd.print(value);
-  String value_string = String(value);
-  for(int i = 0; i<(space-value_string.length()); i++){
-    lcd.print(" ");  
-  }    
-}
 
 void Display_Value_Config()
 {     
