@@ -41,7 +41,7 @@
 void resetParameters() {
 
 #ifdef STEPPER
-  setAndSaveParameter(PARAM_STEPPER_SPEED, 15);
+  setAndSaveParameter(PARAM_STEPPER_SPEED, 80);
 #endif   
   
 #ifdef     TEMPERATURE_CTRL
@@ -58,7 +58,7 @@ void resetParameters() {
   setAndSaveParameter(PARAM_WEIGHT_MIN, 32767);
   setAndSaveParameter(PARAM_WEIGHT_MAX, -32767);
   setAndSaveParameter(PARAM_SEDIMENTATION_TIME, 30);
-//  setAndSaveParameter(PARAM_MIN_FILLED_TIME, 30);
+  setAndSaveParameter(PARAM_FILLED_TIME, 30);
   setAndSaveParameter(PARAM_WEIGHT_STATUS, 0);
   setAndSaveParameter(PARAM_WEIGHT_FACTOR, 5000);
   setAndSaveParameter(PARAM_WEIGHT_OFFSET, 0);
