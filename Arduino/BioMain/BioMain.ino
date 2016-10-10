@@ -64,11 +64,11 @@
   #define TEMP_LIQ         D4
   #define TEMP_PCB         D6 
   #define TEMP_PID         D12
-#define THR_LINEAR_LOGS    1
-  #define FLASH_SELECT     D10    //Flash SS_SPI
+//#define THR_LINEAR_LOGS    1
+//  #define FLASH_SELECT     D10    //Flash SS_SPI --> cquses issues !!!!
 #define THR_MONITORING     1  
   #define MONITORING_LED   D13
-//  #define  LCD_SELECT       D11    //LCD screen SS_SPI
+  #define  LCD_SELECT       D11    //LCD screen SS_SPI
 #endif
 
 
@@ -248,8 +248,7 @@ void setup() {
   delay(1000);
   Serial.begin(9600);
   delay(1000);
-  setupParameters();
-  
+  setupParameters(); 
   #ifdef FLASH_SELECT 
     pinMode(FLASH_SELECT,OUTPUT);
   setupMemory();

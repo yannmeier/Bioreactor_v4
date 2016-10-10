@@ -1,7 +1,7 @@
 
 
 #define LORA_RESET_PIN 9
-
+#ifdef THR_LORA
 void processLoraCommand(char command, char* data, Print* output) {
   switch (command) {
   case 'i':
@@ -199,4 +199,4 @@ void printLoraHelp(Print* output) {
   output->println(F("(an) set nwkskey"));
   output->println(F("(ad) set devaddr"));
 }
-
+#endif

@@ -1,5 +1,7 @@
 #ifdef LCD_SELECT
 
+//#define DEBUG_LCD 1
+
 /************************************
        LCD Control Functions
 ************************************/
@@ -77,14 +79,18 @@ NIL_THREAD(ThreadLCD, arg) {
     
     if (in_byte && !getting_bytes){           // when the intiating byte (1) is received...
       getting_bytes = true;                   // set flag to read setting data
+      #ifdef DEBUG_LCD
       Serial.println(F("Getting bytes."));    
+      #endif
       delayMicroseconds(20);                  // longer delay when data is expected in return
     }else if (getting_bytes){
       switch(pos){
         case 0:                               // expected parameter byte
-          parameter = in_byte;                
+          parameter = in_byte;  
+          #ifdef DEBUG_LCD          
           Serial.print(F("Parameter: "));
           Serial.println(parameter);  
+          #endif
         break;
         case 1:                               // expected first byte of value 
           value = (int)(in_byte<<8);
@@ -96,8 +102,10 @@ NIL_THREAD(ThreadLCD, arg) {
          // setAndSaveParameter(parameter, value);    // !!! uncomment only for real usage of the bioreactor !!!
             setParameter(parameter, value);           // use this for development purposes 
           }
+          #ifdef DEBUG_LCD
           Serial.print(F("Value: ")); 
           Serial.println(value);  
+          #endif
           getting_bytes = false;              // when all setting data has been transmitted change flag to stop reading data
         break;
         default:
