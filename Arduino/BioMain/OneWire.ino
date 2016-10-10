@@ -109,7 +109,7 @@ void getTemperature(OneWire &ow, int parameter, byte errorBit, byte failedEvent,
       present=ow.reset();
       if (present !=0) {
         int16_t raw = (data[1] << 8) | data[0];
-        //float celsius = (float)raw / 16.0;
+ 
         setParameter(parameter, ((long)raw*625)/100);
       }
     }
@@ -126,9 +126,20 @@ void oneWireInfo(Print* output) { // TODO
       output->print(oneWireAddress[i], HEX);
     }
     output->println("");
-    nilThdSleepMilliseconds(250);
-    #endif
+    nilThdSleepMilliseconds(250);  
   }
+  #endif
+  #ifdef TEMP_PCB
+  oneWire2.reset_search();
+  while (oneWire2.search(oneWireAddress)) {
+    for(byte i = 0; i < 8; i++) {
+      output->print(' ');
+      output->print(oneWireAddress[i], HEX);
+    }
+    output->println("");
+    nilThdSleepMilliseconds(250);  
+  }
+  #endif
 }
 
 #endif
