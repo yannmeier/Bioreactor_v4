@@ -36,7 +36,7 @@
 
 //Pin definition
 #define D4   4  //temp probe
-#define D6   6  //temp smd
+#define D6   6  //temp smd (? A4)
 #define D10  10 //memory select
 #define D11  11 //slave at32u4 for LCD
 #define D12  12 //temp control
@@ -68,7 +68,7 @@
   #define FLASH_SELECT     D10    //Flash SS_SPI
 #define THR_MONITORING     1  
   #define MONITORING_LED   D13
- #define  LCD_SELECT       D11    //LCD screen SS_SPI
+//  #define  LCD_SELECT       D11    //LCD screen SS_SPI
 #endif
 
 
