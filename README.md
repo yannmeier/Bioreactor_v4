@@ -53,7 +53,7 @@ References:
 
 #For Developers
 
-It is recommended to use the version 1.0.6 of the arduino IDE packed here: provide ref
+It is recommended to use the version 1.0.5 of the arduino IDE packed here: http://blog.spitzenpfeil.org/arduino/mirror_released/
 Then unzip the arduino libraries provided in your local arduino libraries folder: 
 eg. /usr/share/arduino/liraries on Fedora sytems
 
