@@ -2,7 +2,7 @@
 
 This repository is dedicated to the version 4 of the Bioreactor.
 
-#Electronics
+##Electronics
 
 The architecture for v4 is articulated around one central board powered by 
 an ATmega32u4 MCU relying on nilRTOS and external boards for interfacing
@@ -36,7 +36,7 @@ Bioreactor V4.2:
 - Removed 5V regulation
 - Routed LoRa RST pin to MCU with additionnal pull-up
 
-#Mechanics
+##Mechanics
 
 (Documentation coming soon)
 
@@ -49,4 +49,37 @@ References:
 -https://www.arduino.cc/en/Main/ArduinoBoardZero
 -http://www.freertos.org/Atmel_SAMD20_RTOS.html
 -https://www.kickstarter.com/projects/rabidprototypes/neutrino-the-tiny-32-bit-arduino-zero-compatible/updates
+
+
+#For Developers
+
+It is recommended to use the version 1.0.6 of the arduino IDE packed here: provide ref
+Then unzip the arduino libraries provided in your local arduino libraries folder: 
+eg. /usr/share/arduino/liraries on Fedora sytems
+
+The version 4.2 of the bioreactor is opeerating at 8MHz/3V3 instead of the standard 16MHz/5V, thus the boards.txt files
+that defines the options to burn the bootloader must be adjusted (file can be found under /usr/share/arduino/hardware/arduino/boards.txt)
+by adding the follwing lines:
+
+leonardo8.name=Arduino Leonardo 8MHz
+leonardo8.upload.protocol=avr109
+leonardo8.upload.maximum_size=28672
+leonardo8.upload.speed=57600
+leonardo8.upload.disable_flushing=true
+leonardo8.bootloader.low_fuses=0xff
+leonardo8.bootloader.high_fuses=0xd8
+leonardo8.bootloader.extended_fuses=0xcb
+leonardo8.bootloader.path=caterina-LilyPadUSB
+leonardo8.bootloader.file=Caterina-LilyPadUSB.hex
+leonardo8.bootloader.unlock_bits=0x3F
+leonardo8.bootloader.lock_bits=0x2F
+leonardo8.build.mcu=atmega32u4
+leonardo8.build.f_cpu=8000000L
+leonardo8.build.vid=0x2341
+leonardo8.build.pid=0x8036
+leonardo8.build.core=arduino
+leonardo8.build.variant=leonardo
+
+Then only you can proceed burning the bootloader using the Leonardo 8MHz newly openend option.
+
 
