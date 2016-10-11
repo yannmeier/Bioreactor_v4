@@ -243,6 +243,7 @@ void printResult(char* data, Print* output) {
     else {
       output->println(F("To reset enter r1234"));
     }
+    break;
   case 's':
     printParameters(output);
     break;
