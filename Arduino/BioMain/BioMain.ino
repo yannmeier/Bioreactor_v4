@@ -55,11 +55,11 @@
 #ifdef TYPE_MAIN
 //#define THR_LORA         1
 #define STEPPER            {D18,D19}
-#define FOOD_CTRL          1
-#define FOOD_IN            D20
-#define FOOD_OUT           D21
-#define WEIGHT_DATA        D22
-#define WEIGHT_CLK         D23     //need to redefine the calibration parameters and process (see "HX711")
+//#define FOOD_CTRL          1
+//#define FOOD_IN            D20
+//#define FOOD_OUT           D21
+//#define WEIGHT_DATA        D22
+//#define WEIGHT_CLK         D23     //need to redefine the calibration parameters and process (see "HX711")
 #define TEMPERATURE_CTRL   1
   #define TEMP_LIQ         D4
   #define TEMP_PCB         D6 
