@@ -55,20 +55,20 @@
 #ifdef TYPE_MAIN
 //#define THR_LORA         1
 #define STEPPER            {D18,D19}
-//#define FOOD_CTRL          1
-//#define FOOD_IN            D20
-//#define FOOD_OUT           D21
-//#define WEIGHT_DATA        D22
-//#define WEIGHT_CLK         D23     //need to redefine the calibration parameters and process (see "HX711")
+#define FOOD_CTRL          1
+#define FOOD_IN            D20
+#define FOOD_OUT           D21
+#define WEIGHT_DATA        D22
+#define WEIGHT_CLK         D23     //need to redefine the calibration parameters and process (see "HX711")
 #define TEMPERATURE_CTRL   1
   #define TEMP_LIQ         D4
   #define TEMP_PCB         D6 
   #define TEMP_PID         D12
-//#define THR_LINEAR_LOGS    1
-//  #define FLASH_SELECT     D10    //Flash SS_SPI --> cquses issues !!!!
+ #define THR_LINEAR_LOGS    1
+  #define FLASH_SELECT     D10    //Flash SS_SPI 
 #define THR_MONITORING     1  
   #define MONITORING_LED   D13
-  #define  LCD_SELECT       D11    //LCD screen SS_SPI
+//  #define  LCD_SELECT       D11    //LCD screen SS_SPI
 #endif
 
 
@@ -102,7 +102,7 @@
 
 #ifdef THR_LINEAR_LOGS
 #define LOG_INTERVAL          10  // define the interval in seconds between storing the log
-//#define DEBUG_LOGS          1
+//#define DEBUG_LOGS            1
 #endif
 
 /*******************************
@@ -237,8 +237,7 @@
  * Autoreboot parameters
  *********/
 #define AUTOREBOOT 36000 // we will reboot automatically every 1h ... bad trick to prevent some crash problems of ethernet --> chang that
-uint16_t autoreboot=0;
-// the delay may be prolongated if we received request on the ethernet
+uint16_t autoreboot=0;  // the delay may be prolongated if we received request on the ethernet
 
 
 /*********

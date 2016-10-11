@@ -22,7 +22,7 @@
 #define MAX_NB_ENTRIES    (ADDRESS_SIZE  / ENTRY_SIZE_LINEAR_LOGS)
 
 SEMAPHORE_DECL(lockFlashAccess, 1);
-SST sst=SST(6); //B6
+SST sst=SST(6); //D10 is B6
 
 static uint32_t nextEntryID = 0;
 boolean logActive=false;
@@ -50,6 +50,8 @@ void writeLog(uint16_t event_number, uint16_t parameter_value) {
             Slave Select
   ******************************/
   nilSemWait(&lockFlashAccess);
+  
+  
 /************************************************************************************
     Test if it is the begining of one sector, erase the sector of 4096 bytes if needed  delay(2);
   ************************************************************************************/
@@ -72,7 +74,7 @@ void writeLog(uint16_t event_number, uint16_t parameter_value) {
     sst.flashWriteNextInt16(param);          //2 bytes per parameter
   }
   sst.flashWriteNextInt16(event_number);    //event
-  sst.flashWriteNextInt16(parameter_value); //parameter value
+  sst.flashWriteNextInt16(parameter_value); //parameter value */
   sst.flashWriteFinish();                   // finish the writing process
   /*****************************
           Check Sequence
@@ -282,23 +284,23 @@ void printLastLog(Print* output) {
 void formatFlash(Print* output) {
   busy_flag=true;
   setupMemory();
+  #ifdef DEBUG_LOGS  
   output->println(F("Format flash"));
   output->print(F("Sctr size:"));
   output->println(SECTOR_SIZE);
   output->print(F("Nb sctrs:"));
   output->println(ADDRESS_MAX/SECTOR_SIZE);
+  #endif
   wdt_disable();
-  //selectFlash();
-  
+ 
   for (int i=0; i<ADDRESS_MAX/SECTOR_SIZE; i++) {
     sst.flashSectorErase(i);
     if (i%16==0)
-      output->print(".");
+      output->print(F("."));
     if (i%1024==1023)
-      output->println(""); 
+      output->println(F("")); 
     nilThdSleepMilliseconds(10);
   } 
-  //deselectFlash();
   wdt_enable(WDTO_8S);
   wdt_reset();
   output->println(F("OK"));
@@ -335,8 +337,7 @@ void validateFlash(Print* output) {
           output->println(""); 
         }
       } 
-      else {/*
-        output->print(F("Bad addr: "));*/
+      else {
         output->println(address);
       }
     }
@@ -346,16 +347,18 @@ void validateFlash(Print* output) {
 }
 
 #ifdef LOG_INTERVAL
-
+#ifdef DEBUG_LOGS
+NIL_WORKING_AREA(waThreadLogger, 120);
+#else
 NIL_WORKING_AREA(waThreadLogger, 0);
+#endif
 NIL_THREAD(ThreadLogger, arg) {
-  nilThdSleepMilliseconds(2000);
+  nilThdSleepMilliseconds(5000);
   writeLog(EVENT_ARDUINO_BOOT,0);
   while(TRUE) {
   
     nilThdSleepMilliseconds(LOG_INTERVAL*1000-millis()%1000+100); //by default the time is too short, we add 100ms not to have rounding pro
-    if(!busy_flag)
-      writeLog();
+    if(!busy_flag) writeLog();
   }
 }
 

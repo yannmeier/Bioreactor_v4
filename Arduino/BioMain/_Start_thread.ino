@@ -23,15 +23,7 @@ NIL_THREAD(ThreadMonitoring, arg) {
     digitalWrite(MONITORING_LED,LOW);
     nilThdSleepMilliseconds(500);
     #endif
-      
-//    if (autoreboot<AUTOREBOOT) // ----> is this still usefull with no ethernet ?
-      wdt_reset();//resed avoid the automatic reboot
-//    else {  
-//      if (autoreboot==AUTOREBOOT) {
-//        saveParameters();
-//        setSafeConditions(true);
-//      }
-//    }
+    wdt_reset();//resed avoid the automatic reboot
   }
 }
 
