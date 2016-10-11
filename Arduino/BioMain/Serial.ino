@@ -222,6 +222,7 @@ void printResult(char* data, Print* output) {
 #else
     noThread(output);
 #endif
+    break;
   case 'p':
     printGeneralParameters(output);
     break;
@@ -233,6 +234,7 @@ void printResult(char* data, Print* output) {
       uint16_t a=getQualifier();
       output->println(a);
     }
+    break;
   case 'r':
     if (paramValuePosition>0) {
       if (atol(paramValue)==1234) {
