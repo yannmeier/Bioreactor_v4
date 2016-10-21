@@ -32,7 +32,7 @@
  *********************/
 //I2C addresses 
 #define I2C_FLUX          106//B01101000 --> to be redefined (AT32u4 slave)
-#define I2C_PH            104//B01101000 --> to be redefined
+#define I2C_PH            104//B01101000 --> to be redefined (AT32u4 slave)
 
 //Pin definition
 #define D4   4  //temp probe
@@ -81,7 +81,7 @@
 
 #ifdef MODE_CALIBRATE
 #define GAS_CTRL           1 
-//undefine unused threads during calibration
+//undefine unused threads during calibration --> calibration mode to be removed for a dynamic one
 #undef PH_CTRL 
 #undef TAP_ACID
 #undef TAP_BASE
@@ -218,16 +218,9 @@
 
 #define FLAG_RELAY_FILLING       8
 #define FLAG_RELAY_EMPTYING      9
-#define FLAG_RELAY_NOTUSED1      10
-#define FLAG_RELAY_NOTUSED2      11
-#define RELAY_PUMP_SHIFT         8 // We need to shift of 4 bits to get the value to send to relay board
 
 #define FLAG_RELAY_ACID          12
 #define FLAG_RELAY_BASE          13
-#define FLAG_RELAY_NOTUSED3      14
-#define FLAG_RELAY_NOTUSED4      15
-#define RELAY_TAP_SHIFT          12 // We need to shift of 4 bits to get the value to send to relay board
-
 
 #define SERIAL_BUFFER_LENGTH    36
 #define SERIAL_MAX_PARAM_VALUE_LENGTH  32
