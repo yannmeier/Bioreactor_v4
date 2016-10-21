@@ -211,23 +211,6 @@ boolean wireDeviceExists(byte id) {
   return false; 
 }
 
-/*
-void sendRelay(byte id, byte value, byte* flag) {
-  if (wireDeviceExists(id)) {
-    if (!wireFlagStatus(flag, id))
-    {
-      setWireFlag(flag, id);
-      wireWrite(id, 0x05, 0b00000100); // initialize CONFREG (0x05)
-      wireWrite(id, 0x00, 0b00000000); // initialize IOREG (0x00)
-    }
-    wireWrite(id, 0x0A, value); // pin control
-  }
-  else
-  {
-    clearWireFlag(flag, id);
-  }
-}*/ // to be removed
-
 
 // We will combine flags in a byte. Using pointer does not seems to improve
 // memory size so we don't use pointer
@@ -242,7 +225,6 @@ void clearWireFlag(byte *aByte, byte address) {
 boolean wireFlagStatus(byte *aByte, byte address) {
   return *aByte & (1 << (address & 0b00000111));
 }
-
 
 #endif
 

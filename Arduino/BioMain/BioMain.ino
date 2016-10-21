@@ -232,14 +232,6 @@
 #define SERIAL_BUFFER_LENGTH    36
 #define SERIAL_MAX_PARAM_VALUE_LENGTH  32
 
-
-/*********
- * Autoreboot parameters
- *********/
-#define AUTOREBOOT 36000 // we will reboot automatically every 1h ... bad trick to prevent some crash problems of ethernet --> chang that
-uint16_t autoreboot=0;  // the delay may be prolongated if we received request on the ethernet
-
-
 /*********
  * SETUP
  *********/
