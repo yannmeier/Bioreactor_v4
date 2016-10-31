@@ -209,7 +209,7 @@
  ******************/
 #define PARAM_STATUS       25
 
-#define FLAG_STEPPER_CONTROL      0   // need to be set to 1 for control of engine
+#define FLAG_STEPPER_CONTROL     0   // need to be set to 1 for control of engine
 #define FLAG_PH_CONTROL          1   // set the condition to disable targeted modules when pumping is performed
 #define FLAG_GAS_CONTROL         2
 #define FLAG_FOOD_CONTROL        3   // need to be set to 1 for control of food
