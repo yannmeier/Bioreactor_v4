@@ -163,8 +163,10 @@ void printResult(char* data, Print* output) {
       break;
     #endif    
     case 'e':
-      if (paramValuePosition>0) 
+      if (paramValuePosition>0){ 
         setTime(atol(paramValue));
+        output->println("");
+      }
       else 
         output->println(now());
       break;
