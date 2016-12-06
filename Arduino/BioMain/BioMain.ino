@@ -109,7 +109,7 @@
  * CARD DEFINITION (HARD CODED)
  *******************************/
 #ifdef STEPPER
-  #define PARAM_STEPPER_SPEED       18   // motor speed, parameter S (!!!!!TO BE REPROGRAMMED IN RPM!!!!!!!)
+  #define PARAM_STEPPER_SPEED       38   // motor speed, parameter S (!!!!!TO BE REPROGRAMMED IN RPM!!!!!!!)
 #endif
 
 #ifdef     TEMPERATURE_CTRL
@@ -125,46 +125,42 @@
 /*************************************/
 
 #if defined(WEIGHT_DATA) && defined(WEIGHT_CLK) 
-#define PARAM_WEIGHT_FACTOR        15  // Weight calibration: conversion factor digital -> gr (weight=FACTOR*dig_unit)
-#define PARAM_WEIGHT_OFFSET        16  // Weight calibration: digital offset value when bioreactor is empty
+#define PARAM_WEIGHT_FACTOR        33  // Weight calibration: conversion factor digital -> gr (weight=FACTOR*dig_unit)
+#define PARAM_WEIGHT_OFFSET        34  // Weight calibration: digital offset value when bioreactor is empty
 #define PARAM_WEIGHT               2   // in gr
 #define PARAM_WEIGHT_MIN           29    
 #define PARAM_WEIGHT_MAX           30  
-#define PARAM_SEDIMENTATION_TIME   35  // MINUTES to wait without rotation before emptying
-#define PARAM_FILLED_TIME          36  // MINUTES to stay in the filled state
-#define PARAM_WEIGHT_STATUS        23  // current STATUS // BBBAAAAA AAAAAAAA : A = wait time in minutes, B = status
+#define PARAM_SEDIMENTATION_TIME   31  // MINUTES to wait without rotation before emptying
+#define PARAM_FILLED_TIME          32  // MINUTES to stay in the filled state
+#define PARAM_WEIGHT_STATUS        3  // current STATUS // BBBAAAAA AAAAAAAA : A = wait time in minutes, B = status
 #endif
 
 /*************************************/
 
 #ifdef    PH_CTRL
-#define PARAM_PH            3    // current pH
-#define PARAM_TARGET_PH     31   // desired pH
-#define PARAM_PH_FACTOR_A   32
-#define PARAM_PH_FACTOR_B   33
-#define PARAM_PH_STATE      24  // 0: Pause 1 : normal acquisition, 2 : purge of pipes,  4: calibration pH=4, 7: calibration pH=7, 10: calibration pH=10
+#define PARAM_PH            4    // current pH
+#define PARAM_TARGET_PH     35   // desired pH
+#define PARAM_PH_FACTOR_A   36
+#define PARAM_PH_FACTOR_B   37
+#define PARAM_PH_STATE      5  // 0: Pause 1 : normal acquisition, 2 : purge of pipes,  4: calibration pH=4, 7: calibration pH=7, 10: calibration pH=10
 //#define PARAM_REF_PH4		12
 //#define PARAM_REF_PH7		13  --> TO BE REPLACED BY TEMPORRY VALUES IN THE CODE	
 //#define PARAM_REF_PH10	14	
-
-//not parameters, hard coded values, set the minimal delay between pH adjustements to 10 seconds --> ???
-#define PARAM_PH_ADJUST_DELAY   38    //delay between acid or base supplies
-#define PARAM_PH_OPENING_TIME   39    //1sec TAP opening when adjusting
-#define PARAM_PH_TOLERANCE      34    //correspond to a pH variation of 0.1
+#define PARAM_CONDUCTO      10
 #endif
 
 //*************************************
 
 #ifdef     GAS_CTRL
 //Calibration
-#define PARAM_ANEMO_OFFSET1 17  // anemometer calibration: offset of the digital value (digital value when no gas is flowing)
-#define PARAM_ANEMO_OFFSET2 18  
-#define PARAM_ANEMO_OFFSET3 19  
-#define PARAM_ANEMO_OFFSET4 20  
-#define PARAM_ANEMO_FACTOR1 21  // anemometer calibration factor: conversion between gas flux (of air) and digital unit
-#define PARAM_ANEMO_FACTOR2 22  
-#define PARAM_ANEMO_FACTOR3 23  
-#define PARAM_ANEMO_FACTOR4 24  
+#define PARAM_ANEMO_OFFSET1 43  // anemometer calibration: offset of the digital value (digital value when no gas is flowing)
+#define PARAM_ANEMO_OFFSET2 44  
+#define PARAM_ANEMO_OFFSET3 45  
+#define PARAM_ANEMO_OFFSET4 46  
+#define PARAM_ANEMO_FACTOR1 47  // anemometer calibration factor: conversion between gas flux (of air) and digital unit
+#define PARAM_ANEMO_FACTOR2 48  
+#define PARAM_ANEMO_FACTOR3 49  
+#define PARAM_ANEMO_FACTOR4 50  
 
 // Input/Output
 #define ANEMOMETER_WRITE            I2C_FLUX
@@ -176,32 +172,25 @@
 
 // Parameters stored in memory
 #ifdef TAP_GAS1  
-#define PARAM_FLUX_GAS1            4
-#define PARAM_AVG_FLUX_GAS1        8
-#define PARAM_DESIRED_FLUX_GAS1    45
+#define PARAM_FLUX_GAS1            6
+#define PARAM_DESIRED_FLUX_GAS1    39
 #endif
 
 #ifdef  TAP_GAS2busy
-#define PARAM_FLUX_GAS2            5
-#define PARAM_AVG_FLUX_GAS2        9
-#define PARAM_DESIRED_FLUX_GAS2    46
+#define PARAM_FLUX_GAS2            7
+#define PARAM_DESIRED_FLUX_GAS2    40
 #endif
 
 #ifdef  TAP_GAS3
-#define PARAM_FLUX_GAS3            6
-#define PARAM_AVG_FLUX_GAS3        10
-#define PARAM_DESIRED_FLUX_GAS3    47
+#define PARAM_FLUX_GAS3            8
+#define PARAM_DESIRED_FLUX_GAS3    41
 #endif
 
 #ifdef  TAP_GAS4
-#define PARAM_FLUX_GAS4            7
-#define PARAM_AVG_FLUX_GAS4        11     
-#define PARAM_DESIRED_FLUX_GAS4    48
+#define PARAM_FLUX_GAS4            9   
+#define PARAM_DESIRED_FLUX_GAS4    42
 #endif
 
-//few hard coded parameters for flux control
-#define PARAM_FLUX_TOLERANCE             49    //define a tolerance of 1 cc/min
-#define PARAM_FLUX_TIME_WINDOWS          50    //define a control windows of 10sec for the flux
 #endif
 
 /******************
