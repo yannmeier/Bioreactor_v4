@@ -22,7 +22,7 @@
 #define MAX_NB_ENTRIES    (ADDRESS_SIZE  / ENTRY_SIZE_LINEAR_LOGS)
 
 SEMAPHORE_DECL(lockFlashAccess, 1);
-SST sst=SST(6); //D10 is B6
+SST sst=SST('B',6); //D10 is B6
 
 static uint32_t nextEntryID = 0;
 boolean logActive=false;
