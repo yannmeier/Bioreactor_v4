@@ -19,7 +19,7 @@ Dec Value,PARAM_PH_STATE,Comment
 0,PH_STATE_PAUSE,"pH measure, no regulation"
 1,PH_STATE_MEASURE,pH measure and regulation
 2,PH_STATE_PURGE,opening the valves for cleansing
-3,PH_STATE_CALIBRATION_4,To be verified
+3,PH_STATE_CALIBRATION,To be verified
 4,CALIBRATION_4,To be verified
 7,CALIBRATION_7,To be verified
 10,CALIBRATION_10,To be verified
