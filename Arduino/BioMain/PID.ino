@@ -4,6 +4,7 @@
 #include <PID_v1.h>
 
 
+#define SAFETY_TEMP 60000
 void pid_ctrl();
 void heatingSetup();
 
@@ -14,14 +15,11 @@ double heatingRegSetpoint;
 unsigned long heatingRegWindowStartTime;
 //Specify the heating regulation links and initial tuning parameters //Kp=100; Ti=0.2; Td=5 are initial testing param.
 //PID object definition can be found in PID library (to include for compilation).
-//PID heatingRegPID(&heatingRegInput, &heatingRegOutput, &heatingRegSetpoint, 7000,15,300, DIRECT); //with one 4.7Ohms resistor
-PID heatingRegPID(&heatingRegInput, &heatingRegOutput, &heatingRegSetpoint, 10000,15,300, DIRECT);  //with two series resistors of 4.7Ohms
+PID heatingRegPID(&heatingRegInput, &heatingRegOutput, &heatingRegSetpoint, 7000,15,300, DIRECT); //with one 4.7Ohms resistor (here 5.4)
 
 NIL_WORKING_AREA(waThread_PID, 24); // minimum of 16 The momory change with time
 NIL_THREAD(Thread_PID, arg) 
 {
-  
-
   nilThdSleepMilliseconds(5000); 
   pinMode(TEMP_PID, OUTPUT);
   //Todo : update heatingSetup when a parameter is changed
@@ -29,7 +27,7 @@ NIL_THREAD(Thread_PID, arg)
   
   while(TRUE){
     pid_ctrl();
-    nilThdSleepMilliseconds(500);  //refresh every 500ms
+    nilThdSleepMilliseconds(200);  //refresh every 200ms --> the faster the better the control
   }
 }
 
@@ -50,7 +48,7 @@ void pid_ctrl()
   }
   
   if((heatingRegOutput > exactPresentTime - heatingRegWindowStartTime) 
-    && (getParameter(PARAM_TEMP_PCB)<getParameter(PARAM_TEMP_MAX))
+    && (getParameter(PARAM_TEMP_PCB)<SAFETY_TEMP) 
     && (getParameter(PARAM_TEMP_PCB) != 0xFF)
     && (getParameter(PARAM_TEMP_LIQ)   !=0xFF))
   {

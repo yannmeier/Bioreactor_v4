@@ -33,10 +33,8 @@ NIL_THREAD(ThreadStepper, arg) {
   }
   while (true) {
     //first a check is performed on the motor status
-
     executeStep(NB_STEP_CALL, forward, STEPPER_TAB[1],STEPPER_TAB[0]);
     forward = !forward;
-
     nilThdSleepMilliseconds(1000);
   }
 }
@@ -78,11 +76,11 @@ void executeStep(uint16_t numberSteps, boolean forward, byte port1, byte port2) 
       digitalWrite(port2,LOW);
       break;
     }
-    nilThdSleepMicroseconds(2000-18*(getParameter(PARAM_STEPPER_SPEED)%101));
+    //sleepMicroseconds not handled properly, need to check for nilRTOS implementation  
+    nilThdSleepMilliseconds(1+(10-getParameter(PARAM_STEPPER_SPEED)%11));
+    
   } 
-  
-  else  nilThdSleepMilliseconds(100);
-  
+  else  nilThdSleepMilliseconds(100);  
   }
 
 }
