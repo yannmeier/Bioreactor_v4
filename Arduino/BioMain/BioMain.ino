@@ -62,8 +62,8 @@
 #define WEIGHT_CLK         D23     //need to redefine the calibration parameters and process (see "HX711")
 #define TEMPERATURE_CTRL   1
   #define TEMP_LIQ         D4
-  #define TEMP_PCB         D6 
-  #define TEMP_PID         D12
+  #define TEMP_PCB         D12 
+  #define TEMP_PID         D6
  #define THR_LINEAR_LOGS    1
   #define FLASH_SELECT     D10    //Flash SS_SPI 
 #define THR_MONITORING     1  
@@ -116,10 +116,7 @@
   #define PARAM_TEMP_LIQ      0   // temperature of the solution
   #define PARAM_TEMP_PCB      1   // temperature of the heating plate
   #define PARAM_TEMP_TARGET   26  // target temperature of the liquid
-#define PARAM_TEMP_MAX             27  // maximal temperature of the plate
-#if defined (TEMP_PID) 
-#define PARAM_TEMP_REG_TIME    28 //in [ms]
-#endif
+  #define PARAM_TEMP_MAX             27  // maximal temperature of the plate
 #endif
 
 /*************************************/

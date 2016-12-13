@@ -1,7 +1,7 @@
 #,v4,Type,#,v4,Type
 A,PARAM_TEMP_LIQ,Sensor,AA,PARAM_TEMP_TARGET,User defined
 B,PARAM_TEMP_PCB,Sensor,AB,PARAM_TEMP_MAX,User defined
-C,PARAM_WEIGHT,Sensor,AC,PARAM_TEMP_REG_TIME,User defined
+C,PARAM_WEIGHT,Sensor,AC,-,-
 D,PARAM_WEIGHT_STATUS,State machine,AD,PARAM_WEIGHT_MIN,User defined
 E,PARAM_PH,Sensor,AE,PARAM_WEIGHT_MAX,User defined
 F,PARAM_PH_STATE,State machine,AF,PARAM_SEDIMENTATION_TIME,User defined

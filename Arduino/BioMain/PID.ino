@@ -4,20 +4,18 @@
 #include <PID_v1.h>
 
 
-#define SAFETY_TEMP 60000
+#define SAFETY_TEMP      5500
+#define TEMP_MAX_HARD    7000
 void pid_ctrl();
 void heatingSetup();
-
 
 double heatingRegInput;
 double heatingRegOutput;
 double heatingRegSetpoint;
-unsigned long heatingRegWindowStartTime;
-//Specify the heating regulation links and initial tuning parameters //Kp=100; Ti=0.2; Td=5 are initial testing param.
-//PID object definition can be found in PID library (to include for compilation).
-PID heatingRegPID(&heatingRegInput, &heatingRegOutput, &heatingRegSetpoint, 7000,15,300, DIRECT); //with one 4.7Ohms resistor (here 5.4)
+//Specify the heating regulation links and initial tuning parameters
+PID heatingRegPID(&heatingRegInput, &heatingRegOutput, &heatingRegSetpoint, 1,0.0002, 5, DIRECT);
 
-NIL_WORKING_AREA(waThread_PID, 24); // minimum of 16 The momory change with time
+NIL_WORKING_AREA(waThread_PID, 128); //tune the allocated mem (here extra is provided)
 NIL_THREAD(Thread_PID, arg) 
 {
   nilThdSleepMilliseconds(5000); 
@@ -27,7 +25,10 @@ NIL_THREAD(Thread_PID, arg)
   
   while(TRUE){
     pid_ctrl();
-    nilThdSleepMilliseconds(200);  //refresh every 200ms --> the faster the better the control
+    Serial.println(heatingRegOutput);
+    delay(2); 
+    Serial.println(getParameter(PARAM_TEMP_LIQ));
+    nilThdSleepMilliseconds(1000);  //refresh every 500ms --> the faster the better the control
   }
 }
 
@@ -36,28 +37,21 @@ NIL_THREAD(Thread_PID, arg)
 
 void pid_ctrl()
 {
-  float exactPresentTime;
-  heatingRegInput = getParameter(PARAM_TEMP_LIQ);
-  heatingRegSetpoint = getParameter(PARAM_TEMP_TARGET);
-  heatingRegPID.Compute();                                   // the computation takes only 30ms!
-  // turn the output pin on/off based on pid output
-  exactPresentTime = millis();
-  if (exactPresentTime - heatingRegWindowStartTime > getParameter(PARAM_TEMP_REG_TIME)) { 
-    //time to shift the Relay Window
-    heatingRegWindowStartTime += getParameter(PARAM_TEMP_REG_TIME);
+  uint16_t target=(uint16_t)(getParameter(PARAM_TEMP_TARGET)) ;
+  if(target> TEMP_MAX_HARD || target> getParameter(PARAM_TEMP_MAX)){
+    //some error event for setting the temp to high here
+    setAndSaveParameter(PARAM_TEMP_TARGET,min(TEMP_MAX_HARD,getParameter(PARAM_TEMP_MAX)));
+    target=min(TEMP_MAX_HARD,getParameter(PARAM_TEMP_MAX));
   }
-  
-  if((heatingRegOutput > exactPresentTime - heatingRegWindowStartTime) 
-    && (getParameter(PARAM_TEMP_PCB)<SAFETY_TEMP) 
-    && (getParameter(PARAM_TEMP_PCB) != 0xFF)
-    && (getParameter(PARAM_TEMP_LIQ)   !=0xFF))
-  {
-    digitalWrite(TEMP_PID, HIGH); 
-  }  
-  else 
-  {
-    digitalWrite(TEMP_PID, LOW); 
-  } 
+  heatingRegInput = getParameter(PARAM_TEMP_LIQ);
+  heatingRegSetpoint = target;
+  heatingRegPID.Compute();                                   // the computation takes only 30ms!
+  if((getParameter(PARAM_TEMP_PCB)<SAFETY_TEMP)
+      && (getParameter(PARAM_TEMP_PCB) != 0xFF)
+      && (getParameter(PARAM_TEMP_LIQ)   !=0xFF)){
+       analogWrite(TEMP_PID, heatingRegOutput);
+   }
+   else analogWrite(TEMP_PID,0);
 }
 
 
@@ -65,13 +59,9 @@ void pid_ctrl()
 void heatingSetup()
 {
   //tell the PID to range between 0 and the full window size
-  heatingRegPID.SetOutputLimits(0, getParameter(PARAM_TEMP_REG_TIME));          //what is heating regulation time windows ???
-  //turn the PID on, cf. PID library
-  heatingRegPID.SetMode(AUTOMATIC);                 
-  //set PID sampling time to 10000ms                   //possibly set a timer condition with a nilsleep instead
-  heatingRegPID.SetSampleTime(10000);
-  heatingRegWindowStartTime = millis();
-  // heatingRegSetpoint = getParameter(PARAM_TEMP_MAX);
+  heatingRegPID.SetOutputLimits(0, 200); //200 is ~75% of max PWM --> Limits max avg power to ~7.5A
+  heatingRegPID.SetMode(AUTOMATIC);      //turn the PID on, cf. PID library             
+  heatingRegPID.SetSampleTime(950);      //set PID sampling time to 450ms
 }
 
 #endif

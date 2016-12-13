@@ -15,8 +15,8 @@ D,2,D0/RX,LoRa RX,LoRa RX,LoRa RX,ENC B
 D,3,D1/TX,LoRa TX,LoRa TX,LoRa TX,ENC A
 D,4,D4/A6,Ext. OneWire,Ext. OneWire,Stepper#1-2,LCD #14
 D,5,TXLED,TXLED,TXLED,TXLED,-
-D,6,D12,PID Hexfet,PID Hexfet,Stepper#1-3,LCD #13
-D,7,D6,SMD OneWire,SMD OneWire,Stepper#1-4,LCD #12
+D,6,D12,PID (hack: D12<>D6),PID (hack: D12<>D6),Stepper#1-3,LCD #13
+D,7,D6,OneWire (hack: D6<>D12),OneWire (hack: D6<>D12),Stepper#1-4,LCD #12
 E,2,D7,-,-,Data HX711,ENCODER INT
 E,6,HWB,HWB,HWB,HWB,HWB
 F,0,A5,SCK HX711,SCK HX711,SCK HX711,-

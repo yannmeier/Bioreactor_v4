@@ -49,9 +49,6 @@ void resetParameters() {
   setAndSaveParameter(PARAM_TEMP_PCB, ERROR_VALUE);
   setAndSaveParameter(PARAM_TEMP_TARGET, 3000);
   setAndSaveParameter(PARAM_TEMP_MAX, 0);
-  #ifdef TEMP_PID
-  setAndSaveParameter(PARAM_TEMP_REG_TIME, 5000);
-  #endif
 #endif
 
 #ifdef FOOD_CTRL 
