@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.6.0">
+<eagle version="7.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
@@ -5444,6 +5444,9 @@
 <wire x1="47.47455" y1="15.359571875" x2="40.721815625" y2="15.359571875" width="0.4064" layer="25"/>
 <wire x1="40.721815625" y1="15.359571875" x2="40.721815625" y2="37.220734375" width="0.4064" layer="25"/>
 <text x="39.343703125" y="36.78866875" size="1.016" layer="25" rot="R270">OPT</text>
+<text x="12.59295625" y="45.024915625" size="0.8128" layer="25" rot="R180">I2C P-ups
+Don't solder
+If Slave</text>
 </plain>
 <libraries>
 <library name="lpatiny">
@@ -7360,7 +7363,7 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="17.018553125" y="47.006265625" size="1.27" layer="27" rot="R90"/>
 </element>
 <element name="RK15" library="rcl" package="R0805" value="10k" x="15.46899375" y="43.5924375" smashed="yes">
-<attribute name="NAME" x="13.354946875" y="40.7818375" size="1.27" layer="25"/>
+<attribute name="NAME" x="15.318059375" y="44.957309375" size="1.27" layer="25"/>
 <attribute name="VALUE" x="14.83399375" y="41.0524375" size="1.27" layer="27"/>
 </element>
 <element name="868MHZ" library="sma_end_launch" package="SMA_EDGELAUNCH" value="" x="79.994934375" y="82.4" rot="MR270"/>
@@ -8356,8 +8359,6 @@ design rules under a new name.</description>
 <via x="1.69965" y="64.940390625" extent="1-16" drill="0.8"/>
 <wire x1="12.801090625" y1="58.3076125" x2="9.6762375" y2="61.432465625" width="0.5" layer="1"/>
 <wire x1="3.762265625" y1="75.10754375" x2="1.69965" y2="75.10754375" width="0.6096" layer="1"/>
-<wire x1="6.596221875" y1="47.71344375" x2="2.106665625" y2="47.71344375" width="0.6096" layer="1"/>
-<wire x1="2.106665625" y1="47.71344375" x2="1.69965" y2="47.306428125" width="0.6096" layer="1"/>
 <via x="1.69965" y="47.306428125" extent="1-16" drill="0.8"/>
 <wire x1="6.596221875" y1="47.71344375" x2="8.81045" y2="47.71344375" width="0.6096" layer="1"/>
 <wire x1="8.81045" y1="47.71344375" x2="8.82023125" y2="47.7036625" width="0.6096" layer="1"/>
@@ -8470,6 +8471,8 @@ design rules under a new name.</description>
 <wire x1="75.198034375" y1="65.04" x2="75.7427375" y2="65.584703125" width="0.4064" layer="16"/>
 <wire x1="75.198034375" y1="65.04" x2="70.747190625" y2="65.04" width="0.4064" layer="16"/>
 <wire x1="70.747190625" y1="65.04" x2="70.547190625" y2="64.84" width="0.4064" layer="16"/>
+<wire x1="6.596221875" y1="47.71344375" x2="2.106665625" y2="47.71344375" width="0.6096" layer="1"/>
+<wire x1="2.106665625" y1="47.71344375" x2="1.69965" y2="47.306428125" width="0.6096" layer="1"/>
 </signal>
 <signal name="N$10">
 <contactref element="R3" pad="1"/>
@@ -9620,4 +9623,10 @@ design rules under a new name.</description>
 </errors>
 </board>
 </drawing>
+<compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
+</compatibility>
 </eagle>
