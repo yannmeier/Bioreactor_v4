@@ -20,14 +20,10 @@ NIL_THREAD(Thread_PID, arg)
 {
   nilThdSleepMilliseconds(5000); 
   pinMode(TEMP_PID, OUTPUT);
-  //Todo : update heatingSetup when a parameter is changed
   heatingSetup();
   
   while(TRUE){
     pid_ctrl();
-    Serial.println(heatingRegOutput);
-    delay(2); 
-    Serial.println(getParameter(PARAM_TEMP_LIQ));
     nilThdSleepMilliseconds(1000);  //refresh every 500ms --> the faster the better the control
   }
 }

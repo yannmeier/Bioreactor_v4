@@ -23,7 +23,7 @@ The main board comes with the following features:
 There are already a few external extra modules:
 - LCD SPI slave board on ATmega32u4
 - pH & Conductommetry regulation I2C slave, also works as a stand alone (in development phase)
-- gas flux and mix control with analogic valves, also works as a stand alone (in development phase)$
+- gas flux and mix control with analogic valves, also works as a stand alone (in development phase)
 
 References:
 -https://www.arduino.cc/en/Main/ArduinoBoardLeonardo
@@ -35,6 +35,13 @@ Bioreactor V4.2:
 - Changed operating voltage from 5V to 3.3V
 - Removed 5V regulation
 - Routed LoRa RST pin to MCU with additionnal pull-up
+- Hack to be performed on hardware (D6<>D12) for software compatibility
+Bioreactor V4.3:
+- Stepper motor has individually controllable phases
+- LoRa SMA PCB edge Antenna support
+- Hack to be performed on hardware (D6<>D12) for software compatibility
+Bioreactor V4.4:
+- D6<>D12 exchanged to provide PWM PID control of the heater
 
 ##Mechanics
 
