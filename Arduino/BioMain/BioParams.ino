@@ -41,7 +41,8 @@
 void resetParameters() {
 
 #ifdef STEPPER
-  setAndSaveParameter(PARAM_STEPPER_SPEED, 80);
+  setAndSaveParameter(PARAM_STEPPER_SPEED, 10);
+  setAndSaveParameter(PARAM_STEPPER_STEPS, 10000);
 #endif   
   
 #ifdef     TEMPERATURE_CTRL

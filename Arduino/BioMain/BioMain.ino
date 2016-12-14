@@ -28,14 +28,9 @@
 /******************************************
  * DEFINE FLASH VERSION (default is SST64)
  *****************************************/
-//obsolete versions of the memory, allow only 1 byte per write command
-//Support SST25VF032A/B SST25VF064A/B, better to use more recent versions
-#define SST32_OLD 1 //32Mbis
-//#define SST64_OLD 1 //64Mbits
-
 //standard version of the SSTSPI flsah in 12.2016, 
 //support SST25VF064C, SST26VF064B (64Mbits) or similar from Cypress
-//#define SST64 1
+#define SST64 1
 //support SST25VF032C, SST26VF032B (32Mbits) or similar from Cypress
 //#define SST32 1
 
@@ -76,13 +71,13 @@
     #define STEPPER {D18,D19}
   #else
     //pins 4-5 of port B and 6-7 of port F
-    #define STEPPER {0b00010000,0b00100000,0b01000000,0b1000000}
+    #define STEPPER {0b00010000,0b00100000,0b01000000,0b10000000}
   #endif
-  //#define FOOD_CTRL          1
-  //#define FOOD_IN            D20
-  //#define FOOD_OUT           D21
-  //#define WEIGHT_DATA        D22
-  //#define WEIGHT_CLK         D23     //need to redefine the calibration parameters and process (see "HX711")
+  #define FOOD_CTRL          1
+  #define FOOD_IN            D20
+  #define FOOD_OUT           D21
+  #define WEIGHT_DATA        D22
+  #define WEIGHT_CLK         D23     //need to redefine the calibration parameters and process (see "HX711")
   #define TEMPERATURE_CTRL   1
     #define TEMP_LIQ         D4
     #define TEMP_PCB         D12 
@@ -131,13 +126,14 @@
  *******************************/
 #ifdef STEPPER
   #define PARAM_STEPPER_SPEED       38   // motor speed, parameter S (!!!!!TO BE REPROGRAMMED IN RPM!!!!!!!)
+  #define PARAM_STEPPER_STEPS       28
 #endif
 
 #ifdef     TEMPERATURE_CTRL
   #define PARAM_TEMP_LIQ      0   // temperature of the solution
   #define PARAM_TEMP_PCB      1   // temperature of the heating plate
   #define PARAM_TEMP_TARGET   26  // target temperature of the liquid
-  #define PARAM_TEMP_MAX             27  // maximal temperature of the plate
+  #define PARAM_TEMP_MAX       27  // maximal temperature of the plate
 #endif
 
 /*************************************/
