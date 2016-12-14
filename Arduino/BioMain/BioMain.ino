@@ -20,13 +20,14 @@
 //#define TYPE_PH
 //#define TYPE_GAS
 
-/***********************
- * DEFINE CARD VERSION
- ***********************/
+/*******************************************
+ * DEFINE CARD VERSION (default is nothing)
+ ******************************************/
+//#define BEFORE_43 1
 
-/***********************
- * DEFINE FLASH VERSION
- ***********************/
+/******************************************
+ * DEFINE FLASH VERSION (default is SST64)
+ *****************************************/
 //obsolete versions of the memory, allow only 1 byte per write command
 //Support SST25VF032A/B SST25VF064A/B, better to use more recent versions
 #define SST32_OLD 1 //32Mbis
@@ -54,7 +55,7 @@
 
 //Pin definition
 #define D4   4  //temp probe
-#define D6   6  //temp smd (? A4)
+#define D6   6  //pi
 #define D10  10 //memory select
 #define D11  11 //slave at32u4 for LCD
 #define D12  12 //temp control
@@ -71,22 +72,26 @@
  * ACTIVE THREAD DEPENDING CARD TYPE
  **************************************/
 #ifdef TYPE_MAIN
-//#define THR_LORA         1
-#define STEPPER            {D18,D19}
-#define FOOD_CTRL          1
-#define FOOD_IN            D20
-#define FOOD_OUT           D21
-#define WEIGHT_DATA        D22
-#define WEIGHT_CLK         D23     //need to redefine the calibration parameters and process (see "HX711")
-#define TEMPERATURE_CTRL   1
-  #define TEMP_LIQ         D4
-  #define TEMP_PCB         D12 
-  #define TEMP_PID         D6
- #define THR_LINEAR_LOGS    1
-  #define FLASH_SELECT     D10    //Flash SS_SPI 
-#define THR_MONITORING     1  
-  #define MONITORING_LED   D13
-//  #define  LCD_SELECT       D11    //LCD screen SS_SPI
+  #ifdef BEFORE_43
+    #define STEPPER {D18,D19}
+  #else
+    //pins 4-5 of port B and 6-7 of port F
+    #define STEPPER {0b00010000,0b00100000,0b01000000,0b1000000}
+  #endif
+  //#define FOOD_CTRL          1
+  //#define FOOD_IN            D20
+  //#define FOOD_OUT           D21
+  //#define WEIGHT_DATA        D22
+  //#define WEIGHT_CLK         D23     //need to redefine the calibration parameters and process (see "HX711")
+  #define TEMPERATURE_CTRL   1
+    #define TEMP_LIQ         D4
+    #define TEMP_PCB         D12 
+    #define TEMP_PID         D6
+    #define FLASH_SELECT     D10    //Flash SS_SPI 
+  #define THR_MONITORING     1  
+    #define MONITORING_LED   D13
+  //#define THR_LORA         1
+  //  #define  LCD_SELECT       D11    //LCD screen SS_SPI
 #endif
 
 
@@ -110,18 +115,16 @@
 /***********************
  * SERIAL, LOGGER AND DEBUGGER
  ************************/
-
-#define THR_SERIAL    1
-
-
+  #define THR_SERIAL    1
+  #define THR_LINEAR_LOGS    1
 /*******************************
  * THREADS AND PARAMETERS PRESENT IN EACH CARD 
  *******************************/
 
-#ifdef THR_LINEAR_LOGS
-#define LOG_INTERVAL          10  // define the interval in seconds between storing the log
-//#define DEBUG_LOGS            1
-#endif
+  #ifdef THR_LINEAR_LOGS
+  #define LOG_INTERVAL          10  // define the interval in seconds between storing the log
+  //#define DEBUG_LOGS            1
+  #endif
 
 /*******************************
  * CARD DEFINITION (HARD CODED)

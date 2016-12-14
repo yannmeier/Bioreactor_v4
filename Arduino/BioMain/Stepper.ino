@@ -12,77 +12,112 @@
  *  BLACK = {PWM=HIGH, IO=HIGH}
  *  RED = {PWM=HIGH, IO=LOW}
  ******************************/
-
 //We define here the number of step executed during every call to the thread
-// Maximum 65535 !!!!
-#define NB_STEP_CALL  24000
+#define NB_STEP_CALL  24000 // Maximum 65535 !!!!
 
-
-//Prototypes
-void executeStep(uint16_t numberSteps, boolean forward, byte port1, byte port2);
-
-
-NIL_WORKING_AREA(waThreadStepper, 0);
+NIL_WORKING_AREA(waThreadStepper, 24); //set back to 0
 NIL_THREAD(ThreadStepper, arg) {
   nilThdSleepMilliseconds(4000);
-  byte STEPPER_TAB[]=STEPPER;
+  byte STEPPER_TAB[]= STEPPER;
   boolean forward = true;
   uint8_t count = 0;
+  
+  #ifdef BEFORE_43
   for (byte i=0; i<sizeof(STEPPER_TAB); i++) {
     pinMode(STEPPER_TAB[i], OUTPUT);    
-  }
+  }#else
+    DDRB |= (STEPPER[0] | STEPPER[1]) ;
+    DDRF |= (STEPPER[2] | STEPPER[3]) ;
+  #endif
+  
+  
   while (true) {
     //first a check is performed on the motor status
-    executeStep(NB_STEP_CALL, forward, STEPPER_TAB[1],STEPPER_TAB[0]);
+    #ifdef BEFORE_43
+      oldExecuteStep(NB_STEP_CALL, forward, STEPPER_TAB[1],STEPPER_TAB[0]);
+    #else
+      executeStep(NB_STEP_CALL, forward, STEPPER_TAB[0],STEPPER_TAB[1],STEPPER_TAB[2],STEPPER_TAB[3]);
+    #endif
     forward = !forward;
     nilThdSleepMilliseconds(1000);
   }
 }
 
-void executeStep(uint16_t numberSteps, boolean forward, byte port1, byte port2) {
+void executeStep(uint16_t numberSteps, boolean forward, byte port1, byte port2, byte port3, byte port4 ) {
+    DDRB |= (port1| port2) ;
+    DDRF |= (port3 | port4) ;
+  
   uint8_t counter=0;
   while (numberSteps>0) {
-    if(getParameterBit(PARAM_STATUS, FLAG_STEPPER_CONTROL)==0) {
-      return;
-    }
-    numberSteps--;
-    if (forward) {
-      counter++;
-    }
-    else { 
-      counter--;
-    }
     
-    if((getParameter(PARAM_STEPPER_SPEED)%101)!=0){
+    if(getParameterBit(PARAM_STATUS, FLAG_STEPPER_CONTROL)==0){
+      return; 
+   }
+    
+    numberSteps--;
+    if (forward) counter++;
+    else counter--;
+    
+    if((getParameter(PARAM_STEPPER_SPEED)%11)!=0){
     switch (counter % 4) {
     case 0:
-      //This is RED & BLUE
-      digitalWrite(port1, LOW);
-      digitalWrite(port2,LOW);
+      PORTF &=~port4;
+      PORTB|= port1;
       break;
-    case 1:   // 1 or 2
-      //This is BLUE
-      digitalWrite(port1, LOW);
-      digitalWrite(port2,HIGH);
+    case 1:
+      PORTB &=~port1;
+      PORTB|= port2;    // 1 or 2
       break;
     case 2:   // 2 or 3
-      //This is Black
-      digitalWrite(port1, HIGH);
-      digitalWrite(port2,HIGH);
+      PORTB &=~port2;
+      PORTF|= port3;
       break;
-    case 3:   // 3 or 1
-      //This is Green
-      digitalWrite(port1, HIGH);
-      digitalWrite(port2,LOW);
+    case 3:
+      PORTF &=~port3;
+      PORTF |= port4;   
       break;
     }
-    //sleepMicroseconds not handled properly, need to check for nilRTOS implementation  
     nilThdSleepMilliseconds(1+(10-getParameter(PARAM_STEPPER_SPEED)%11));
-    
-  } 
-  else  nilThdSleepMilliseconds(100);  
+    }else  nilThdSleepMilliseconds(100);  
   }
+}
 
+void oldExecuteStep(uint16_t numberSteps, boolean forward, byte port1, byte port2) {
+  uint8_t counter=0;
+  while (numberSteps>0) {
+    
+    if(getParameterBit(PARAM_STATUS, FLAG_STEPPER_CONTROL)==0) return;
+    
+    numberSteps--;
+    if (forward) counter++;
+    else counter--;
+    
+    if((getParameter(PARAM_STEPPER_SPEED)%101)!=0){
+        switch (counter % 4) {
+        case 0:
+          //This is RED & BLUE
+          digitalWrite(port1, LOW);
+          digitalWrite(port2,LOW);
+          break;
+        case 1:   // 1 or 2
+          //This is BLUE
+          digitalWrite(port1, LOW);
+          digitalWrite(port2,HIGH);
+          break;
+        case 2:   // 2 or 3
+          //This is Black
+          digitalWrite(port1, HIGH);
+          digitalWrite(port2,HIGH);
+          break;
+        case 3:   // 3 or 1
+          //This is Green
+          digitalWrite(port1, HIGH);
+          digitalWrite(port2,LOW);
+          break;
+        }
+        nilThdSleepMilliseconds(1+(10-getParameter(PARAM_STEPPER_SPEED)%11));      
+    }else  nilThdSleepMilliseconds(100);  
+  }
 }
 
 #endif

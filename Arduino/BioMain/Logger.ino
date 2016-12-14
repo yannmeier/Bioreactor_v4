@@ -230,13 +230,13 @@ uint16_t findSectorOfN( ) {
 void oldFlashWriteNextInt32(uint32_t addr, uint32_t data){  
   sst.flashWriteInit(addr);
   sst.flashWriteNextInt8((byte)((data >> 24) & 0xFF));
-  sst.flashWriteFinish();  
+  //sst.flashWriteFinish();  
   sst.flashWriteInit(addr+1);
   sst.flashWriteNextInt8((byte)((data >> 16) & 0xFF));
-  sst.flashWriteFinish(); 
+  //sst.flashWriteFinish(); 
   sst.flashWriteInit(addr+2);
   sst.flashWriteNextInt8((byte)((data >> 8) & 0xFF));
-  sst.flashWriteFinish(); 
+  //sst.flashWriteFinish(); 
   sst.flashWriteInit(addr+3);
   sst.flashWriteNextInt8((byte)(data & 0xFF));
   sst.flashWriteFinish(); 
@@ -375,6 +375,7 @@ void formatFlash(Print* output) {
 void validateFlash(Print* output) {
   logActive=false;
   formatFlash(output);
+  wdt_disable();
   output->println(F("Write / read / validate"));
   for (int i=0; i<ADDRESS_MAX/SECTOR_SIZE; i++) {
     for (byte j=0; j<SECTOR_SIZE/64; j++) {
@@ -406,21 +407,22 @@ void validateFlash(Print* output) {
   }
   formatFlash(output);
   nextEntryID=0;
+  wdt_enable(WDTO_8S);
+  wdt_reset();
 }
 
 #ifdef LOG_INTERVAL
 #ifdef DEBUG_LOGS
 NIL_WORKING_AREA(waThreadLogger, 120);
 #else
-NIL_WORKING_AREA(waThreadLogger, 64);
+NIL_WORKING_AREA(waThreadLogger, 0); 
 #endif
 NIL_THREAD(ThreadLogger, arg) {
   nilThdSleepMilliseconds(5000);
   writeLog(EVENT_ARDUINO_BOOT,0);
   while(TRUE) {
     //avoids logging during the second x+1, ensure x+LOG_INTERVAL
-    //because epoch is only precise to the second so the logging
-    //is evenly spaced
+    //because epoch is only precise to the second so the logging is evenly spaced
     nilThdSleepMilliseconds(LOG_INTERVAL*1000-millis()%1000+100); 
     if(!busy_flag) writeLog(); 
   }
