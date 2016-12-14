@@ -55,7 +55,6 @@ NIL_THREAD(ThreadWeight, arg) {
     // moving average calibrated weight (parameters 'P' and 'Q' for factor and offset)
     // with 3 load cells connected in parallel, the measured weight is the average of the 3 cells
     weight = 3*scale.get_units();
-    //Serial.println(scale.get_units()); // Uncomment to debug
      
     /***********************************************
              Standby and Error management

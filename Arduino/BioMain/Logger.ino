@@ -12,14 +12,22 @@
 #define SIZE_COUNTER_ENTRY         4
 
 // Definition of the log sectors in the flash for the logs
+#if defined(SST64) || defined(SST64_OLD) //64Mbits
+  #define ADDRESS_MAX   0x800000 // http://www.sst.com/dotAsset/40498.pdf&usd=2&usg=ALhdy294tEkn4s_aKwurdSetYTt_vmXQhw
+#elif defined(SST32) || defined(SST32_OLD) //32Mbits
+  #define ADDRESS_MAX   0X400000
+#endif
+
 #define ADDRESS_BEG   0x000000
-#define ADDRESS_MAX   0x800000 // http://www.sst.com/dotAsset/40498.pdf&usd=2&usg=ALhdy294tEkn4s_aKwurdSetYTt_vmXQhw
 #define ADDRESS_LAST  (ADDRESS_MAX - ENTRY_SIZE_LINEAR_LOGS)
 #define SECTOR_SIZE       4096
 #define NB_ENTRIES_PER_SECTOR    (SECTOR_SIZE  / ENTRY_SIZE_LINEAR_LOGS)
 #define ADDRESS_SIZE  (ADDRESS_MAX  - ADDRESS_BEG)
 // The number of entires by types of logs (seconds, minutes, hours, commands/events)
 #define MAX_NB_ENTRIES    (ADDRESS_SIZE  / ENTRY_SIZE_LINEAR_LOGS)
+
+
+#if defined(SST64) || defined(SST64_OLD) || defined(SST32) || defined(SST32_OLD)
 
 SEMAPHORE_DECL(lockFlashAccess, 1);
 SST sst=SST('B',6); //D10 is B6
@@ -66,16 +74,40 @@ void writeLog(uint16_t event_number, uint16_t parameter_value) {
           Writing Sequence
   ******************************/
   uint16_t param = 0;
-  sst.flashWriteInit(findAddressOfEntryN(nextEntryID)); // Initialize with the right address 
-  sst.flashWriteNextInt32(nextEntryID);      //4 bytes of the entry number
-  sst.flashWriteNextInt32(now());            //4 bytes of the timestamp in the memory using a mask
-  for(byte i = 0; i < NB_PARAMETERS_LINEAR_LOGS; i++) {
-    param = getParameter(i);
-    sst.flashWriteNextInt16(param);          //2 bytes per parameter
-  }
-  sst.flashWriteNextInt16(event_number);    //event
-  sst.flashWriteNextInt16(parameter_value); //parameter value */
-  sst.flashWriteFinish();                   // finish the writing process
+  uint32_t timenow = now();
+  uint32_t startAddress = findAddressOfEntryN(nextEntryID);
+  
+  #if defined(SST64) || defined(SST32) 
+    sst.flashWriteInit(startAddress); // Initialize with the right address 
+    sst.flashWriteNextInt32(nextEntryID);      //4 bytes of the entry number
+    sst.flashWriteNextInt32(timenow);            //4 bytes of the timestamp in the memory using a mask
+    for(byte i = 0; i < NB_PARAMETERS_LINEAR_LOGS; i++) {
+      param = getParameter(i);
+      sst.flashWriteNextInt16(param);          //2 bytes per parameter
+    }
+    sst.flashWriteNextInt16(event_number);    //event
+    sst.flashWriteNextInt16(parameter_value); //parameter value */
+    sst.flashWriteFinish();                   // finish the writing process
+  
+  #elif defined(SST64_OLD) || defined(SST32_OLD)
+     sst.flashWriteInit(startAddress); // Initialize with the right address 
+    //entry #
+    oldFlashWriteNextInt32(startAddress,nextEntryID);
+    startAddress+=4;
+    //epoch
+    oldFlashWriteNextInt32(startAddress,timenow);
+    startAddress+=4;
+    for(byte i = 0; i < NB_PARAMETERS_LINEAR_LOGS; i++) {
+      param = getParameter(i);
+      oldFlashWriteNextInt16(startAddress,param); //2 bytes per parameter
+      startAddress+=2;      
+    }
+      oldFlashWriteNextInt16(startAddress, event_number); //event
+      startAddress+=2;
+      oldFlashWriteNextInt16(startAddress, parameter_value); //parameter value     
+  #endif
+  
+  
   /*****************************
           Check Sequence
   ******************************/
@@ -190,6 +222,36 @@ uint16_t findSectorOfN( ) {
   return sectorNb;
 }
 
+/******************************************************************
+  implement write support for obsolete memories for inin16 & int32
+*******************************************************************/
+//check if the Write Finish command is necessary each time
+#if defined(SST64_OLD) || defined(SST32_OLD)
+void oldFlashWriteNextInt32(uint32_t addr, uint32_t data){  
+  sst.flashWriteInit(addr);
+  sst.flashWriteNextInt8((byte)((data >> 24) & 0xFF));
+  sst.flashWriteFinish();  
+  sst.flashWriteInit(addr+1);
+  sst.flashWriteNextInt8((byte)((data >> 16) & 0xFF));
+  sst.flashWriteFinish(); 
+  sst.flashWriteInit(addr+2);
+  sst.flashWriteNextInt8((byte)((data >> 8) & 0xFF));
+  sst.flashWriteFinish(); 
+  sst.flashWriteInit(addr+3);
+  sst.flashWriteNextInt8((byte)(data & 0xFF));
+  sst.flashWriteFinish(); 
+}
+
+void oldFlashWriteNextInt16(uint32_t addr, uint16_t data){  
+  sst.flashWriteInit(addr);
+  sst.flashWriteNextInt8((byte)((data >> 8) & 0xFF));
+  sst.flashWriteFinish();  
+  sst.flashWriteInit(addr+1);
+  sst.flashWriteNextInt8((byte)(data & 0xFF));
+  sst.flashWriteFinish(); 
+}
+   
+#endif
 
 /******************************************************************************
  Returns the address corresponding to one log ID nilThdSleepMilliseconds(5); nilThdSleepMilliseconds(5);
@@ -350,20 +412,22 @@ void validateFlash(Print* output) {
 #ifdef DEBUG_LOGS
 NIL_WORKING_AREA(waThreadLogger, 120);
 #else
-NIL_WORKING_AREA(waThreadLogger, 0);
+NIL_WORKING_AREA(waThreadLogger, 64);
 #endif
 NIL_THREAD(ThreadLogger, arg) {
   nilThdSleepMilliseconds(5000);
   writeLog(EVENT_ARDUINO_BOOT,0);
   while(TRUE) {
-  
-    nilThdSleepMilliseconds(LOG_INTERVAL*1000-millis()%1000+100); //by default the time is too short, we add 100ms not to have rounding pro
-    if(!busy_flag) writeLog();
+    //avoids logging during the second x+1, ensure x+LOG_INTERVAL
+    //because epoch is only precise to the second so the logging
+    //is evenly spaced
+    nilThdSleepMilliseconds(LOG_INTERVAL*1000-millis()%1000+100); 
+    if(!busy_flag) writeLog(); 
   }
 }
 
 #endif
-
+#endif
 
 
 

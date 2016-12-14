@@ -20,6 +20,24 @@
 //#define TYPE_PH
 //#define TYPE_GAS
 
+/***********************
+ * DEFINE CARD VERSION
+ ***********************/
+
+/***********************
+ * DEFINE FLASH VERSION
+ ***********************/
+//obsolete versions of the memory, allow only 1 byte per write command
+//Support SST25VF032A/B SST25VF064A/B, better to use more recent versions
+#define SST32_OLD 1 //32Mbis
+//#define SST64_OLD 1 //64Mbits
+
+//standard version of the SSTSPI flsah in 12.2016, 
+//support SST25VF064C, SST26VF064B (64Mbits) or similar from Cypress
+//#define SST64 1
+//support SST25VF032C, SST26VF032B (32Mbits) or similar from Cypress
+//#define SST32 1
+
 /******************
  * OPERATION MODE
  ******************/

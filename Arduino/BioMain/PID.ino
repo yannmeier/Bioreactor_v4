@@ -15,7 +15,7 @@ double heatingRegSetpoint;
 //Specify the heating regulation links and initial tuning parameters
 PID heatingRegPID(&heatingRegInput, &heatingRegOutput, &heatingRegSetpoint, 1,0.0002, 5, DIRECT);
 
-NIL_WORKING_AREA(waThread_PID, 128); //tune the allocated mem (here extra is provided)
+NIL_WORKING_AREA(waThread_PID, 120); //tune the allocated mem (here extra is provided)
 NIL_THREAD(Thread_PID, arg) 
 {
   nilThdSleepMilliseconds(5000); 
@@ -43,13 +43,13 @@ void pid_ctrl()
   heatingRegSetpoint = target;
   heatingRegPID.Compute();                                   // the computation takes only 30ms!
   if((getParameter(PARAM_TEMP_PCB)<SAFETY_TEMP)
-      && (getParameter(PARAM_TEMP_PCB) != 0xFF)
-      && (getParameter(PARAM_TEMP_LIQ)   !=0xFF)){
+      && (getParameter(PARAM_TEMP_PCB) != ERROR_VALUE)
+      && (getParameter(PARAM_TEMP_LIQ)   !=ERROR_VALUE)){
        analogWrite(TEMP_PID, heatingRegOutput);
+   }else {
+     analogWrite(TEMP_PID,0);
    }
-   else analogWrite(TEMP_PID,0);
 }
-
 
 // see the rest of oliver's code for sanity checks
 void heatingSetup()
