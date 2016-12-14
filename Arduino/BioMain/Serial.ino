@@ -251,6 +251,9 @@ void printResult(char* data, Print* output) {
   case 's':
     printParameters(output);
     break;
+  case 'w':
+      processWeightCommand(data[1], paramValue, output);
+    break;
   case 'z':
     getStatusEEPROM(output);
     break;
@@ -275,6 +278,7 @@ void printHelp(Print* output) {
   output->println(F("(q)ualifier"));
   output->println(F("(r)eset"));
   output->println(F("(s)ettings"));
+  output->println(F("(w)eight"));
   output->println(F("(z) eeprom"));
 }
 
