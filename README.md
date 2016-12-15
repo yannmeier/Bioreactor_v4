@@ -60,12 +60,12 @@ References:
 
 #For Developers
 
-It is recommended to use the version 1.0.5 of the arduino IDE packed here: http://blog.spitzenpfeil.org/arduino/mirror_released/
+It is recommended to use the version 1.0.5 of the arduino IDE packed here: http://blog.spitzenpfeil.org/arduino/mirror_released/ . You might need to install the last version of arduino to have the necessary libs on your computer first.
 Then unzip the arduino libraries provided in your local arduino libraries folder: 
 eg. /usr/share/arduino/liraries on Fedora sytems
 
 The version 4.2 of the bioreactor is opeerating at 8MHz/3V3 instead of the standard 16MHz/5V, thus the boards.txt files
-that defines the options to burn the bootloader must be adjusted (file can be found under /usr/share/arduino/hardware/arduino/boards.txt)
+that defines the options to burn the bootloader must be adjusted (file can be found under your arduino installation directory, eg: /usr/share/arduino-1.0.5/hardware/arduino/boards.txt)
 by adding the follwing lines:
 
 leonardo8.name=Arduino Leonardo 8MHz<br />
@@ -88,5 +88,6 @@ leonardo8.build.core=arduino<br />
 leonardo8.build.variant=leonardo<br />
 
 Then only you can proceed burning the bootloader using the Leonardo 8MHz newly openend option and upload your code selecting the same Leonardo 8MHz in the list of available MCUs from the IDE.
+To do so, you must select the Leonardo 8MHz board under /Tools/Boards/ . Note that the LCD board works under 16MHz/5V and must be flashed as a standard Leonardo board. You must also select the right board version when programming the board via USB.
 
 
