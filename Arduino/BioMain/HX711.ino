@@ -12,7 +12,7 @@ HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
 #define WEIGHT_STATUS_STANDBY   4
 #define WEIGHT_STATUS_ERROR     7
 
-//#define EVENT_LOGGING 
+#define EVENT_LOGGING 
 //#define WEIGHT_DEBUG 1 
 
 #ifdef WEIGHT_DEBUG
@@ -27,6 +27,7 @@ NIL_THREAD(ThreadWeight, arg) {
   ********************************************/             
   int weight = int(getParameter(PARAM_WEIGHT));
   byte weight_status=0;
+  byte previous_status=0;
   unsigned long tsinceLastEvent=0;        
   unsigned long lastCycleMillis=millis(); // when was the last food cycle
   all_off();                              //clear flags, shut down pumps
@@ -35,11 +36,14 @@ NIL_THREAD(ThreadWeight, arg) {
 
   //get to the last log status, worst case: just 18 seconds lag with current state
   if (getParameter(PARAM_WEIGHT_STATUS)!=-1) {
+    previous_status=(((uint16_t)getParameter(PARAM_WEIGHT_STATUS)) >> 13);
     weight_status=(((uint16_t)getParameter(PARAM_WEIGHT_STATUS)) >> 13);
     tsinceLastEvent=(((uint16_t)getParameter(PARAM_WEIGHT_STATUS))&0b0001111111111111)*60000;
   }
-  else
+  else{
     weight_status=WEIGHT_STATUS_ERROR;
+    previous_status= WEIGHT_STATUS_NORMAL;  
+  }
     
   /********************************************
                Thread Loop
@@ -54,7 +58,15 @@ NIL_THREAD(ThreadWeight, arg) {
     
     // moving average calibrated weight (parameters 'P' and 'Q' for factor and offset)
     // with 3 load cells connected in parallel, the measured weight is the average of the 3 cells
-    weight = 3*scale.get_units();
+    int weight_temp = 3*scale.get_units(); //where does the error comes from ?
+    if (weight_temp >=0){
+      weight=0.8*weight+0.2*weight_temp;
+    }
+    #ifdef EVENT_LOGGING
+    else{     
+       writeLog(EVENT_WEIGHT_READ_FAIL  ,weight_temp);
+    }
+    #endif    
      
     /***********************************************
              Standby and Error management
@@ -72,17 +84,18 @@ NIL_THREAD(ThreadWeight, arg) {
 
       if (weight<(0.80*getParameter(PARAM_WEIGHT_MIN)) || weight>(1.20*getParameter(PARAM_WEIGHT_MAX))) {
         all_off();
+        previous_status=weight_status;
         weight_status=WEIGHT_STATUS_ERROR;
         #ifdef EVENT_LOGGING
-          writeLog(EVENT_WEIGHT_FAILURE,0);
+          writeLog(EVENT_WEIGHT_FAILURE,weight);
         #endif
       } 
 
       else if (weight_status==WEIGHT_STATUS_ERROR) {
           #ifdef EVENT_LOGGING
-            writeLog(EVENT_WEIGHT_BACK_TO_NORMAL,0);
+            writeLog(EVENT_WEIGHT_BACK_TO_NORMAL,weight);
           #endif
-          weight_status=WEIGHT_STATUS_NORMAL;
+          weight_status=previous_status;
           Serial.println(F("er>ok"));
       }
     }
