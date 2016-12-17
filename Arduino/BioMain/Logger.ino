@@ -36,6 +36,8 @@ static uint32_t nextEntryID = 0;
 boolean logActive=false;
 
 
+uint32_t findAddressOfEntryN(uint32_t entryN);
+
 /*********************************************************************************** 
  Save logs in the Flash memory.
  event_number: If there is a command, then this parameter should be set with the
@@ -46,7 +48,7 @@ void writeLog() {
   writeLog(0,0);
 }
 
-void writeLog(uint16_t event_number, uint16_t parameter_value) {
+void writeLog(uint16_t event_number, int parameter_value) {
   /********************************
              Safeguards
   ********************************/

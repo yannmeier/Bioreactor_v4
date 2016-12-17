@@ -1,6 +1,7 @@
 #if defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
 
 #include "HX711.h"
+#include "BioMain.h"
 
 #define calibration_factor -7050.10 //From SparkFun_HX711_Calibration sketch
 HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
@@ -21,6 +22,8 @@ NIL_WORKING_AREA(waThreadWeight, 96);
 #else
 NIL_WORKING_AREA(waThreadWeight, 56); // minimum of 32 !
 #endif
+
+
 
 NIL_THREAD(ThreadWeight, arg) {
   /********************************************
@@ -205,6 +208,14 @@ NIL_THREAD(ThreadWeight, arg) {
   } 
 }
 
+void printWeightHelp(Print* output) {
+  output->println(F("Weight help"));
+  output->println(F("(we) Empty level"));
+  output->println(F("(wl) Low level"));
+  output->println(F("(wh) High level"));
+  output->println(F("(wq) Quantity (g) high"));
+}
+
 
 void processWeightCommand(char command, char* data, Print* output) {
   switch (command) {
@@ -224,13 +235,6 @@ void processWeightCommand(char command, char* data, Print* output) {
 	printWeightHelp(output);
   }
 
-}
-void printWeightHelp(Print* output) {
-  output->println(F("Weight help"));
-  output->println(F("(we) Empty level"));
-  output->println(F("(wl) Low level"));
-  output->println(F("(wh) High level"));
-  output->println(F("(wq) Quantity (g) high"));
 }
 
 

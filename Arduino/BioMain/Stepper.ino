@@ -16,32 +16,12 @@
 //#define NB_STEP_CALL  10000 // Maximum 65535 !!!!
 byte STEPPER_TAB[]= STEPPER;
 
-NIL_WORKING_AREA(waThreadStepper, 0);
-NIL_THREAD(ThreadStepper, arg) {
-  nilThdSleepMilliseconds(4000);
-  boolean forward = true;
-  uint8_t count = 0;
-  
-  #ifdef BEFORE_43
-  for (byte i=0; i<sizeof(STEPPER_TAB); i++) {
-    pinMode(STEPPER_TAB[i], OUTPUT);    
-  }#else
-    stopStepper();
-    DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;
-    DDRF |= (STEPPER_TAB[2] | STEPPER_TAB[3]) ;
-  #endif
-    
-  while (true) {
-    //first a check is performed on the motor status
-    #ifdef BEFORE_43
-      oldExecuteStep((uint16_t)getParameter(PARAM_STEPPER_STEPS), forward, STEPPER_TAB[1],STEPPER_TAB[0]);
-    #else
-      executeStep((uint16_t)getParameter(PARAM_STEPPER_STEPS), forward);
-    #endif
-    forward = !forward;
-    nilThdSleepMilliseconds(1000);
-  }
+
+void stopStepper() {
+    PORTB &=~(STEPPER_TAB[0] | STEPPER_TAB[1]);
+    PORTF &=~(STEPPER_TAB[2] | STEPPER_TAB[3]);
 }
+
 
 void executeStep(uint16_t numberSteps, boolean forward) {
   DDRB |= (STEPPER_TAB[0]|STEPPER_TAB[1]) ;
@@ -82,10 +62,7 @@ void executeStep(uint16_t numberSteps, boolean forward) {
   }
 }
 
-void stopStepper() {
-    PORTB &=~(STEPPER_TAB[0] | STEPPER_TAB[1]);
-    PORTF &=~(STEPPER_TAB[2] | STEPPER_TAB[3]);
-}
+
 
 void oldExecuteStep(uint16_t numberSteps, boolean forward, byte port1, byte port2) {
   uint8_t counter=0;
@@ -124,6 +101,42 @@ void oldExecuteStep(uint16_t numberSteps, boolean forward, byte port1, byte port
     }else  nilThdSleepMilliseconds(100);  
   }
 }
+
+
+NIL_WORKING_AREA(waThreadStepper, 0);
+NIL_THREAD(ThreadStepper, arg) {
+  nilThdSleepMilliseconds(4000);
+  boolean forward = true;
+  uint8_t count = 0;
+
+
+  #ifdef BEFORE_43
+  for (byte i=0; i<sizeof(STEPPER_TAB); i++) {
+    pinMode(STEPPER_TAB[i], OUTPUT);
+  }#else
+    stopStepper();
+    DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;
+    DDRF |= (STEPPER_TAB[2] | STEPPER_TAB[3]) ;
+  #endif
+
+
+
+
+  while (true) {
+    //first a check is performed on the motor status
+    #ifdef BEFORE_43
+      oldExecuteStep((uint16_t)getParameter(PARAM_STEPPER_STEPS), forward, STEPPER_TAB[1],STEPPER_TAB[0]);
+    #else
+      executeStep((uint16_t)getParameter(PARAM_STEPPER_STEPS), forward);
+    #endif
+    forward = !forward;
+    nilThdSleepMilliseconds(1000);
+  }
+}
+
+
+
+
 
 #endif
 

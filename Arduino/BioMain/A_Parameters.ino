@@ -13,11 +13,18 @@
  *********************************************/
 
 #include <avr/eeprom.h>
+#include "Arduino.h"
+#include <NilRTOS.h>
+#include "BioMain.h"
 
 
 #define EEPROM_MIN_ADDR            0
 #define EEPROM_MAX_ADDR          511
 #include <EEPROM.h> // should be removed and based only on avr/eeprom
+
+
+
+
 
 #define MAX_PARAM 52   // If the MAX_PARAM change you need to change the pointer in the EEPROM
 
@@ -45,6 +52,10 @@
 #define ERROR_VALUE  -32768
 
 int parameters[MAX_PARAM];
+
+
+
+
 
 void setupParameters() {
   //We copy all the value in the parameters table

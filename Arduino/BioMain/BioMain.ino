@@ -11,6 +11,8 @@
 // We need to deal with EPOCH
 #include <Time.h>
 
+#include "BioMain.h"
+
 /******************
  * DEFINE CARD TYPE
  ******************/
@@ -225,7 +227,6 @@
 #define FLAG_RELAY_ACID          12
 #define FLAG_RELAY_BASE          13
 
-#define SERIAL_BUFFER_LENGTH    36
 #define SERIAL_MAX_PARAM_VALUE_LENGTH  32
 
 /*********
@@ -237,6 +238,7 @@ void setup() {
   Serial.begin(9600);
   delay(1000);
   setupParameters(); 
+
   #ifdef FLASH_SELECT 
     pinMode(FLASH_SELECT,OUTPUT);
   setupMemory();
