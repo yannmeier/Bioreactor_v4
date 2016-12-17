@@ -5,7 +5,6 @@
 #define calibration_factor -7050.10 //From SparkFun_HX711_Calibration sketch
 HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
 
-SEMAPHORE_DECL(lockHXAccess, 1);
 
 #define WEIGHT_STATUS_NORMAL    0
 #define WEIGHT_STATUS_WAITING   1
@@ -55,10 +54,12 @@ NIL_THREAD(ThreadWeight, arg) {
       nilThdSleepMilliseconds(1000);
     #endif
     if(weight_status !=WEIGHT_STATUS_ERROR) previous_status=weight_status;
-    while(!scale.is_ready()) nilThdSleepMilliseconds(10);
-    nilSemWait(&lockHXAccess);
+    while(!scale.is_ready()) {
+    	nilThdSleepMilliseconds(10);
+    }
+    protectThread();
     weight = 3*scale.get_units(); //to be improved (change calib values for the HX711)
-    nilSemSignal(&lockHXAccess);
+    unprotectThread();
 
     /***********************************************
              Standby and Error management
