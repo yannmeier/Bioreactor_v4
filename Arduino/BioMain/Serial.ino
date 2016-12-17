@@ -252,7 +252,7 @@ void printResult(char* data, Print* output) {
     printParameters(output);
     break;
   case 'w':
-      processWeightCommand(data[1], paramValue, output);
+   //   processWeightCommand(data[1], paramValue, output);
     break;
   case 'z':
     getStatusEEPROM(output);
