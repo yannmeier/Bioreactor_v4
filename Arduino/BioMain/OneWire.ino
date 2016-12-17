@@ -24,7 +24,7 @@
  *********************************************/
 
 #include <OneWire.h>
-
+SEMAPHORE_DECL(lockDSAccess, 1);
 //#define DEBUG_ONEWIRE  1
 
 byte oneWireAddress[8];
@@ -142,16 +142,20 @@ void getTemperature(OneWire &ow, int parameter, byte errorBit, byte failedEvent,
       return;
   } 
 
+  nilSemWait(&lockDSAccess);
   ow.reset();
   ow.select(addr);
   ow.write(0x44, 1);        // start conversion, with parasite power on at the end
-  
+  nilSemSignal(&lockDSAccess);
+    
   nilThdSleepMilliseconds(800);     // maybe 750ms is enough, maybe not
   // we might do a ds.depower() here, but the reset will take care of it.
   
+  nilSemWait(&lockDSAccess);
   present = ow.reset();
   ow.select(addr);    
   ow.write(0xBE);         // Read Scratchpad
+  nilSemSignal(&lockDSAccess);
 
   #ifdef DEBUG_ONEWIRE
   Serial.print(F("  Data = "));

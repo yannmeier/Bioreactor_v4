@@ -41,14 +41,12 @@ NIL_THREADS_TABLE_ENTRY(NULL, ThreadLora, NULL, waThreadLora, sizeof(waThreadLor
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadStepper, NULL, waThreadStepper, sizeof(waThreadStepper))
 #endif
 
-#ifdef THR_LINEAR_LOGS
-NIL_THREADS_TABLE_ENTRY(NULL, ThreadLogger, NULL, waThreadLogger, sizeof(waThreadLogger))
+#if defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
+NIL_THREADS_TABLE_ENTRY(NULL, ThreadWeight, NULL, waThreadWeight, sizeof(waThreadWeight))
 #endif
 
-#ifdef GAS_CTRL
-#ifndef MODE_CALIBRATE
-NIL_THREADS_TABLE_ENTRY(NULL, ThreadTap, NULL, waThreadTap, sizeof(waThreadTap))
-#endif  
+#ifdef THR_LINEAR_LOGS
+NIL_THREADS_TABLE_ENTRY(NULL, ThreadLogger, NULL, waThreadLogger, sizeof(waThreadLogger))
 #endif
 
 #ifdef TEMPERATURE_CTRL
@@ -58,8 +56,10 @@ NIL_THREADS_TABLE_ENTRY(NULL, ThreadTap, NULL, waThreadTap, sizeof(waThreadTap))
   #endif       
 #endif
 
-#if defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
-NIL_THREADS_TABLE_ENTRY(NULL, ThreadWeight, NULL, waThreadWeight, sizeof(waThreadWeight))
+#ifdef GAS_CTRL
+#ifndef MODE_CALIBRATE
+NIL_THREADS_TABLE_ENTRY(NULL, ThreadTap, NULL, waThreadTap, sizeof(waThreadTap))
+#endif  
 #endif
 
 #ifdef THR_SERIAL

@@ -5,6 +5,8 @@
 #define calibration_factor -7050.10 //From SparkFun_HX711_Calibration sketch
 HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
 
+SEMAPHORE_DECL(lockHXAccess, 1);
+
 #define WEIGHT_STATUS_NORMAL    0
 #define WEIGHT_STATUS_WAITING   1
 #define WEIGHT_STATUS_EMPTYING  2
@@ -18,7 +20,7 @@ HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
 #ifdef WEIGHT_DEBUG
 NIL_WORKING_AREA(waThreadWeight, 96);    
 #else
-NIL_WORKING_AREA(waThreadWeight, 32); // minimum of 32 !
+NIL_WORKING_AREA(waThreadWeight, 56); // minimum of 32 !
 #endif
 
 NIL_THREAD(ThreadWeight, arg) {
@@ -52,9 +54,12 @@ NIL_THREAD(ThreadWeight, arg) {
     #else
       nilThdSleepMilliseconds(1000);
     #endif
-    
+    if(weight_status !=WEIGHT_STATUS_ERROR) previous_status=weight_status;
+    while(!scale.is_ready()) nilThdSleepMilliseconds(10);
+    nilSemWait(&lockHXAccess);
     weight = 3*scale.get_units(); //to be improved (change calib values for the HX711)
-     
+    nilSemSignal(&lockHXAccess);
+
     /***********************************************
              Standby and Error management
     ************************************************/
@@ -66,15 +71,20 @@ NIL_THREAD(ThreadWeight, arg) {
       
       if(weight_status==WEIGHT_STATUS_STANDBY){ 
         weight_status=WEIGHT_STATUS_NORMAL;
+      #ifdef WEIGHT_DEBUG
         Serial.println(F("sb>ok"));
+      #endif
       }
       //safety measures
       if (weight<(0.80*getParameter(PARAM_WEIGHT_MIN)) || weight>(1.20*getParameter(PARAM_WEIGHT_MAX))) {
         all_off();
-        if(weight_status !=WEIGHT_STATUS_ERROR) previous_status=weight_status;
         weight_status=WEIGHT_STATUS_ERROR;
-        Serial.print(F("wght err:"));
-        Serial.println(weight);
+        
+        #ifdef WEIGHT_DEBUG
+          Serial.print(F("wght err:"));
+          Serial.println(weight);
+        #endif
+        
         #ifdef EVENT_LOGGING
           writeLog(EVENT_WEIGHT_FAILURE,weight);
         #endif
@@ -84,7 +94,9 @@ NIL_THREAD(ThreadWeight, arg) {
           #endif
           if(previous_status==WEIGHT_STATUS_ERROR) weight_status=WEIGHT_STATUS_NORMAL;
           else weight_status=previous_status;
-          Serial.println(F("er>ok"));
+          #ifdef WEIGHT_DEBUG
+            Serial.println(F("er>ok"));
+          #endif
       }
     }
 
@@ -132,6 +144,10 @@ NIL_THREAD(ThreadWeight, arg) {
       all_off();
       setParameterBit(PARAM_STATUS, FLAG_RELAY_EMPTYING);  //emptying ON
       if (weight<=getParameter(PARAM_WEIGHT_MIN)) {        //switch fo Filling 
+        #ifdef WEIGHT_DEBUG
+          Serial.print(F("empty:"));
+          Serial.println(weight);
+        #endif
         weight_status=WEIGHT_STATUS_FILLING;
         tsinceLastEvent=0; 
         #ifdef EVENT_LOGGING
@@ -157,6 +173,8 @@ NIL_THREAD(ThreadWeight, arg) {
       setParameterBit(PARAM_STATUS, FLAG_STEPPER_CONTROL);   //stepper  ON
      
       if (weight>=getParameter(PARAM_WEIGHT_MAX)) {
+        Serial.print(F("full:"));
+        Serial.println(weight);
         weight_status=WEIGHT_STATUS_NORMAL;
         tsinceLastEvent=0;
         
@@ -183,7 +201,7 @@ NIL_THREAD(ThreadWeight, arg) {
     #endif
     tsinceLastEvent+=(millis()-lastCycleMillis);
     lastCycleMillis=millis();
-  }
+  } 
 }
 #endif
 
