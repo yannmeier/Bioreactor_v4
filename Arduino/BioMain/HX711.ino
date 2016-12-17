@@ -204,6 +204,37 @@ NIL_THREAD(ThreadWeight, arg) {
     lastCycleMillis=millis();
   } 
 }
+
+
+void processWeightCommand(char command, char* data, Print* output) {
+  switch (command) {
+  case 'e':
+
+    break;
+  case 'l':
+
+    break;
+  case 'h':
+
+    break;
+  case 'q':
+
+   break;
+  default:
+	printWeightHelp(output);
+  }
+
+}
+void printWeightHelp(Print* output) {
+  output->println(F("Weight help"));
+  output->println(F("(we) Empty level"));
+  output->println(F("(wl) Low level"));
+  output->println(F("(wh) High level"));
+  output->println(F("(wq) Quantity (g) high"));
+}
+
+
+
 #endif
 
 /********************
