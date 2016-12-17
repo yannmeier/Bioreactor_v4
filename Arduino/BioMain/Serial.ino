@@ -1,3 +1,5 @@
+#include "WString.h"
+
 #ifdef THR_SERIAL
 
 #define SERIAL_BUFFER_LENGTH 32

@@ -4,6 +4,7 @@
  The time synchronization works through the NTP protocol and our server
 ******************************************************************************************/
 #include <SST.h>
+#include "BioMain.h"
 
 //Types of logs
 #define ENTRY_SIZE_LINEAR_LOGS     64
