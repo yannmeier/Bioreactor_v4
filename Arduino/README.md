@@ -32,73 +32,10 @@ If you are using only our project it is easier to directly point this folder
 to the libraries that are present in the github.
 
 ```
-
-
-
-## H2
-### H3
-#### H4
-##### H5
-###### H6
-
-Alternatively, for H1 and H2, an underline-ish style:
-
-Alt-H1
-======
-
-Alt-H2
-------
-
-* item1
-  - subitem1
-  - subitem2
-* item2
-  1. subitem1
-  2. subitem2
-* item3
-
-
-* http://www.cheminfo.org
-* [I'm an inline-style link](https://www.google.com)
-
-
-Inline `code` has `back-ticks around` it.
-
-
-~~abc~~
-
-_italic_ *italic*
-__bold__ **bold**
-
----
-
-First Header  | Second Header
-------------- | -------------
-Content Cell  | Content Cell
-Content Cell  | Content Cell
-
-| Left-Aligned  | Center Aligned  | Right Aligned |
-| :------------ |:---------------:| -----:|
-| col 3 is      | some wordy text | $1600 |
-| col 2 is      | centered        |   $12 |
-| zebra stripes | are neat        |    $1 |
-
-___
-
+mkdir ~/Arduino/
+ln -s ~/git/bioreactor/Bioreactor_v4/Arduino/libraries/ ~/Arduino/
 ```
-var a=0;
-for (var i=0; i<100; i++) {
-  a+=i;
-}
-```
-***
 
-> Blockquotes are very handy in email to emulate reply text.
-> This line is part of the same quote.
->> Blockquotes are very handy in email to emulate reply text.
->> This line is part of the same quote.
+## That's it
 
-
-
-
-
+You should now be able to compile the project from the Arduino IDE.
