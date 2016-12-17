@@ -27,6 +27,7 @@ NIL_THREAD(ThreadWeight, arg) {
   ********************************************/             
   int weight = int(getParameter(PARAM_WEIGHT));
   byte weight_status=0;
+  byte previous_status= WEIGHT_STATUS_ERROR;
   unsigned long tsinceLastEvent=0;        
   unsigned long lastCycleMillis=millis(); // when was the last food cycle
   all_off();                              //clear flags, shut down pumps
@@ -49,48 +50,40 @@ NIL_THREAD(ThreadWeight, arg) {
     #ifdef MODE_CALIBRATE
       nilThdSleepMilliseconds(10); //in calibration mode, we have much faster weight changes. ---> remove that and change for dynamic calibration
     #else
-      nilThdSleepMilliseconds(500);
+      nilThdSleepMilliseconds(1000);
     #endif
     
-    // moving average calibrated weight (parameters 'P' and 'Q' for factor and offset)
-    // with 3 load cells connected in parallel, the measured weight is the average of the 3 cells
-    int weight_temp = 3*scale.get_units(); //where does the error comes from ?
-    if (weight_temp < weight*1.20 || weight_temp > weight*1.20){
-      weight=0.8*weight+0.2*weight_temp;
-    }
-    #ifdef EVENT_LOGGING
-    else{     
-       writeLog(EVENT_WEIGHT_READ_FAIL  ,weight_temp);
-    }
-    #endif    
+    weight = 3*scale.get_units(); //to be improved (change calib values for the HX711)
      
     /***********************************************
              Standby and Error management
     ************************************************/
     //flag down stands for deactivated weight control   
-    if(getParameterBit(PARAM_STATUS, FLAG_FOOD_CONTROL)==0) 
-      weight_status=WEIGHT_STATUS_STANDBY;
-    
     //if weight control is on this first loop manages the standby and error cases (wake-up cases)
-    else {
+    if(getParameterBit(PARAM_STATUS, FLAG_FOOD_CONTROL)==0){ 
+      weight_status=WEIGHT_STATUS_STANDBY;
+    }else { 
+      
       if(weight_status==WEIGHT_STATUS_STANDBY){ 
         weight_status=WEIGHT_STATUS_NORMAL;
         Serial.println(F("sb>ok"));
       }
-
+      //safety measures
       if (weight<(0.80*getParameter(PARAM_WEIGHT_MIN)) || weight>(1.20*getParameter(PARAM_WEIGHT_MAX))) {
         all_off();
+        if(weight_status !=WEIGHT_STATUS_ERROR) previous_status=weight_status;
         weight_status=WEIGHT_STATUS_ERROR;
+        Serial.print(F("wght err:"));
+        Serial.println(weight);
         #ifdef EVENT_LOGGING
-          writeLog(EVENT_WEIGHT_FAILURE,0);
+          writeLog(EVENT_WEIGHT_FAILURE,weight);
         #endif
-      } 
-
-      else if (weight_status==WEIGHT_STATUS_ERROR) {
+      } else if (weight_status==WEIGHT_STATUS_ERROR) {
           #ifdef EVENT_LOGGING
             writeLog(EVENT_WEIGHT_BACK_TO_NORMAL,0);
           #endif
-          weight_status=WEIGHT_STATUS_NORMAL;
+          if(previous_status==WEIGHT_STATUS_ERROR) weight_status=WEIGHT_STATUS_NORMAL;
+          else weight_status=previous_status;
           Serial.println(F("er>ok"));
       }
     }
