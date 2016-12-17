@@ -253,3 +253,17 @@ void setup() {
 }
 
 void loop() {}
+
+
+bool lockTimeCriticalZone=false;
+void protectThread() {
+   while(lockTimeCriticalZone) {
+    nilThdSleepMilliseconds(5);
+   }
+   lockTimeCriticalZone=true;
+}
+void unprotectThread() {
+	lockTimeCriticalZone=false;
+}
+
+

@@ -29,12 +29,12 @@
 
 #if defined(SST64) || defined(SST32) 
 
-SEMAPHORE_DECL(lockFlashAccess, 1);
+
 SST sst=SST('B',6); //D10 is B6
 
 static uint32_t nextEntryID = 0;
 boolean logActive=false;
-boolean busy_flag=false;
+
 
 /*********************************************************************************** 
  Save logs in the Flash memory.
@@ -57,8 +57,9 @@ void writeLog(uint16_t event_number, uint16_t parameter_value) {
   /*****************************
             Slave Select
   ******************************/
-  nilSemWait(&lockFlashAccess);
   
+  protectThread();
+
   
 /************************************************************************************
     Test if it is the begining of one sector, erase the sector of 4096 bytes if needed  delay(2);
@@ -93,6 +94,7 @@ void writeLog(uint16_t event_number, uint16_t parameter_value) {
   ******************************/
   sst.flashReadInit(findAddressOfEntryN(nextEntryID));
   long writtenID=sst.flashReadNextInt32();
+
   #ifdef DEBUG_LOGS  
   Serial.println(F("nextEntryID "));
   Serial.println(nextEntryID);
@@ -118,7 +120,7 @@ void writeLog(uint16_t event_number, uint16_t parameter_value) {
          Out and Deselect
   ******************************/
   nilThdSleepMilliseconds(5);
-  nilSemSignal(&lockFlashAccess);
+  unprotectThread();
 }
 
 /******************************************************************************************
@@ -138,7 +140,7 @@ void writeLog(uint16_t event_number, uint16_t parameter_value) {
  *****************************************************************************************/
 uint32_t printLogN(Print* output, uint32_t entryN) {
    
-  nilSemWait(&lockFlashAccess);
+	protectThread();
   // Are we asking for a log entry that is not on the card anymore ? Then we just start with the first that is on the card
   // And we skip a sector ...
   if ((nextEntryID > MAX_NB_ENTRIES) && (entryN < (nextEntryID - MAX_NB_ENTRIES + NB_ENTRIES_PER_SECTOR))) {
@@ -158,33 +160,33 @@ uint32_t printLogN(Print* output, uint32_t entryN) {
   toHex(output, checkDigit);
   output->println("");
   sst.flashReadFinish();
-  nilSemSignal(&lockFlashAccess);
+  unprotectThread();
   return entryN;
 }
 
 
 void Last_Log_To_SPI_buff(byte* buff) {
    
-  nilSemWait(&lockFlashAccess);
+  protectThread();
   sst.flashReadInit(findAddressOfEntryN(nextEntryID-1));
   for(byte i = 0; i < ENTRY_SIZE_LINEAR_LOGS; i++) {
     byte oneByte=sst.flashReadNextInt8();
     buff[i]=oneByte;
   }
   sst.flashReadFinish();
-  nilSemSignal(&lockFlashAccess);
+  unprotectThread();
 }
 
 
 uint8_t loadLastEntryToParameters() {
-  nilSemWait(&lockFlashAccess);
+  protectThread();
   uint32_t addressOfEntryN = findAddressOfEntryN(nextEntryID-1);
   sst.flashReadInit(addressOfEntryN+8); // we skip entryID and epoch
   for(byte i = 0; i < NB_PARAMETERS_LINEAR_LOGS; i++) {
     setParameter(i,sst.flashReadNextInt16());
   }
   sst.flashReadFinish(); 
-  nilSemSignal(&lockFlashAccess);
+  unprotectThread();
 }
 
 
@@ -280,7 +282,7 @@ void recoverLastEntryN()
  Memory related functions
  *****************************/
 //Setup the memory for future use
-//Need to be used only onced at startup
+//Need to be used only once at startup
 void setupMemory(){
   SPI.begin(); 
   SPI.setDataMode(SPI_MODE0);
@@ -293,7 +295,7 @@ void printLastLog(Print* output) {
 }
 
 void formatFlash(Print* output) {
-  busy_flag=true;
+	protectThread();
   setupMemory();
   #ifdef DEBUG_LOGS  
   output->println(F("Format flash"));
@@ -317,48 +319,55 @@ void formatFlash(Print* output) {
   output->println(F("OK"));
   setTime(0);
   nextEntryID=0;
-  busy_flag=false;
+  unprotectThread();
+}
+
+void readFlash(Print* output) {
+	protectThread();
+	  wdt_disable();
+	  output->println(F("Write / read / validate"));
+	  for (int i=0; i<ADDRESS_MAX/SECTOR_SIZE; i++) {
+	    for (byte j=0; j<SECTOR_SIZE/64; j++) {
+	      long address=(long)i*SECTOR_SIZE+(long)j*64;
+	      sst.flashWriteInit(address);
+	      byte result=0;
+	      for (byte k=0; k<64; k++) {
+	        result^=(k+13);
+	        sst.flashWriteNextInt8(k+13);
+	      }
+	      sst.flashWriteFinish();
+	      sst.flashReadInit(address);
+	      for (byte k=0; k<64; k++) {
+	        result^=sst.flashReadNextInt8();
+	      }
+	      sst.flashReadFinish();
+	      if (result==0) {
+	        if (j==0 && i%16==0) {
+	          output->print(".");
+	        }
+	        if (j==0 && i%1024==1023) {
+	          output->println("");
+	        }
+	      }
+	      else {
+	        output->println(address);
+	      }
+	    }
+	  }
+	unprotectThread();
 }
 
 //need revision !!!
 void validateFlash(Print* output) {
   logActive=false;
   formatFlash(output);
-  wdt_disable();
-  output->println(F("Write / read / validate"));
-  for (int i=0; i<ADDRESS_MAX/SECTOR_SIZE; i++) {
-    for (byte j=0; j<SECTOR_SIZE/64; j++) {
-      long address=(long)i*SECTOR_SIZE+(long)j*64;
-      sst.flashWriteInit(address);
-      byte result=0;
-      for (byte k=0; k<64; k++) {
-        result^=(k+13);
-        sst.flashWriteNextInt8(k+13);
-      }
-      sst.flashWriteFinish();
-      sst.flashReadInit(address);
-      for (byte k=0; k<64; k++) {
-        result^=sst.flashReadNextInt8();
-      }
-      sst.flashReadFinish();
-      if (result==0) {
-        if (j==0 && i%16==0) {
-          output->print(".");
-        }
-        if (j==0 && i%1024==1023) {
-          output->println(""); 
-        }
-      } 
-      else {
-        output->println(address);
-      }
-    }
-  }
+  readFlash(output);
   formatFlash(output);
   nextEntryID=0;
   wdt_enable(WDTO_8S);
   wdt_reset();
 }
+
 
 #ifdef LOG_INTERVAL
 #ifdef DEBUG_LOGS
@@ -366,6 +375,7 @@ NIL_WORKING_AREA(waThreadLogger, 120);
 #else
 NIL_WORKING_AREA(waThreadLogger, 0); 
 #endif
+
 NIL_THREAD(ThreadLogger, arg) {
   nilThdSleepMilliseconds(5000);
   writeLog(EVENT_ARDUINO_BOOT,0);
@@ -373,7 +383,7 @@ NIL_THREAD(ThreadLogger, arg) {
     //avoids logging during the second x+1, ensure x+LOG_INTERVAL
     //because epoch is only precise to the second so the logging is evenly spaced
     nilThdSleepMilliseconds(LOG_INTERVAL*1000-millis()%1000+100); 
-    if(!busy_flag) writeLog(); 
+    writeLog();
   }
 }
 
