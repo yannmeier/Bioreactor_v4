@@ -23,6 +23,17 @@ in github !
 Currently we are still using the Arduino IDE. Plase download the last 1.6 version
 of the program from: https://www.arduino.cc/en/Main/Software
 
+## Another IDE ...
+
+Ready to try a new IDE to program the Arduino ? Have a look at this eclipse project and install it:
+http://eclipse.baeyens.it/
+
+Once it works, start the program, select the Arduino Leonardo and go in the menu `Arduino` -> `New sketch`.
+As project name just enter 'BioMain' and for the location: `~/git/bioreactor/Bioreactor_v4/Arduino/BioMain`
+
+After don't select any template (just normal .ino files that are already in the folder). The program
+will automatically import the libraries if there are placed correctly (see just after).
+
 ## Libraries
 
 In this project we use many non standard libraries. By default the Arduino IDE
