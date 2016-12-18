@@ -4,9 +4,9 @@
 
 | Denomination                  | Qty | Price | Supplier        | Image | Remarks |
 |-------------------------------|-----|-------|-----------------|-------| ------- |
-| DS18B20 temperature with cable| 1   | 1.4   | [ebay](http://www.ebay.com/itm/331828375684) | | |
-| 12V 10A power supply 100V-265V| 1   | 17    | [ebay](http://www.ebay.com/itm/161929667263) | | |
-| Magnetic Stirrer bar 5cm      | 1   | 3.6   | [ebay](http://www.ebay.com/itm/332037093368) | | |
+| DS18B20 temperature with cable| 1   | 1.4   | [ebay](http://www.ebay.com/itm/331828375684) |  <img src="images/s-l300.jpg" width="48"> | |
+| 12V 10A power supply 100V-265V| 1   | 17    | [ebay](http://www.ebay.com/itm/161929667263) |  <img src="images/Power-supply.jpg" width="48"> | |
+| Magnetic Stirrer bar 5cm      | 1   | 3.6   | [ebay](http://www.ebay.com/itm/332037093368) |  <img src="images/Stirrer-bar.jpg" width="48"> | |
 
 
 ## Electronic
