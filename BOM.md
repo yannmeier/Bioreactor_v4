@@ -12,13 +12,13 @@
 
 
 | Denomination                  | Qty | Price | Supplier        | Image | Remarks |
-|-------------------------------|-----|-------|-----------------|-------|
-| Header 4 pins  KF2510-4P      | 1   | 0.1   | [ebay](http://www.ebay.com/itm/201726148721)
-| Cable 4 pins   KF2510-4P      | 1   | 0.5   | [ebay](http://www.ebay.com/itm/231277926061)
-| Header 2 pins  KF2510-2P      | 2   | 0.1   | [ebay](http://www.ebay.com/itm/251255708763)
-| Cable 2 pins   KF2510-2P      | 2   | 0.5   | ebay
-| 3.5 Female jack PCB PF3024M   | 1   | 0.3   | [ebay](http://www.ebay.com/itm/331809367438)
-| 3.5 Male plug (for one wire)  | 1   | 0.1   | [ebay](http://www.ebay.com/itm/172001125871)
+| ----------------------------- | --- | ----- | --------------- | ----- | |
+| Header 4 pins  KF2510-4P      | 1   | 0.1   | [ebay](http://www.ebay.com/itm/201726148721) | | |
+| Cable 4 pins   KF2510-4P      | 1   | 0.5   | [ebay](http://www.ebay.com/itm/231277926061) | | |
+| Header 2 pins  KF2510-2P      | 2   | 0.1   | [ebay](http://www.ebay.com/itm/251255708763) | | |
+| Cable 2 pins   KF2510-2P      | 2   | 0.5   | ebay | | |
+| 3.5 Female jack PCB PF3024M   | 1   | 0.3   | [ebay](http://www.ebay.com/itm/331809367438) | | |
+| 3.5 Male plug (for one wire)  | 1   | 0.1   | [ebay](http://www.ebay.com/itm/172001125871) | | |
 
  
 ### Components
