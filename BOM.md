@@ -35,3 +35,4 @@
 | HX711 SOP16                   | 1   | 0.5   | [ebay](http://www.ebay.com/itm/182316289786) | <img src="images/SST26vf064b.jpg" width="48"> | |
 | DS18B20Z One-Wire temperature | 1   | 2.1   | [aliexpress](https://www.aliexpress.com/item/Free-Shipping-10PCS-Hot-new-original-authentic-DS18B20-DS18B20Z-temperature-sensor-SOP8-YF1128/32550585751.html?spm=2114.13010608.0.0.tzWGQM) | <img src="images/ds18b20z.jpg" width="48"> | | 
 
+(DS18B20U) https://www.aliexpress.com/item/100-new-original-DS18B20U-T-R-DS18B20U-T-DS18B20U-DS18B20U-MSOP8/32720211527.html?spm=2114.30010308.3.33.1by9Q7&ws_ab_test=searchweb0_0,searchweb201602_3_10065_10068_10084_10083_10080_10082_10081_10060_10061_10062_10056_10055_10037_10054_10033_10059_10032_10099_10078_10079_10077_10105_427_10103_10073_10102_10096_10052_10050_10051,searchweb201603_1&btsid=ccf9ed95-49e6-437b-9c58-c6d8852da00b
