@@ -36,7 +36,7 @@ will automatically import the libraries if there are placed correctly (see just 
 
 ## Hardware support for Leonardo 8MHz
 
-The version 4.2 of the bioreactor is opeerating at 8MHz/3V3 instead of the standard 16MHz/5V, thus the boards.txt files that defines the options to burn the bootloader must be adjusted (file can be found under your arduino installation directory, eg: /usr/share/arduino-1.6.13/hardware/arduino/boards.txt) by adding the follwing lines:
+The version 4.2 of the bioreactor is opeerating at 8MHz/3V3 instead of the standard 16MHz/5V, thus the boards.txt files that defines the options to burn the bootloader must be adjusted (file can be found under your arduino installation directory, eg: /usr/share/arduino-1.6.13/hardware/arduino/boards.txt for the Arduino IDE in fedora OR /usr/lib64/eclipse/arduinoPlugin/packages/arduino/hardware/avr/1.6.15/boards.txt for the Eclipse IDE) by adding the follwing lines:
 
 leonardo8.name=Arduino Leonardo 8MHz<br />
 leonardo8.vid.0=0x2341<br />
