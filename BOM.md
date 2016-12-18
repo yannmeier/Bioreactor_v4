@@ -8,7 +8,7 @@
 | 12V 10A power supply 100V-265V| 1   | 17    | [ebay](http://www.ebay.com/itm/161929667263) |  <img src="images/Power-supply.jpg" width="48"> | |
 | Magnetic Stirrer bar 5cm      | 1   | 3.6   | [ebay](http://www.ebay.com/itm/332037093368) |  <img src="images/Stirrer-bar.jpg" width="48"> | |
 | MK3 heating plate             | 1   | 12.3  | [aliexpress](https://www.aliexpress.com/item/3D-printer-heatbed-Heat-bed-MK3-standard-aluminum-plate-3mm-hot-bed-Free-shipping/1941676934.html?spm=2114.13010608.0.0.eVVdIm) |  <img src="images/MK3.jpg" width="48"> | |
-
+| Stepper (agitation)           | 1   |  |  |   | |
 
 ## Electronic
 
