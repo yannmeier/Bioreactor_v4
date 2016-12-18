@@ -39,27 +39,6 @@ will automatically import the libraries if there are placed correctly (see just 
 The version 4.2 of the bioreactor is opeerating at 8MHz/3V3 instead of the standard 16MHz/5V, thus the boards.txt files that defines the options to burn the bootloader must be adjusted (file can be found under your arduino installation directory, eg: /usr/share/arduino-1.6.13/hardware/arduino/boards.txt) by adding the follwing lines:
 
 leonardo8.name=Arduino Leonardo 8MHz<br />
-leonardo8.upload.protocol=avr109<br />
-leonardo8.upload.maximum_size=28672<br />
-leonardo8.upload.speed=57600<br />
-leonardo8.upload.disable_flushing=true<br />
-leonardo8.bootloader.low_fuses=0xff<br />
-leonardo8.bootloader.high_fuses=0xd8<br />
-leonardo8.bootloader.extended_fuses=0xcb<br />
-leonardo8.bootloader.path=caterina-LilyPadUSB<br />
-leonardo8.bootloader.file=Caterina-LilyPadUSB.hex<br />
-leonardo8.bootloader.unlock_bits=0x3F<br />
-leonardo8.bootloader.lock_bits=0x2F<br />
-leonardo8.build.mcu=atmega32u4<br />
-leonardo8.build.f_cpu=8000000L<br />
-leonardo8.build.vid=0x2341<br />
-leonardo8.build.pid=0x8036<br />
-leonardo8.build.core=arduino<br />
-leonardo8.build.variant=leonardo<br />
-<br />
-OR IF YOU USE THE ECLIPSE IDE:<br />
-<br />
-leonardo8.name=Arduino Leonardo 8MHz<br />
 leonardo8.vid.0=0x2341<br />
 leonardo8.pid.0=0x0036<br />
 leonardo8.vid.1=0x2341<br />
