@@ -1,9 +1,10 @@
 # Bill Of Material (BOM)
 
 
+
 | Denomination                  | Qty | Price | Supplier        | Image | Remarks |
-|-------------------------------|-----|-------|-----------------|-------|
-| DS18B20 temperature with cable| 1   | 1.4   | [ebay](http://www.ebay.com/itm/331828375684)
+|-------------------------------|-----|-------|-----------------|-------| ------- |
+| DS18B20 temperature with cable| 1   | 1.4   | [ebay](http://www.ebay.com/itm/331828375684) | | |
 
 ## Electronic
 
@@ -12,7 +13,7 @@
 
 
 | Denomination                  | Qty | Price | Supplier        | Image | Remarks |
-| ----------------------------- | --- | ----- | --------------- | ----- | |
+| ----------------------------- | --- | ----- | --------------- | ----- | ------- |
 | Header 4 pins  KF2510-4P      | 1   | 0.1   | [ebay](http://www.ebay.com/itm/201726148721) | | |
 | Cable 4 pins   KF2510-4P      | 1   | 0.5   | [ebay](http://www.ebay.com/itm/231277926061) | | |
 | Header 2 pins  KF2510-2P      | 2   | 0.1   | [ebay](http://www.ebay.com/itm/251255708763) | | |
