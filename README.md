@@ -60,8 +60,8 @@ References:
 
 #For Developers
 
-It is recommended to use the version 1.0.5 of the arduino IDE packed here: http://blog.spitzenpfeil.org/arduino/mirror_released/ . You might need to install the last version of arduino to have the necessary libs on your computer first.
-Then unzip the arduino libraries provided in your local arduino libraries folder: 
+https://github.com/Bioreactor/Bioreactor_v4/blob/master/Arduino/README.md
+Import the arduino libraries provided in your local arduino libraries folder: 
 eg. /usr/share/arduino/liraries on Fedora sytems
 
 The version 4.2 of the bioreactor is opeerating at 8MHz/3V3 instead of the standard 16MHz/5V, thus the boards.txt files
