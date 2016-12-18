@@ -31,7 +31,7 @@
 | Denomination                  | Qty | Price | Supplier        | Image | Remarks |
 | ----------------------------- | --- | ----- | --------------- | ----- | ------- |
 | Atemage32U4 44TQFP            | 1   | 3.6   | [aliexpress](https://www.aliexpress.com/item/10pcs-lot-ATMEGA32U4-AU-ATMEGA32U4-TQFP-44-IC-8-bit-Microcontroller-with-16-32K-Bytes-of/32720185776.html?spm=2114.13010608.0.0.Brw1qI) | <img src="images/atmega32u4-au.jpg" width="48"> | |
-| SST26VF064B-104I/SM           | 1   | 2.0  | [aliexpress](https://www.aliexpress.com/item/SST26VF064B-I-SM-SST26VF064B-I-SST26VF064B-new-original/32760981168.html?spm=2114.13010608.0.0.vhdFdY) | <img src="images/SST26vf064b.jpg" width="48"> | |
-| HX711 SOP16                   | 1   | 0.5  | [ebay](          | 1   | 2.0  | [aliexpress](http://www.ebay.com/itm/182316289786) | <img src="images/SST26vf064b.jpg" width="48"> | |) | <img src="images/hx711.jpg" width="48"> | |
-
+| SST26VF064B-104I/SM           | 1   | 2.0   | [aliexpress](https://www.aliexpress.com/item/SST26VF064B-I-SM-SST26VF064B-I-SST26VF064B-new-original/32760981168.html?spm=2114.13010608.0.0.vhdFdY) | <img src="images/SST26vf064b.jpg" width="48"> | |
+| HX711 SOP16                   | 1   | 0.5   | [ebay](http://www.ebay.com/itm/182316289786) | <img src="images/SST26vf064b.jpg" width="48"> | |
+| DS18B20Z One-Wire temperature | 1   | 2.1   | [aliexpress](https://www.aliexpress.com/item/Free-Shipping-10PCS-Hot-new-original-authentic-DS18B20-DS18B20Z-temperature-sensor-SOP8-YF1128/32550585751.html?spm=2114.13010608.0.0.tzWGQM) | <img src="images/ds18b20z.jpg" width="48"> | | 
 
