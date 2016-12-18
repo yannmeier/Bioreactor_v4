@@ -5,6 +5,9 @@
 | Denomination                  | Qty | Price | Supplier        | Image | Remarks |
 |-------------------------------|-----|-------|-----------------|-------| ------- |
 | DS18B20 temperature with cable| 1   | 1.4   | [ebay](http://www.ebay.com/itm/331828375684) | | |
+| 12V 10A power supply 100V-265V| 1   | 17    | [ebay](http://www.ebay.com/itm/161929667263) | | |
+| Magnetic Stirrer bar 5cm      | 1   | 3.6   | [ebay](http://www.ebay.com/itm/332037093368) | | |
+
 
 ## Electronic
 
@@ -14,7 +17,7 @@
 
 | Denomination                  | Qty | Price | Supplier        | Image | Remarks |
 | ----------------------------- | --- | ----- | --------------- | ----- | ------- |
-| Header 4 pins  KF2510-4P      | 1   | 0.1   | [ebay](http://www.ebay.com/itm/201726148721) | | |
+| Header 4 pins  KF2510-4P      | 1   | 0.1   | [ebay](http://www.ebay.com/itm/201726148721) | <img src="images/Header-KF5410-4P.jpg" width="48"> | |
 | Cable 4 pins   KF2510-4P      | 1   | 0.5   | [ebay](http://www.ebay.com/itm/231277926061) | | |
 | Header 2 pins  KF2510-2P      | 2   | 0.1   | [ebay](http://www.ebay.com/itm/251255708763) | | |
 | Cable 2 pins   KF2510-2P      | 2   | 0.5   | ebay | | |
