@@ -27,4 +27,10 @@
  
 ### Components
 
+| Denomination                  | Qty | Price | Supplier        | Image | Remarks |
+| ----------------------------- | --- | ----- | --------------- | ----- | ------- |
+| Atemage32U4                   | 1   | 3.6   | [aliexpress](https://www.aliexpress.com/item/10pcs-lot-ATMEGA32U4-AU-ATMEGA32U4-TQFP-44-IC-8-bit-Microcontroller-with-16-32K-Bytes-of/32720185776.html?spm=2114.13010608.0.0.Brw1qI) | <img src="images/atmega32u4-au.jpg" width="48"> | |
+| Atemage32U4                   | 1   | 2.0  | [aliexpress](https://www.aliexpress.com/item/SST26VF064B-I-SM-SST26VF064B-I-SST26VF064B-new-original/32760981168.html?spm=2114.13010608.0.0.vhdFdY) | <img src="images/SST26vf064b.jpg" width="48"> | |
+
+
 
