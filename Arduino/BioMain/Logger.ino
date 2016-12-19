@@ -4,7 +4,6 @@
  The time synchronization works through the NTP protocol and our server
 ******************************************************************************************/
 #include <SST.h>
-#include "BioMain.h"
 
 //Types of logs
 #define ENTRY_SIZE_LINEAR_LOGS     64
@@ -122,33 +121,26 @@ void writeLog(uint16_t event_number, int parameter_value) {
   /*****************************
          Out and Deselect
   ******************************/
-  nilThdSleepMilliseconds(5);
   unprotectThread();
+  nilThdSleepMilliseconds(5);
 }
 
 /******************************************************************************************
  Read the corresponding logs in the flash memory of the entry number (ID).
  result: Array of uint8_t where the logs are stored. It should be a 32 bytes array
  for the 3 RRD logs and 12 bytes for the commands/events logs.  
-    }
-  }
-  formatFlash(output);
-  nextEntryID=0;
-}
-
-#ifdef LOG_INTERVAL
+ #ifdef LOG_INTERVAL
  *entryN: Log ID that will correspond to the logs address to be read and stored in result
  return:  Error flag: 0: no error occured
  EVENT_ERROR_NOT_FOUND_ENTRY_N: The log ID (entryN) was not found in the flash memory
  *****************************************************************************************/
 uint32_t printLogN(Print* output, uint32_t entryN) {
-   
-	protectThread();
   // Are we asking for a log entry that is not on the card anymore ? Then we just start with the first that is on the card
   // And we skip a sector ...
   if ((nextEntryID > MAX_NB_ENTRIES) && (entryN < (nextEntryID - MAX_NB_ENTRIES + NB_ENTRIES_PER_SECTOR))) {
     entryN=nextEntryID - MAX_NB_ENTRIES + NB_ENTRIES_PER_SECTOR;
   }
+  protectThread();
   sst.flashReadInit(findAddressOfEntryN(entryN));
   #ifdef DEBUG_LOGS
   Serial.print(F("entryN: "));
@@ -169,7 +161,6 @@ uint32_t printLogN(Print* output, uint32_t entryN) {
 
 
 void Last_Log_To_SPI_buff(byte* buff) {
-   
   protectThread();
   sst.flashReadInit(findAddressOfEntryN(nextEntryID-1));
   for(byte i = 0; i < ENTRY_SIZE_LINEAR_LOGS; i++) {
@@ -182,14 +173,12 @@ void Last_Log_To_SPI_buff(byte* buff) {
 
 
 uint8_t loadLastEntryToParameters() {
-  protectThread();
   uint32_t addressOfEntryN = findAddressOfEntryN(nextEntryID-1);
   sst.flashReadInit(addressOfEntryN+8); // we skip entryID and epoch
   for(byte i = 0; i < NB_PARAMETERS_LINEAR_LOGS; i++) {
     setParameter(i,sst.flashReadNextInt16());
   }
   sst.flashReadFinish(); 
-  unprotectThread();
 }
 
 
@@ -326,7 +315,6 @@ void formatFlash(Print* output) {
 }
 
 void readFlash(Print* output) {
-	protectThread();
 	  wdt_disable();
 	  output->println(F("Write / read / validate"));
 	  for (int i=0; i<ADDRESS_MAX/SECTOR_SIZE; i++) {
@@ -357,7 +345,8 @@ void readFlash(Print* output) {
 	      }
 	    }
 	  }
-	unprotectThread();
+    wdt_enable(WDTO_8S);
+    wdt_reset();
 }
 
 //need revision !!!
