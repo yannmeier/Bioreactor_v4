@@ -80,6 +80,11 @@ NIL_THREAD(ThreadWeight, arg) {
       }
       //safety measures
       if (weight<(0.80*getParameter(PARAM_WEIGHT_MIN)) || weight>(1.20*getParameter(PARAM_WEIGHT_MAX))) {
+        
+        #ifdef EVENT_LOGGING
+          if(weight_status!=WEIGHT_STATUS_ERROR) writeLog(EVENT_WEIGHT_FAILURE,weight);
+        #endif
+
         all_off();
         weight_status=WEIGHT_STATUS_ERROR;
         
@@ -88,9 +93,6 @@ NIL_THREAD(ThreadWeight, arg) {
           Serial.println(weight);
         #endif
         
-        #ifdef EVENT_LOGGING
-          writeLog(EVENT_WEIGHT_FAILURE,weight);
-        #endif
       } else if (weight_status==WEIGHT_STATUS_ERROR) {
           #ifdef EVENT_LOGGING
             writeLog(EVENT_WEIGHT_BACK_TO_NORMAL,0);
@@ -262,7 +264,7 @@ void all_off(){
   clearParameterBit(PARAM_STATUS, FLAG_PH_CONTROL);      //pH       OFF
   clearParameterBit(PARAM_STATUS, FLAG_RELAY_FILLING);   //filling  OFF
   clearParameterBit(PARAM_STATUS, FLAG_RELAY_EMPTYING);  //emptying OFF
-  clearParameterBit(PARAM_STATUS, FLAG_PID_CONTROL);  //emptying ON
+  clearParameterBit(PARAM_STATUS, FLAG_PID_CONTROL);     //pid      OFF
 }
 
 
