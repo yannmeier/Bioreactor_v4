@@ -42,7 +42,7 @@
 #endif
 
 #define FALSE 0
-#define TRUE  1
+#define TRUE  !FALSE
 
 // Platform specific I/O definitions
 
