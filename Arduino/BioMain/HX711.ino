@@ -1,7 +1,6 @@
 #if defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
 
 #include "HX711.h"
-#include "BioMain.h"
 
 #define calibration_factor -7050.10 //From SparkFun_HX711_Calibration sketch
 HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
