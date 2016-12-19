@@ -11,7 +11,7 @@
 | Stepper (agitation)           | 1   | ~15 |  |   | |
 | Peristaltic pumps             | 2   | ~7 |  |   | |
 | Magnets for the agitation     | 2   |  |  |   | 
-| Load cell     | 3   | ~3 |  |   |
+| Load cell 2kg YZC-133         | 3   | 2.7 | [aliexpress](https://www.aliexpress.com/item/Electronic-2KG-YZC-133-Aluminum-Weighing-Weight-Scale-Sensor-Load-Cell/32660749913.html?spm=2114.13010608.0.0.vVBDFq) | <img src="images/LoadCell.jpg" width="48"> |
 
 
 ## Electronic
@@ -22,6 +22,8 @@
 
 | Denomination                  | Qty | Unit Price | Supplier        | Image | Remarks |
 | ----------------------------- | --- | ----- | --------------- | ----- | ------- |
+| Header 5 pins  KF2510-5P      | 1   | 0.2   | | | |
+| Cable 5 pins   KF2510-5P      | 1   | 0.6   |  |  | |
 | Header 4 pins  KF2510-4P      | 1   | 0.1   | [ebay](http://www.ebay.com/itm/201726148721) | <img src="images/Header-KF5410-4P.jpg" width="48"> | |
 | Cable 4 pins   KF2510-4P      | 1   | 0.5   | [ebay](http://www.ebay.com/itm/231277926061) | <img src="images/Cable-KF5410-4P.jpg" width="48"> | |
 | Header 2 pins  KF2510-2P      | 2   | 0.1   | [ebay](http://www.ebay.com/itm/251255708763) | <img src="images/Header-KF5410-2P.jpg" width="48"> | |
