@@ -37,8 +37,6 @@
 #define EVENT_ERROR_NOT_FOUND_ENTRY_N  150
 
 
-
-
 void resetParameters() {
 
 #ifdef STEPPER

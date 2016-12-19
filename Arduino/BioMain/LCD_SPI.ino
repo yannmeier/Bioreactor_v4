@@ -1,7 +1,4 @@
 #ifdef LCD_SELECT
-
-//#define DEBUG_LCD 1
-
 /************************************
        LCD Control Functions
 ************************************/
@@ -26,7 +23,6 @@ void Last_Params_To_SPI_buff(byte* buff) {
 /**
  * Check if parameter data received from LCD is valid.
  */
-
 boolean checkParameterData(int parameter, int value){
   // TODO
   

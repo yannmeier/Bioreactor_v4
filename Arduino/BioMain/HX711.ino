@@ -14,7 +14,7 @@ HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
 #define WEIGHT_STATUS_ERROR     7
 
 #define EVENT_LOGGING 
-//#define WEIGHT_DEBUG 1 
+
 
 #ifdef WEIGHT_DEBUG
 NIL_WORKING_AREA(waThreadWeight, 96);    

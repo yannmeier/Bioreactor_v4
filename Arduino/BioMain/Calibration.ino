@@ -1,4 +1,4 @@
-#ifdef MODE_CALIBRATE
+#ifdef MODE_CALIBRATE //everything is to be removed and made dynamic
 
 #define PARAM_SELECT_ANEMOM_CHANNEL   13 //select the channel you want to test.
 

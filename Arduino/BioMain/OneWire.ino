@@ -10,7 +10,6 @@
  *  us to directly ask any device on the line without address.
  *  
  *  The sequence is as follow: 
- *  
  *  We ask the sensor to update its value :
  *  1. Issue a Reset pulse and observe the Presence of the thermometer
  *  2. Issue the Skip Rom command (0xCC)
@@ -25,10 +24,7 @@
 
 #include <OneWire.h>
 
-//#define DEBUG_ONEWIRE  1
-
 byte oneWireAddress[8];
-#ifdef TEMPERATURE_CTRL
 
 #ifdef TEMP_LIQ
   OneWire oneWire1(TEMP_LIQ);
@@ -38,8 +34,6 @@ byte oneWireAddress[8];
 #ifdef TEMP_PCB
   OneWire oneWire2(TEMP_PCB);
   byte errorTempPlate = false;
-#endif
-
 #endif
 
 void getTemperature(OneWire &ow, int parameter, byte errorBit, byte failedEvent, byte recoverEvent);
@@ -56,7 +50,6 @@ NIL_THREAD(ThreadTemp, arg) {
   nilThdSleepMilliseconds(2000);
   Serial.println(F("OneWire Thread"));
   #endif
-
 
   while(true){
   #ifdef TEMP_LIQ

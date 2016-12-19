@@ -1,6 +1,5 @@
-#include "WString.h"
-
 #ifdef THR_SERIAL
+#include "WString.h"
 
 #define SERIAL_BUFFER_LENGTH 32
 char serialBuffer[SERIAL_BUFFER_LENGTH];

@@ -8,8 +8,6 @@
 /******************
  * DEFINE CARD TYPE
  ******************/
-//ONLY PARAMETER THAT CHANGES
-
 #define TYPE_MAIN     1   // card to control the basic functions: food, motor, temperature
 //#define TYPE_PH
 //#define TYPE_GAS
@@ -22,7 +20,6 @@
 /******************************************
  * DEFINE FLASH VERSION (default is SST64)
  *****************************************/
-//standard version of the SSTSPI flsah in 12.2016,
 //support SST25VF064C, SST26VF064B (64Mbits) or similar from Cypress
 #define SST64 1
 //support SST25VF032C, SST26VF032B (32Mbits) or similar from Cypress
@@ -39,12 +36,12 @@
  * PIN&ADRESS MAPPING
  *********************/
 //I2C addresses
-#define I2C_FLUX          106//B01101000 --> to be redefined (AT32u4 slave)
-#define I2C_PH            104//B01101000 --> to be redefined (AT32u4 slave)
+//#define I2C_FLUX          106//B01101000 --> to be redefined (AT32u4 slave)
+//#define I2C_PH            104//B01101000 --> to be redefined (AT32u4 slave)
 
 //Pin definition
 #define D4   4  //temp probe
-#define D6   6  //pi
+#define D6   6  //pid
 #define D10  10 //memory select
 #define D11  11 //slave at32u4 for LCD
 #define D12  12 //temp control
@@ -55,7 +52,6 @@
 #define D21  21 //food out
 #define D22  22 //weight data
 #define D23  23 //weight clock
-
 
 /**************************************
  * ACTIVE THREAD DEPENDING CARD TYPE
@@ -76,7 +72,6 @@
     #define TEMP_LIQ         D4
     #define TEMP_PCB         D12
     #define TEMP_PID         D6
-    #define FLASH_SELECT     D10    //Flash SS_SPI
   #define THR_MONITORING     1
     #define MONITORING_LED   D13
   //#define THR_LORA         1
@@ -101,20 +96,20 @@
 #undef TEMPERATURE_CTRL
 #endif
 
-/***********************
- * SERIAL, LOGGER AND DEBUGGER
- ************************/
-  #define THR_SERIAL    1
-  #define THR_LINEAR_LOGS    1
-/*******************************
- * THREADS AND PARAMETERS PRESENT IN EACH CARD
- *******************************/
+/******************************
+* SERIAL, LOGGER AND DEBUGGERS
+*******************************/
+#define THR_SERIAL         1
+#define THR_LINEAR_LOGS    1
+//#define DEBUG_LOGS         1
+//#define WEIGHT_DEBUG       1 
+//#define DEBUG_LCD          1
+//#define DEBUG_ONEWIRE      1
 
-  #ifdef THR_LINEAR_LOGS
-  #define LOG_INTERVAL          10  // define the interval in seconds between storing the log
-  //#define DEBUG_LOGS            1
-  #endif
-
+#ifdef THR_LINEAR_LOGS
+  #define FLASH_SELECT D10 //Flash SS_SPI
+  #define LOG_INTERVAL 10  //Interval in (s) between logs
+#endif
 /*******************************
  * CARD DEFINITION (HARD CODED)
  *******************************/
