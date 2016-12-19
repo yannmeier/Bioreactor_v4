@@ -23,7 +23,8 @@ NIL_THREAD(Thread_PID, arg)
   heatingSetup();
   
   while(TRUE){
-    pid_ctrl();
+    if(getParameterBit(PARAM_STATUS,FLAG_PID_CONTROL)) pid_ctrl();
+    else analogWrite(TEMP_PID,0);
     nilThdSleepMilliseconds(1000);  //refresh every 500ms --> the faster the better the control
   }
 }

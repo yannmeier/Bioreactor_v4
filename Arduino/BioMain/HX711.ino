@@ -16,7 +16,7 @@ HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
 #define EVENT_LOGGING 
 
 
-#ifdef WEIGHT_DEBUG
+#ifdef DEBUG_WEIGHT
 NIL_WORKING_AREA(waThreadWeight, 96);    
 #else
 NIL_WORKING_AREA(waThreadWeight, 56); // minimum of 32 !
@@ -74,7 +74,7 @@ NIL_THREAD(ThreadWeight, arg) {
       
       if(weight_status==WEIGHT_STATUS_STANDBY){ 
         weight_status=WEIGHT_STATUS_NORMAL;
-      #ifdef WEIGHT_DEBUG
+      #ifdef DEBUG_WEIGHT
         Serial.println(F("sb>ok"));
       #endif
       }
@@ -83,7 +83,7 @@ NIL_THREAD(ThreadWeight, arg) {
         all_off();
         weight_status=WEIGHT_STATUS_ERROR;
         
-        #ifdef WEIGHT_DEBUG
+        #ifdef DEBUG_WEIGHT
           Serial.print(F("wght err:"));
           Serial.println(weight);
         #endif
@@ -97,7 +97,7 @@ NIL_THREAD(ThreadWeight, arg) {
           #endif
           if(previous_status==WEIGHT_STATUS_ERROR) weight_status=WEIGHT_STATUS_NORMAL;
           else weight_status=previous_status;
-          #ifdef WEIGHT_DEBUG
+          #ifdef DEBUG_WEIGHT
             Serial.println(F("er>ok"));
           #endif
       }
@@ -106,7 +106,7 @@ NIL_THREAD(ThreadWeight, arg) {
     setParameter(PARAM_WEIGHT, weight);
     setParameter(PARAM_WEIGHT_STATUS, (((uint16_t)(tsinceLastEvent/60000)) | ((uint16_t)(weight_status<<13))));
     
-   #ifdef WEIGHT_DEBUG
+   #ifdef DEBUG_WEIGHT
         Serial.print(weight_status);
         Serial.print(F(" "));
         Serial.println(weight);
@@ -120,7 +120,8 @@ NIL_THREAD(ThreadWeight, arg) {
     case WEIGHT_STATUS_NORMAL: 
       all_off();
       setParameterBit(PARAM_STATUS, FLAG_PH_CONTROL);        //pH      ON
-      setParameterBit(PARAM_STATUS, FLAG_STEPPER_CONTROL);   //stepper ON    
+      setParameterBit(PARAM_STATUS, FLAG_STEPPER_CONTROL);   //stepper ON   
+      setParameterBit(PARAM_STATUS, FLAG_PID_CONTROL);       //PID ON   
       if(( (uint16_t)(tsinceLastEvent/60000))>=getParameter(PARAM_FILLED_TIME)){                //switch to Sedimentation 
         weight_status=WEIGHT_STATUS_WAITING;
         tsinceLastEvent=0; 
@@ -147,7 +148,7 @@ NIL_THREAD(ThreadWeight, arg) {
       all_off();
       setParameterBit(PARAM_STATUS, FLAG_RELAY_EMPTYING);  //emptying ON
       if (weight<=getParameter(PARAM_WEIGHT_MIN)) {        //switch fo Filling 
-        #ifdef WEIGHT_DEBUG
+        #ifdef DEBUG_WEIGHT
           Serial.print(F("empty:"));
           Serial.println(weight);
         #endif
@@ -174,10 +175,13 @@ NIL_THREAD(ThreadWeight, arg) {
       all_off();
       setParameterBit(PARAM_STATUS, FLAG_RELAY_FILLING);     //filling  ON
       setParameterBit(PARAM_STATUS, FLAG_STEPPER_CONTROL);   //stepper  ON
+      setParameterBit(PARAM_STATUS, FLAG_PID_CONTROL);       //PID ON
      
       if (weight>=getParameter(PARAM_WEIGHT_MAX)) {
-        Serial.print(F("full:"));
-        Serial.println(weight);
+        #ifdef DEBUG_WEIGHT
+          Serial.print(F("full:"));
+          Serial.println(weight);
+        #endif
         weight_status=WEIGHT_STATUS_NORMAL;
         tsinceLastEvent=0;
         
@@ -257,7 +261,8 @@ void all_off(){
   clearParameterBit(PARAM_STATUS, FLAG_STEPPER_CONTROL); //stepper  OFF
   clearParameterBit(PARAM_STATUS, FLAG_PH_CONTROL);      //pH       OFF
   clearParameterBit(PARAM_STATUS, FLAG_RELAY_FILLING);   //filling  OFF
-  clearParameterBit(PARAM_STATUS, FLAG_RELAY_EMPTYING);  //emptying ON
+  clearParameterBit(PARAM_STATUS, FLAG_RELAY_EMPTYING);  //emptying OFF
+  clearParameterBit(PARAM_STATUS, FLAG_PID_CONTROL);  //emptying ON
 }
 
 

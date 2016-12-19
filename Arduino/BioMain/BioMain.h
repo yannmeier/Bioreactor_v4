@@ -102,7 +102,7 @@
 #define THR_SERIAL         1
 #define THR_LINEAR_LOGS    1
 //#define DEBUG_LOGS         1
-//#define WEIGHT_DEBUG       1 
+//#define DEBUG_WEIGHT       1 
 //#define DEBUG_LCD          1
 //#define DEBUG_ONEWIRE      1
 
@@ -201,12 +201,13 @@
  ******************/
 #define PARAM_STATUS       25
 
-#define FLAG_STEPPER_CONTROL     0   // need to be set to 1 for control of engine
-#define FLAG_PH_CONTROL          1   // set the condition to disable targeted modules when pumping is performed
-#define FLAG_GAS_CONTROL         2
-#define FLAG_FOOD_CONTROL        3   // need to be set to 1 for control of food
+#define FLAG_STEPPER_CONTROL     0   //0 to stop engine
+#define FLAG_PH_CONTROL          1   //0 to to stop ph
+#define FLAG_GAS_CONTROL         2   //0 to stop gas
+#define FLAG_FOOD_CONTROL        3   //1 for food ctrl
+#define FLAG_PID_CONTROL         4   //0 to stop PID
 
-#define FLAG_PH_CALIBRATE        4
+#define FLAG_PH_CALIBRATE        5
 
 #define FLAG_RELAY_FILLING       8
 #define FLAG_RELAY_EMPTYING      9
