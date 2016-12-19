@@ -1,5 +1,4 @@
 #ifdef STEPPER
-
 /****************************
  *  THREAD STEPPER MOTOR
  *  This is the thread controlling the motor. It should have a high priority 
@@ -12,6 +11,7 @@
  *  BLACK = {PWM=HIGH, IO=HIGH}
  *  RED = {PWM=HIGH, IO=LOW}
  ******************************/
+
 //We define here the number of step executed during every call to the thread
 //#define NB_STEP_CALL  10000 // Maximum 65535 !!!!
 byte STEPPER_TAB[]= STEPPER;
