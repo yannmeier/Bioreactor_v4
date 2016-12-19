@@ -1,4 +1,10 @@
-
+/**************
+ * LIBRAIRIES
+ **************/
+#include <NilRTOS.h> //MultiThread
+#include <SPI.h>     //Flash SPI
+#include <avr/wdt.h> //Watchdog
+#include <Time.h>
 /******************
  * DEFINE CARD TYPE
  ******************/
@@ -127,14 +133,14 @@
 /*************************************/
 
 #if defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
-#define PARAM_WEIGHT_FACTOR        33  // Weight calibration: conversion factor digital -> gr (weight=FACTOR*dig_unit)
-#define PARAM_WEIGHT_OFFSET        34  // Weight calibration: digital offset value when bioreactor is empty
-#define PARAM_WEIGHT               2   // in gr
-#define PARAM_WEIGHT_MIN           29
-#define PARAM_WEIGHT_MAX           30
-#define PARAM_SEDIMENTATION_TIME   31  // MINUTES to wait without rotation before emptying
-#define PARAM_FILLED_TIME          32  // MINUTES to stay in the filled state
-#define PARAM_WEIGHT_STATUS        3  // current STATUS // BBBAAAAA AAAAAAAA : A = wait time in minutes, B = status
+  #define PARAM_WEIGHT_FACTOR        33  // Weight calibration: conversion factor digital -> gr (weight=FACTOR*dig_unit)
+  #define PARAM_WEIGHT_OFFSET        34  // Weight calibration: digital offset value when bioreactor is empty
+  #define PARAM_WEIGHT               2   // in gr
+  #define PARAM_WEIGHT_MIN           29
+  #define PARAM_WEIGHT_MAX           30
+  #define PARAM_SEDIMENTATION_TIME   31  // MINUTES to wait without rotation before emptying
+  #define PARAM_FILLED_TIME          32  // MINUTES to stay in the filled state
+  #define PARAM_WEIGHT_STATUS        3  // current STATUS // BBBAAAAA AAAAAAAA : A = wait time in minutes, B = status
 #endif
 
 /*************************************/
@@ -178,7 +184,7 @@
 #define PARAM_DESIRED_FLUX_GAS1    39
 #endif
 
-#ifdef  TAP_GAS2busy
+#ifdef  TAP_GAS2
 #define PARAM_FLUX_GAS2            7
 #define PARAM_DESIRED_FLUX_GAS2    40
 #endif
@@ -214,10 +220,6 @@
 #define FLAG_RELAY_BASE          13
 
 #define SERIAL_MAX_PARAM_VALUE_LENGTH  32
-
-
-
-
 
 void writeLog(uint16_t event_number, int parameter_value);
 void clearParameterBit(byte number, byte bitToClear);
