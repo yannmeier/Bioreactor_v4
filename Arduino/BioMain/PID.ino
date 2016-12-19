@@ -23,8 +23,7 @@ NIL_THREAD(Thread_PID, arg)
   heatingSetup();
   
   while(TRUE){
-    if(getParameterBit(PARAM_STATUS,FLAG_PID_CONTROL)) pid_ctrl();
-    else analogWrite(TEMP_PID,0);
+    pid_ctrl();
     nilThdSleepMilliseconds(1000);  //refresh every 500ms --> the faster the better the control
   }
 }
@@ -45,7 +44,8 @@ void pid_ctrl()
   heatingRegPID.Compute();                                   // the computation takes only 30ms!
   if((getParameter(PARAM_TEMP_PCB)<SAFETY_TEMP)
       && (getParameter(PARAM_TEMP_PCB) != ERROR_VALUE)
-      && (getParameter(PARAM_TEMP_LIQ)   !=ERROR_VALUE)){
+      && (getParameter(PARAM_TEMP_LIQ)   !=ERROR_VALUE)
+      && getParameterBit(PARAM_STATUS,FLAG_PID_CONTROL) ){
        analogWrite(TEMP_PID, heatingRegOutput);
    }else {
      analogWrite(TEMP_PID,0);
