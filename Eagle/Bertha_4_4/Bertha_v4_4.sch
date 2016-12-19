@@ -13078,6 +13078,39 @@ W = angled&lt;p&gt;
 </deviceset>
 </devicesets>
 </library>
+<library name="supply2">
+<description>&lt;b&gt;Supply Symbols&lt;/b&gt;&lt;p&gt;
+GND, VCC, 0V, +5V, -5V, etc.&lt;p&gt;
+Please keep in mind, that these devices are necessary for the
+automatic wiring of the supply signals.&lt;p&gt;
+The pin name defined in the symbol is identical to the net which is to be wired automatically.&lt;p&gt;
+In this library the device names are the same as the pin names of the symbols, therefore the correct signal names appear next to the supply symbols in the schematic.&lt;p&gt;
+&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
+<packages>
+</packages>
+<symbols>
+<symbol name="VDD">
+<circle x="0" y="1.27" radius="1.27" width="0.254" layer="94"/>
+<text x="-1.905" y="3.175" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="VDD" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="VDD" prefix="SUPPLY">
+<description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
+<gates>
+<gate name="G$1" symbol="VDD" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -13143,7 +13176,6 @@ W = angled&lt;p&gt;
 <part name="J1" library="lpatiny" deviceset="RJ12" device="RIGHTANGLE-I2C"/>
 <part name="J2" library="lpatiny" deviceset="RJ12" device="RIGHTANGLE-I2C"/>
 <part name="U$8" library="lpatiny" deviceset="DS18B20_SMALLPADS" device=""/>
-<part name="GND26" library="supply1" deviceset="GND" device=""/>
 <part name="P+23" library="supply1" deviceset="+12V" device=""/>
 <part name="P+24" library="supply1" deviceset="+12V" device=""/>
 <part name="U1" library="Testing" deviceset="HX711" device="HX711" value="HX711"/>
@@ -13195,7 +13227,6 @@ W = angled&lt;p&gt;
 <part name="LDM3" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RED"/>
 <part name="LDM2" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RED"/>
 <part name="LDM1" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RED"/>
-<part name="P+12" library="supply1" deviceset="+12V" device=""/>
 <part name="GND4" library="supply1" deviceset="GND" device=""/>
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
 <part name="X3" library="con-hirose" deviceset="FH12-08S-1S" device="H"/>
@@ -13204,7 +13235,6 @@ W = angled&lt;p&gt;
 <part name="LDPW3" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RED"/>
 <part name="GND7" library="supply1" deviceset="GND" device=""/>
 <part name="R1" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
-<part name="P+14" library="supply1" deviceset="+12V" device=""/>
 <part name="CU7" library="rcl" deviceset="C-EU" device="C1206" value="10uF"/>
 <part name="GND19" library="supply1" deviceset="GND" device=""/>
 <part name="CU8" library="rcl" deviceset="C-EU" device="C1206" value="10uF"/>
@@ -13286,8 +13316,6 @@ W = angled&lt;p&gt;
 <part name="P+20" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="P+28" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="P+9" library="SparkFun" deviceset="3.3V" device=""/>
-<part name="P+16" library="supply1" deviceset="+12V" device=""/>
-<part name="P+29" library="supply1" deviceset="+12V" device=""/>
 <part name="P+30" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="P+31" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="P+32" library="SparkFun" deviceset="3.3V" device=""/>
@@ -13296,14 +13324,18 @@ W = angled&lt;p&gt;
 <part name="P+35" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="P+36" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="P+37" library="SparkFun" deviceset="3.3V" device=""/>
-<part name="P+38" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="P+39" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="P+40" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="P+41" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="P+42" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="P+43" library="supply1" deviceset="+12V" device=""/>
 <part name="868MHZ" library="sma_end_launch" deviceset="SMACONNECTOR" device="_EDGE"/>
-<part name="GND9" library="supply1" deviceset="GND" device=""/>
+<part name="D1" library="lpatiny" deviceset="1N581*" device="D1206" value="1N581D1206"/>
+<part name="SUPPLY1" library="supply2" deviceset="VDD" device=""/>
+<part name="SUPPLY2" library="supply2" deviceset="VDD" device=""/>
+<part name="SUPPLY3" library="supply2" deviceset="VDD" device=""/>
+<part name="SUPPLY4" library="supply2" deviceset="VDD" device=""/>
+<part name="SUPPLY5" library="supply2" deviceset="VDD" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -15370,7 +15402,7 @@ Increases noise per read</text>
 <instance part="R12" gate="G$1" x="464.82" y="35.56" rot="MR90"/>
 <instance part="CON_ISP" gate="G$1" x="119.38" y="254"/>
 <instance part="GND14" gate="1" x="132.08" y="248.92"/>
-<instance part="CU4" gate="G$1" x="160.02" y="241.3"/>
+<instance part="CU4" gate="G$1" x="165.1" y="241.3"/>
 <instance part="D2" gate="G$1" x="147.32" y="256.54"/>
 <instance part="U$7" gate="G$1" x="139.7" y="238.76"/>
 <instance part="D4" gate="G$1" x="147.32" y="236.22"/>
@@ -15414,7 +15446,6 @@ Increases noise per read</text>
 <instance part="J1" gate="G$1" x="368.3" y="271.78"/>
 <instance part="J2" gate="G$1" x="368.3" y="241.3"/>
 <instance part="U$8" gate="G$1" x="284.48" y="43.18" rot="R270"/>
-<instance part="GND26" gate="1" x="411.48" y="76.2"/>
 <instance part="P+23" gate="1" x="482.6" y="121.92" rot="R90"/>
 <instance part="P+24" gate="1" x="482.6" y="114.3" rot="R90"/>
 <instance part="U1" gate="U1" x="116.84" y="137.16"/>
@@ -15469,11 +15500,8 @@ Increases noise per read</text>
 <instance part="LDM3" gate="G$1" x="464.82" y="144.78" rot="MR0"/>
 <instance part="LDM2" gate="G$1" x="472.44" y="144.78" rot="MR0"/>
 <instance part="LDM1" gate="G$1" x="480.06" y="144.78" rot="MR0"/>
-<instance part="P+12" gate="1" x="464.82" y="45.72" smashed="yes">
-<attribute name="VALUE" x="466.725" y="45.72" size="1.27" layer="96"/>
-</instance>
 <instance part="GND4" gate="1" x="464.82" y="15.24"/>
-<instance part="GND3" gate="1" x="165.1" y="233.68"/>
+<instance part="GND3" gate="1" x="170.18" y="233.68"/>
 <instance part="X3" gate="-1" x="73.66" y="264.16"/>
 <instance part="X3" gate="-2" x="73.66" y="261.62"/>
 <instance part="X3" gate="-3" x="73.66" y="259.08"/>
@@ -15487,7 +15515,6 @@ Increases noise per read</text>
 <instance part="LDPW3" gate="G$1" x="485.14" y="25.4" rot="MR0"/>
 <instance part="GND7" gate="1" x="485.14" y="15.24"/>
 <instance part="R1" gate="G$1" x="55.88" y="243.84" rot="R270"/>
-<instance part="P+14" gate="1" x="457.2" y="205.74"/>
 <instance part="CU7" gate="G$1" x="457.2" y="198.12"/>
 <instance part="GND19" gate="1" x="474.98" y="182.88" smashed="yes">
 <attribute name="VALUE" x="473.075" y="180.975" size="1.27" layer="96"/>
@@ -15519,10 +15546,10 @@ Increases noise per read</text>
 <instance part="P+25" gate="G$1" x="289.56" y="281.94"/>
 <instance part="P+26" gate="G$1" x="226.06" y="233.68" rot="R270"/>
 <instance part="RXT" gate="G$1" x="271.78" y="132.08" rot="MR90"/>
-<instance part="C2" gate="G$1" x="167.64" y="241.3"/>
-<instance part="CU3" gate="G$1" x="160.02" y="264.16"/>
-<instance part="GND50" gate="1" x="165.1" y="256.54"/>
-<instance part="C1" gate="G$1" x="167.64" y="264.16"/>
+<instance part="C2" gate="G$1" x="172.72" y="241.3"/>
+<instance part="CU3" gate="G$1" x="162.56" y="269.24"/>
+<instance part="GND50" gate="1" x="167.64" y="261.62"/>
+<instance part="C1" gate="G$1" x="170.18" y="269.24"/>
 <instance part="Q6" gate="G$1" x="78.74" y="53.34"/>
 <instance part="Q5" gate="G$1" x="78.74" y="27.94"/>
 <instance part="RK14" gate="G$1" x="353.06" y="22.86" rot="R90"/>
@@ -15582,8 +15609,6 @@ Increases noise per read</text>
 <instance part="P+20" gate="G$1" x="276.86" y="170.18"/>
 <instance part="P+28" gate="G$1" x="281.94" y="172.72"/>
 <instance part="P+9" gate="G$1" x="335.28" y="284.48" rot="R90"/>
-<instance part="P+16" gate="1" x="162.56" y="269.24"/>
-<instance part="P+29" gate="1" x="60.96" y="266.7"/>
 <instance part="P+30" gate="G$1" x="142.24" y="172.72"/>
 <instance part="P+31" gate="G$1" x="81.28" y="170.18"/>
 <instance part="P+32" gate="G$1" x="99.06" y="160.02"/>
@@ -15592,14 +15617,18 @@ Increases noise per read</text>
 <instance part="P+35" gate="G$1" x="30.48" y="116.84"/>
 <instance part="P+36" gate="G$1" x="274.32" y="27.94"/>
 <instance part="P+37" gate="G$1" x="274.32" y="50.8"/>
-<instance part="P+38" gate="G$1" x="391.16" y="48.26"/>
 <instance part="P+39" gate="G$1" x="401.32" y="45.72"/>
 <instance part="P+40" gate="G$1" x="408.94" y="45.72"/>
 <instance part="P+41" gate="G$1" x="429.26" y="45.72"/>
 <instance part="P+42" gate="G$1" x="436.88" y="45.72"/>
-<instance part="P+43" gate="1" x="165.1" y="246.38"/>
+<instance part="P+43" gate="1" x="170.18" y="246.38"/>
 <instance part="868MHZ" gate="G$1" x="279.4" y="254"/>
-<instance part="GND9" gate="1" x="271.78" y="269.24" rot="R180"/>
+<instance part="D1" gate="G$1" x="160.02" y="243.84" rot="R180"/>
+<instance part="SUPPLY1" gate="G$1" x="154.94" y="259.08"/>
+<instance part="SUPPLY2" gate="G$1" x="457.2" y="205.74"/>
+<instance part="SUPPLY3" gate="G$1" x="167.64" y="274.32"/>
+<instance part="SUPPLY4" gate="G$1" x="60.96" y="266.7"/>
+<instance part="SUPPLY5" gate="G$1" x="464.82" y="45.72"/>
 </instances>
 <busses>
 </busses>
@@ -15667,10 +15696,6 @@ Increases noise per read</text>
 <pinref part="GND20" gate="1" pin="GND"/>
 <pinref part="U$4" gate="G$1" pin="GND"/>
 <wire x1="312.42" y1="20.32" x2="307.34" y2="20.32" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="GND26" gate="1" pin="GND"/>
-<wire x1="411.48" y1="78.74" x2="411.48" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="GND37" gate="1" pin="GND"/>
@@ -15777,10 +15802,10 @@ Increases noise per read</text>
 </segment>
 <segment>
 <pinref part="CU4" gate="G$1" pin="2"/>
-<wire x1="167.64" y1="236.22" x2="165.1" y2="236.22" width="0.1524" layer="91"/>
+<wire x1="172.72" y1="236.22" x2="170.18" y2="236.22" width="0.1524" layer="91"/>
 <pinref part="GND3" gate="1" pin="GND"/>
-<wire x1="165.1" y1="236.22" x2="160.02" y2="236.22" width="0.1524" layer="91"/>
-<junction x="165.1" y="236.22"/>
+<wire x1="170.18" y1="236.22" x2="165.1" y2="236.22" width="0.1524" layer="91"/>
+<junction x="170.18" y="236.22"/>
 <pinref part="C2" gate="G$1" pin="2"/>
 </segment>
 <segment>
@@ -15842,10 +15867,10 @@ Increases noise per read</text>
 </segment>
 <segment>
 <pinref part="CU3" gate="G$1" pin="2"/>
-<wire x1="167.64" y1="259.08" x2="165.1" y2="259.08" width="0.1524" layer="91"/>
+<wire x1="170.18" y1="264.16" x2="167.64" y2="264.16" width="0.1524" layer="91"/>
 <pinref part="GND50" gate="1" pin="GND"/>
-<wire x1="165.1" y1="259.08" x2="160.02" y2="259.08" width="0.1524" layer="91"/>
-<junction x="165.1" y="259.08"/>
+<wire x1="167.64" y1="264.16" x2="162.56" y2="264.16" width="0.1524" layer="91"/>
+<junction x="167.64" y="264.16"/>
 <pinref part="C1" gate="G$1" pin="2"/>
 </segment>
 <segment>
@@ -16207,11 +16232,6 @@ Increases noise per read</text>
 <pinref part="STEPPER" gate="G$1" pin="5"/>
 </segment>
 <segment>
-<pinref part="P+12" gate="1" pin="+12V"/>
-<pinref part="R12" gate="G$1" pin="2"/>
-<wire x1="464.82" y1="40.64" x2="464.82" y2="43.18" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="CON1" gate="G$1" pin="V+"/>
 <wire x1="17.9324" y1="258.826" x2="15.2957625" y2="258.799615625" width="0.1524" layer="91"/>
 <label x="14.578871875" y="256.545659375" size="1.27" layer="95" font="vector"/>
@@ -16244,53 +16264,14 @@ Increases noise per read</text>
 <wire x1="231.14" y1="81.28" x2="220.98" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="464.82" y1="200.66" x2="457.2" y2="200.66" width="0.1524" layer="91"/>
-<wire x1="457.2" y1="200.66" x2="457.2" y2="203.2" width="0.1524" layer="91"/>
-<pinref part="CU7" gate="G$1" pin="1"/>
-<junction x="457.2" y="200.66"/>
-<pinref part="IC1" gate="G$1" pin="VI"/>
-<pinref part="P+14" gate="1" pin="+12V"/>
-</segment>
-<segment>
-<wire x1="154.94" y1="266.7" x2="160.02" y2="266.7" width="0.1524" layer="91"/>
-<pinref part="CU3" gate="G$1" pin="1"/>
-<wire x1="160.02" y1="266.7" x2="162.56" y2="266.7" width="0.1524" layer="91"/>
-<junction x="160.02" y="266.7"/>
-<junction x="165.1" y="266.7"/>
-<wire x1="162.56" y1="266.7" x2="165.1" y2="266.7" width="0.1524" layer="91"/>
-<wire x1="165.1" y1="266.7" x2="167.64" y2="266.7" width="0.1524" layer="91"/>
-<pinref part="C1" gate="G$1" pin="1"/>
-<pinref part="P+16" gate="1" pin="+12V"/>
-<junction x="162.56" y="266.7"/>
-</segment>
-<segment>
-<pinref part="X3" gate="-1" pin="1"/>
-<wire x1="71.12" y1="264.16" x2="60.96" y2="264.16" width="0.1524" layer="91"/>
-<label x="60.96" y="264.16" size="1.778" layer="95"/>
-<pinref part="X3" gate="-2" pin="1"/>
-<wire x1="71.12" y1="261.62" x2="60.96" y2="261.62" width="0.1524" layer="91"/>
-<label x="60.96" y="261.62" size="1.778" layer="95"/>
-<wire x1="60.96" y1="264.16" x2="60.96" y2="261.62" width="0.1524" layer="91"/>
-<pinref part="P+29" gate="1" pin="+12V"/>
-<junction x="60.96" y="264.16"/>
-</segment>
-<segment>
-<label x="144.78" y="243.84" size="1.778" layer="95"/>
-<pinref part="D2" gate="G$1" pin="C"/>
-<wire x1="154.94" y1="243.84" x2="160.02" y2="243.84" width="0.1524" layer="91"/>
-<wire x1="165.1" y1="243.84" x2="160.02" y2="243.84" width="0.1524" layer="91"/>
-<wire x1="149.86" y1="256.54" x2="154.94" y2="256.54" width="0.1524" layer="91"/>
-<wire x1="154.94" y1="256.54" x2="154.94" y2="243.84" width="0.1524" layer="91"/>
-<junction x="154.94" y="243.84"/>
-<pinref part="D4" gate="G$1" pin="C"/>
-<wire x1="149.86" y1="236.22" x2="154.94" y2="236.22" width="0.1524" layer="91"/>
-<wire x1="154.94" y1="236.22" x2="154.94" y2="243.84" width="0.1524" layer="91"/>
-<pinref part="CU4" gate="G$1" pin="1"/>
-<wire x1="160.02" y1="243.84" x2="165.1" y2="243.84" width="0.1524" layer="91"/>
-<junction x="160.02" y="243.84"/>
 <pinref part="C2" gate="G$1" pin="1"/>
 <pinref part="P+43" gate="1" pin="+12V"/>
-<wire x1="165.1" y1="243.84" x2="167.64" y2="243.84" width="0.1524" layer="91"/>
+<wire x1="170.18" y1="243.84" x2="172.72" y2="243.84" width="0.1524" layer="91"/>
+<junction x="170.18" y="243.84"/>
+<pinref part="CU4" gate="G$1" pin="1"/>
+<wire x1="165.1" y1="243.84" x2="170.18" y2="243.84" width="0.1524" layer="91"/>
+<pinref part="D1" gate="G$1" pin="A"/>
+<wire x1="165.1" y1="243.84" x2="162.56" y2="243.84" width="0.1524" layer="91"/>
 <junction x="165.1" y="243.84"/>
 </segment>
 </net>
@@ -17210,6 +17191,54 @@ Increases noise per read</text>
 <pinref part="C4" gate="G$1" pin="2"/>
 <wire x1="281.94" y1="269.24" x2="289.56" y2="269.24" width="0.1524" layer="91"/>
 <label x="281.94" y="266.7" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="VDD" class="1">
+<segment>
+<label x="144.78" y="243.84" size="1.778" layer="95"/>
+<pinref part="D2" gate="G$1" pin="C"/>
+<wire x1="149.86" y1="256.54" x2="154.94" y2="256.54" width="0.1524" layer="91"/>
+<wire x1="154.94" y1="256.54" x2="154.94" y2="243.84" width="0.1524" layer="91"/>
+<pinref part="D4" gate="G$1" pin="C"/>
+<wire x1="154.94" y1="243.84" x2="154.94" y2="236.22" width="0.1524" layer="91"/>
+<wire x1="149.86" y1="236.22" x2="154.94" y2="236.22" width="0.1524" layer="91"/>
+<pinref part="D1" gate="G$1" pin="C"/>
+<wire x1="157.48" y1="243.84" x2="154.94" y2="243.84" width="0.1524" layer="91"/>
+<junction x="154.94" y="243.84"/>
+<pinref part="SUPPLY1" gate="G$1" pin="VDD"/>
+<junction x="154.94" y="256.54"/>
+</segment>
+<segment>
+<pinref part="CU7" gate="G$1" pin="1"/>
+<pinref part="SUPPLY2" gate="G$1" pin="VDD"/>
+<wire x1="457.2" y1="203.2" x2="457.2" y2="200.66" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="VI"/>
+<wire x1="464.82" y1="200.66" x2="457.2" y2="200.66" width="0.1524" layer="91"/>
+<junction x="457.2" y="200.66"/>
+</segment>
+<segment>
+<pinref part="C1" gate="G$1" pin="1"/>
+<pinref part="SUPPLY3" gate="G$1" pin="VDD"/>
+<wire x1="170.18" y1="271.78" x2="167.64" y2="271.78" width="0.1524" layer="91"/>
+<pinref part="CU3" gate="G$1" pin="1"/>
+<wire x1="167.64" y1="271.78" x2="162.56" y2="271.78" width="0.1524" layer="91"/>
+<junction x="167.64" y="271.78"/>
+</segment>
+<segment>
+<pinref part="X3" gate="-1" pin="1"/>
+<wire x1="71.12" y1="264.16" x2="60.96" y2="264.16" width="0.1524" layer="91"/>
+<label x="60.96" y="264.16" size="1.778" layer="95"/>
+<pinref part="X3" gate="-2" pin="1"/>
+<wire x1="71.12" y1="261.62" x2="60.96" y2="261.62" width="0.1524" layer="91"/>
+<label x="60.96" y="261.62" size="1.778" layer="95"/>
+<wire x1="60.96" y1="264.16" x2="60.96" y2="261.62" width="0.1524" layer="91"/>
+<pinref part="SUPPLY4" gate="G$1" pin="VDD"/>
+<junction x="60.96" y="264.16"/>
+</segment>
+<segment>
+<pinref part="R12" gate="G$1" pin="2"/>
+<wire x1="464.82" y1="40.64" x2="464.82" y2="43.18" width="0.1524" layer="91"/>
+<pinref part="SUPPLY5" gate="G$1" pin="VDD"/>
 </segment>
 </net>
 </nets>
