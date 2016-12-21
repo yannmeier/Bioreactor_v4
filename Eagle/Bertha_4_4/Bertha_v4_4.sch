@@ -13112,10 +13112,10 @@ Source: http://www.lumberg.com/Produkte/PDFs/1503_09.pdf</description>
 <part name="P+6" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="R3" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="RK3" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
-<part name="R12" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
+<part name="R12" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
 <part name="CON_ISP" library="lpatiny" deviceset="TINYISP" device="T" value="SPI"/>
 <part name="GND14" library="supply1" deviceset="GND" device=""/>
-<part name="CU4" library="rcl" deviceset="C-EU" device="C0805" value="10uF"/>
+<part name="CU4" library="rcl" deviceset="C-EU" device="C0805" value="10u"/>
 <part name="D2" library="lpatiny" deviceset="1N581*" device="D1206" value="1N581D1206"/>
 <part name="U$7" library="MyPOW" deviceset="VUSB" device=""/>
 <part name="D4" library="lpatiny" deviceset="1N581*" device="D1206" value="1N581D1206"/>
@@ -13137,7 +13137,7 @@ Source: http://www.lumberg.com/Produkte/PDFs/1503_09.pdf</description>
 <part name="RT1" library="resistor" deviceset="R-EU_" device="R0805" value="4.7k"/>
 <part name="GND20" library="supply1" deviceset="GND" device=""/>
 <part name="RT2" library="resistor" deviceset="R-EU_" device="R0805" value="4.7k"/>
-<part name="R2" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
+<part name="R2" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="GND21" library="supply1" deviceset="GND" device=""/>
 <part name="R9" library="rcl" deviceset="R-EU_" device="R0805" value="1K"/>
 <part name="R10" library="rcl" deviceset="R-EU_" device="R0805" value="1K"/>
@@ -13161,10 +13161,10 @@ Source: http://www.lumberg.com/Produkte/PDFs/1503_09.pdf</description>
 <part name="8.2K" library="resistor" deviceset="R-EU_" device="M0805" value="8.2k"/>
 <part name="20K" library="resistor" deviceset="R-EU_" device="M0805" value="20k"/>
 <part name="RK5" library="resistor" deviceset="R-EU_" device="M0805" value="10k"/>
-<part name="C6" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
-<part name="C7" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
-<part name="C8" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
-<part name="C9" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
+<part name="C6" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
+<part name="C7" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
+<part name="C8" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
+<part name="C9" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
 <part name="Q4" library="infineon" deviceset="BSP613P" device="" value="BSP75"/>
 <part name="Q3" library="infineon" deviceset="BSP613P" device="" value="BSP75"/>
 <part name="Q2" library="infineon" deviceset="BSP613P" device="" value="BSP75"/>
@@ -13177,21 +13177,21 @@ Source: http://www.lumberg.com/Produkte/PDFs/1503_09.pdf</description>
 <part name="RK9" library="rcl" deviceset="R-EU_" device="R0805" value="10K"/>
 <part name="RK10" library="rcl" deviceset="R-EU_" device="R0805" value="10K"/>
 <part name="RK11" library="rcl" deviceset="R-EU_" device="R0805" value="10K"/>
-<part name="C10" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
+<part name="C10" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
 <part name="32U4" library="adafruit" deviceset="ATMEGA32U4" device="-AU" value="ATMEGA32U4"/>
 <part name="CX2" library="rcl" deviceset="C-EU" device="C0805" value="22pF"/>
 <part name="CX1" library="rcl" deviceset="C-EU" device="C0805" value="22pF"/>
 <part name="U$10" library="MyPOW" deviceset="VUSB" device=""/>
 <part name="RK7" library="resistor" deviceset="R-EU_" device="M0805" value="10k"/>
 <part name="RK6" library="resistor" deviceset="R-EU_" device="M0805" value="10k"/>
-<part name="C13" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
+<part name="C13" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
 <part name="X2" library="lpatiny" deviceset="XTAL" device="NX6035" value="8MHz"/>
-<part name="C11" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
-<part name="C12" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
-<part name="CU2" library="rcl" deviceset="C-EU" device="C0805" value="10uF"/>
-<part name="CU1" library="rcl" deviceset="C-EU" device="C0805" value="10uF"/>
+<part name="C11" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
+<part name="C12" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
+<part name="CU2" library="rcl" deviceset="C-EU" device="C0805" value="10u"/>
+<part name="CU1" library="rcl" deviceset="C-EU" device="C0805" value="10u"/>
 <part name="LDPW12" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RED"/>
-<part name="BKLD" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RED"/>
+<part name="BKLD" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="BLK"/>
 <part name="LDM4" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RED"/>
 <part name="LDM3" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RED"/>
 <part name="LDM2" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RED"/>
@@ -13204,9 +13204,9 @@ Source: http://www.lumberg.com/Produkte/PDFs/1503_09.pdf</description>
 <part name="LDPW3" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RED"/>
 <part name="GND7" library="supply1" deviceset="GND" device=""/>
 <part name="R1" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
-<part name="CU7" library="rcl" deviceset="C-EU" device="C0805" value="10uF"/>
+<part name="CU7" library="rcl" deviceset="C-EU" device="C0805" value="10u"/>
 <part name="GND19" library="supply1" deviceset="GND" device=""/>
-<part name="CU8" library="rcl" deviceset="C-EU" device="C0805" value="10uF"/>
+<part name="CU8" library="rcl" deviceset="C-EU" device="C0805" value="10u"/>
 <part name="IC1" library="linear" deviceset="MCP1703" device="DB"/>
 <part name="P+15" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="P+8" library="SparkFun" deviceset="3.3V" device=""/>
@@ -13222,8 +13222,8 @@ Source: http://www.lumberg.com/Produkte/PDFs/1503_09.pdf</description>
 <part name="GND46" library="supply1" deviceset="GND" device=""/>
 <part name="GND54" library="supply1" deviceset="GND" device=""/>
 <part name="GND55" library="supply1" deviceset="GND" device=""/>
-<part name="C3" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
-<part name="C4" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
+<part name="C3" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
+<part name="C4" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
 <part name="P+10" library="supply1" deviceset="+12V" device=""/>
 <part name="P+11" library="supply1" deviceset="+12V" device=""/>
 <part name="P+17" library="SparkFun" deviceset="3.3V" device=""/>
@@ -13232,13 +13232,13 @@ Source: http://www.lumberg.com/Produkte/PDFs/1503_09.pdf</description>
 <part name="P+25" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="P+26" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="RXT" library="rcl" deviceset="R-EU_" device="R0805" value="1M"/>
-<part name="C2" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
-<part name="CU3" library="rcl" deviceset="C-EU" device="C0805" value="10uF"/>
+<part name="C2" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
+<part name="CU3" library="rcl" deviceset="C-EU" device="C0805" value="10u"/>
 <part name="GND50" library="supply1" deviceset="GND" device=""/>
-<part name="C1" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
+<part name="C1" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
 <part name="Q6" library="infineon" deviceset="BSP613P" device="" value="BSP75"/>
 <part name="Q5" library="infineon" deviceset="BSP613P" device="" value="BSP75"/>
-<part name="RK14" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
+<part name="RK14" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="RK13" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
 <part name="RK12" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
 <part name="R5" library="rcl" deviceset="R-EU_" device="R0805" value="1K"/>
@@ -13252,15 +13252,15 @@ Source: http://www.lumberg.com/Produkte/PDFs/1503_09.pdf</description>
 <part name="P+13" library="supply1" deviceset="+12V" device=""/>
 <part name="SJ2" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NC_BY_TRACE" device="" value=""/>
 <part name="GND1" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="RK15" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
-<part name="TXLD" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RED"/>
-<part name="RK18" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
-<part name="LDSLAVE" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RED"/>
-<part name="RK16" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
-<part name="RXLD" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RED"/>
+<part name="RK15" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
+<part name="TX" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="TX"/>
+<part name="RK18" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
+<part name="LDSLAVE" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="LCD"/>
+<part name="RK16" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
+<part name="RXLD" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RX"/>
 <part name="RK19" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
-<part name="LDMEM" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RED"/>
-<part name="C5" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
+<part name="LDMEM" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="Flash"/>
+<part name="C5" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
 <part name="P+7" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="GND66" library="supply1" deviceset="GND" device=""/>
 <part name="LDPID" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RED"/>
@@ -13274,8 +13274,8 @@ Source: http://www.lumberg.com/Produkte/PDFs/1503_09.pdf</description>
 <part name="SJ6" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NC_BY_TRACE" device="" value=""/>
 <part name="GND22" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="100K" library="rcl" deviceset="R-EU_" device="R0805" value="100k"/>
-<part name="GND" library="Headerlibrary" deviceset="PINHD-1X1" device=""/>
-<part name="12V" library="Headerlibrary" deviceset="PINHD-1X1" device=""/>
+<part name="GND" library="Headerlibrary" deviceset="PINHD-1X1" device="" value="GND"/>
+<part name="12V" library="Headerlibrary" deviceset="PINHD-1X1" device="" value="12V"/>
 <part name="3V3" library="Headerlibrary" deviceset="PINHD-1X1" device=""/>
 <part name="GND28" library="supply1" deviceset="GND" device=""/>
 <part name="P+21" library="SparkFun" deviceset="3.3V" device=""/>
@@ -13306,7 +13306,7 @@ Source: http://www.lumberg.com/Produkte/PDFs/1503_09.pdf</description>
 <part name="SUPPLY5" library="supply2" deviceset="VDD" device=""/>
 <part name="CON2" library="lpatiny" deviceset="JACK_DC_BARREL" device=""/>
 <part name="X1" library="con-lumberg" deviceset="1503_09" device=""/>
-<part name="U$2" library="lpatiny" deviceset="DS18B20" device="SMALL"/>
+<part name="U$2" library="lpatiny" deviceset="DS18B20" device="SMALL" value="DS18B20"/>
 </parts>
 <sheets>
 <sheet>
@@ -15538,7 +15538,7 @@ Increases noise per read</text>
 <instance part="SJ2" gate="G$1" x="2.54" y="106.68" rot="R90"/>
 <instance part="GND1" gate="1" x="2.54" y="99.06"/>
 <instance part="RK15" gate="G$1" x="401.32" y="40.64" rot="MR270"/>
-<instance part="TXLD" gate="G$1" x="401.32" y="27.94" rot="MR0"/>
+<instance part="TX" gate="G$1" x="401.32" y="27.94" rot="MR0"/>
 <instance part="RK18" gate="G$1" x="429.26" y="40.64" rot="MR270"/>
 <instance part="LDSLAVE" gate="G$1" x="429.26" y="27.94" rot="MR0"/>
 <instance part="RK16" gate="G$1" x="408.94" y="40.64" rot="MR270"/>
@@ -16122,7 +16122,7 @@ Increases noise per read</text>
 <label x="345.44" y="121.92" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="TXLD" gate="G$1" pin="C"/>
+<pinref part="TX" gate="G$1" pin="C"/>
 <wire x1="401.32" y1="22.86" x2="401.32" y2="12.7" width="0.1524" layer="91"/>
 <label x="401.32" y="12.7" size="1.778" layer="95" rot="R90"/>
 </segment>
@@ -16979,7 +16979,7 @@ Increases noise per read</text>
 <segment>
 <pinref part="RK15" gate="G$1" pin="2"/>
 <wire x1="401.32" y1="30.48" x2="401.32" y2="35.56" width="0.1524" layer="91"/>
-<pinref part="TXLD" gate="G$1" pin="A"/>
+<pinref part="TX" gate="G$1" pin="A"/>
 </segment>
 </net>
 <net name="N$22" class="0">
