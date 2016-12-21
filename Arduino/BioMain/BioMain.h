@@ -15,7 +15,8 @@
 /*******************************************
  * DEFINE CARD VERSION (default is nothing)
  ******************************************/
-//#define BEFORE_43 1
+//#define BEFORE_43  1
+//#define VERSION_43 1
 
 /******************************************
  * DEFINE FLASH VERSION (default is SST64)
@@ -41,15 +42,16 @@
 
 //Pin definition
 #define D4   4  //temp probe
+#define D5   5  //food OUT in v4.4
 #define D6   6  //pid
-#define D10  10 //memory select
-#define D11  11 //slave at32u4 for LCD
+#define D10  10 //memory select (before 4.4) or food IN in v4.4
+#define D11  11 //slave at32u4 for LCD 
 #define D12  12 //temp control
 #define D13  13 //blink
 #define D18  18 //stepper
 #define D19  19 //stepper
-#define D20  20 //food in
-#define D21  21 //food out
+#define D20  20 //food in (before 4.4)  or LoRa RST in 4.4
+#define D21  21 //food out (before 4.4) or Flash select in 4.4
 #define D22  22 //weight data
 #define D23  23 //weight clock
 
@@ -60,12 +62,17 @@
   #ifdef BEFORE_43
     #define STEPPER {D18,D19}
   #else
-    //pins 4-5 of port B and 6-7 of port F
+    //pins 4-5 of port B and 6-7 of port F --> change for _BV (easier to manipulate)
     #define STEPPER {0b00010000,0b00100000,0b01000000,0b10000000}
   #endif
   #define FOOD_CTRL          1
+ #if defined(VERSION_43) || defined(BEFORE_43)
   #define FOOD_IN            D20
   #define FOOD_OUT           D21
+ #else
+  #define FOOD_IN            D10
+  #define FOOD_OUT           D5
+ #endif
   #define WEIGHT_DATA        D22
   #define WEIGHT_CLK         D23     //need to redefine the calibration parameters and process (see "HX711")
   #define TEMPERATURE_CTRL   1
@@ -107,7 +114,11 @@
 //#define DEBUG_ONEWIRE      1
 
 #ifdef THR_LINEAR_LOGS
-  #define FLASH_SELECT D10 //Flash SS_SPI
+  #if defined(VERSION_43) ||defined(BEFORE_43)
+    #define FLASH_SELECT D10 //Flash SS_SPI
+  #else
+    #define FLASH_SELECT A3 //Flash SS_SPI
+  #endif
   #define LOG_INTERVAL 10  //Interval in (s) between logs
 #endif
 /*******************************
