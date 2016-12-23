@@ -42,11 +42,11 @@ void printParam(int pos){
   }
 }
 
-void addParam(int pos, char * id, int id_length, int number){
+void addParam(int pos, char * id, int idLength, int number){
   if(pos>=0 && pos < MAX_CONFIG_PARAM){
-    parameter * newParam = (parameter *) malloc(id_length+2*sizeof(int));
+    parameter * newParam = (parameter *) malloc(idLength+2*sizeof(int));
     newParam->paramName = id;
-    newParam->paramNameLength = id_length;
+    newParam->paramNameLength = idLength;
     newParam->paramNum = number;
     configMenuParams[pos] = newParam;  
     printParam(pos);
@@ -58,13 +58,13 @@ void addParam(int pos, char * id, int id_length, int number){
 /************************************************
          Arduino SPI Slave Functions
 *************************************************/
-byte outBuf [OUT_BUF_SIZE];            // buffer for output to motherboard 
-boolean writeToMaster=false;                // flag indicating if their is something to send to the motherboard
-boolean isStart=false;                     // flag indicating if it's the beginning of the communication with the motherboard
-byte buf [2*MAX_PARAM+1];     // buffer for input from motherboard
+byte outBuf [OUT_BUF_SIZE];     // output SPI buffer
+boolean writeToMaster=false;   // flag indicating if their is something to send 
+boolean isStart=false;         // flag indicating if beginning of the COM 
+byte buf [2*MAX_PARAM+1];      // buffer for input from motherboard : maxparams + XOR
 volatile byte pos;            // position of incoming byte in SPI buffer
 
-void SPI_slave_init()
+void slaveInit()
 {
   pinMode(SS,INPUT);     //switch the slave select pin to input mode
   digitalWrite(SS,HIGH); //turn on internal pull-up
@@ -97,12 +97,9 @@ void bufferParse(){
   if(checkDigit==buf[buffSize]){ //then load parameters
     for(int i=0;i<buffSize;i++){
        param[i]=((buf[2*i+1]<<8)&(0xFF00))+(buf[2*(i+1)]&(0x00FF));
-       //    Serial.print(i);
-       //    Serial.print(F(": "));
-       //    Serial.println(param[i]);
+       //Serial.print(F("Changed Local Param"));
     }
-  }else Serial.println(F("wrong checkDigit"));
-
+  }else Serial.println(F("wrong XOR"));
 }
 
 /************************************************
@@ -124,7 +121,7 @@ void sendParameter(int parameter, int value){
   checkDigit^=outBuf[3];
   outBuf[4]=checkDigit;
   writeToMaster = true;                           // notify SPI interrupt that it can start sending bytes as soon as the transmission starts
-  Serial.println(F("Sent param")); 
+  //Serial.println(F("Sent param")); 
 }
 /************************************************
        Main function to refresh the LCD
@@ -331,7 +328,7 @@ void setup() {
   attachInterrupt(INT_BUTTON, doEncoderButton, CHANGE);
   //Serial communication start
   Serial.begin(9600);  
-  SPI_slave_init();
+  slaveInit();
   lcd.begin(20, 4);
   // set configurable parameters
   delay(3000);                        // let Serial init 
@@ -414,7 +411,7 @@ void doEncoderButton(){
           encoderMenuSelect=MENU_SELECTOR;  
     }  
     pushing=false;   //debouncer  
-    toBeRefreshed=1; //refresh flag
+    toBeRefreshed=true; //refresh flag
     //sendParameter(PARAM_STEPPER_SPEED, 30); //notify motherboard on button pressed
   }
   else 

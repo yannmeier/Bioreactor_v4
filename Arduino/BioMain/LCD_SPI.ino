@@ -97,14 +97,6 @@ void parseReturnBuff(){
   }
 }
 
-
-//Check if parameter data received from LCD is valid.
-boolean checkParameterData(int parameter, int value){
-  // TODO
-  // check if paramater is in modifiable parameter list
-  // check parameter values for certain parameters
-  return true;
-}
 /***********************************************
         SPI Slave thread for SPI
 ************************************************/
