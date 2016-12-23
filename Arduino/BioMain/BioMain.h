@@ -15,7 +15,7 @@
 /*******************************************
  * DEFINE CARD VERSION (default is nothing)
  ******************************************/
-//#define BEFORE_43  1
+#define BEFORE_43  1
 //#define VERSION_43 1
 
 /******************************************
@@ -82,7 +82,7 @@
   #define THR_MONITORING     1
     #define MONITORING_LED   D13
   //#define THR_LORA         1
-  //  #define  LCD_SELECT       D11    //LCD screen SS_SPI
+  #define  LCD_SELECT       D11    //LCD screen SS_SPI
 #endif
 
 

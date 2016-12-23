@@ -113,7 +113,8 @@ NIL_THREAD(ThreadStepper, arg) {
   #ifdef BEFORE_43
   for (byte i=0; i<sizeof(STEPPER_TAB); i++) {
     pinMode(STEPPER_TAB[i], OUTPUT);
-  }#else
+  }
+  #else
     stopStepper();
     DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;
     DDRF |= (STEPPER_TAB[2] | STEPPER_TAB[3]) ;

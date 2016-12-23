@@ -201,31 +201,33 @@ void getTemperature(OneWire &ow, int parameter, byte errorBit, byte failedEvent,
 
 //bus info function
 void oneWireInfo(Print* output) { // TODO
-  protectThread();
   output->println(F("One wire device list"));
   #ifdef TEMP_LIQ
+  protectThread();
   oneWire1.reset_search();
   while (oneWire1.search(oneWireAddress)) {
     for(byte i = 0; i < 8; i++) {
       output->print(' ');
       output->print(oneWireAddress[i], HEX);
     }
+    unprotectThread();
     output->println("");
     nilThdSleepMilliseconds(250);  
   }
   #endif
   #ifdef TEMP_PCB
+  protectThread();
   oneWire2.reset_search();
   while (oneWire2.search(oneWireAddress)) {
     for(byte i = 0; i < 8; i++) {
       output->print(' ');
       output->print(oneWireAddress[i], HEX);
     }
+    unprotectThread();
     output->println("");
     nilThdSleepMilliseconds(250);  
   }
   #endif
-  unprotectThread();
 }
 
 #endif

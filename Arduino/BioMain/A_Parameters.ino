@@ -23,10 +23,8 @@
 #include <EEPROM.h> // should be removed and based only on avr/eeprom
 
 
-
-
-
 #define MAX_PARAM 52   // If the MAX_PARAM change you need to change the pointer in the EEPROM
+#define NB_PARAMETERS_LINEAR_LOGS  26
 
 
 //When parameters are set (and saved) an event is recorded (256-281 : A-Z + .... (if more parameters than 26))

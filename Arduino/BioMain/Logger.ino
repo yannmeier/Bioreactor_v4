@@ -7,7 +7,6 @@
 
 //Types of logs
 #define ENTRY_SIZE_LINEAR_LOGS     64
-#define NB_PARAMETERS_LINEAR_LOGS  26
 #define SIZE_TIMESTAMPS            4
 #define SIZE_COUNTER_ENTRY         4
 
