@@ -1,51 +1,8 @@
 #include <LiquidCrystal.h>
 #include <SPI.h>
+#include "LCD_Slave.h"
 // initialize the library with the numbers of the interface pins
-
-const int LCDD7 = A6;
-const int LCDD6 = 12;
-const int LCDD5 = 6;
-const int LCDD4 = 8;
-const int LCDE  = 9;
-const int LCDRS = 10;
-
 LiquidCrystal lcd(LCDRS,LCDE,LCDD4,LCDD5,LCDD6,LCDD7);
-
-#define MAX_PARAM  52
-#define MAX_CONFIG_PARAM 7             // Maximum number of configurable parameters in the config menu
-
-#define PARAM_TEMP_LIQ             0   // temperature of the solution
-#define PARAM_TEMP_PCB             1   // temperature of the heating plate
-#define PARAM_WEIGHT               2   // in gr
-#define PARAM_WEIGHT_FACTOR        15  // Weight calibration: conversion factor digital -> gr (weight=FACTOR*dig_unit)
-#define PARAM_WEIGHT_OFFSET        16  // Weight calibration: digital offset value when bioreactor is empty
-#define PARAM_STEPPER_SPEED        18  // motor speed, parameter S (!!!!!TO BE REPROGRAMMED IN RPM!!!!!!!)
-#define PARAM_WEIGHT_STATUS        23  // current STATUS // BBBAAAAA AAAAAAAA : A = wait time in minutes, B = status
-#define PARAM_STATUS               25  
-#define PARAM_TEMP_TARGET          26  // target temperature of the liquid
-#define PARAM_TEMP_MAX             27  // maximal temperature of the plate
-#define PARAM_TEMP_REG_TIME        28  //in [ms]
-#define PARAM_WEIGHT_MIN           29    
-#define PARAM_WEIGHT_MAX           30  
-#define PARAM_SEDIMENTATION_TIME   35  // MINUTES to wait without rotation before emptying
-#define PARAM_FILLED_TIME          36  // MINUTES to stay in the filled state
-
-
-#define ENCODER_CLOCKWISE      0
-#define ENCODER_ANTI_CLOCKWISE 1
-#define ENCODER_BUTTON         7
-#define INT_CLOCKWISE          2
-#define INT_ANTI_CLOCKWISE     3
-#define INT_BUTTON             4  
-
-#define MENU_SELECTOR       0
-#define MENU_SENSOR         1
-#define MENU_CONFIG         2
-#define MENU_CALIBRATION    3
-#define MENU_SET_VALUE      4
-
-#define OUT_BUF_SIZE    5
-
 
 /************************************************
           Encoder position variables
@@ -68,7 +25,6 @@ volatile boolean firstReturn=false;   // is first return in ending of SPI com fr
 /************************************************
               Parameter Utilities
 *************************************************/
-
 typedef struct{
   char* paramName = 0;
   int paramNameLength = 0;
@@ -80,9 +36,9 @@ parameter * configMenuParams [MAX_CONFIG_PARAM];
 void printParam(int pos){
   if(pos>=0 && pos < MAX_CONFIG_PARAM){
     parameter * param = configMenuParams[pos];
-    Serial.print(F("Param name:"));
+    Serial.print(F("ParamName:"));
     Serial.println(param->paramName);
-    Serial.print(F("Param #: "));
+    Serial.print(F("Param#:"));
     Serial.println(param->paramNum);  
   }else{
     Serial.println(F("Err: pos of config variable out of range"));  
@@ -106,9 +62,9 @@ void addParam(int pos, char * id, int id_length, int number){
          Arduino SPI Slave Functions
 *************************************************/
 //#define LCD_SELECT RXLED //pin SS (D8)
-byte out_buf [OUT_BUF_SIZE];            // buffer for output to motherboard 
+byte outBuf [OUT_BUF_SIZE];            // buffer for output to motherboard 
 boolean writeToMaster=false;                // flag indicating if their is something to send to the motherboard
-boolean is_start=false;                     // flag indicating if it's the beginning of the communication with the motherboard
+boolean isStart=false;                     // flag indicating if it's the beginning of the communication with the motherboard
 byte buf [2*MAX_PARAM+2];     // buffer for input from motherboard
 volatile byte pos;            // position of incoming byte in SPI buffer
 
@@ -162,15 +118,15 @@ void bufferParse(){
  * int value : value to be set for the given parameter. 
  */
 void sendParameter(int parameter, int value){
-  out_buf[0]=4;                                     // Start transmission with non_null byte (size of the message after)
-  byte checkDigit=out_buf[0];
-  out_buf[1]=(byte)parameter;                       // Number of parameter to set
-  checkDigit^=out_buf[1];
-  out_buf[2]=(byte)((value>>8)&(0x00FF));           // Value of parameter
-  checkDigit^=out_buf[2];
-  out_buf[3]=(byte)(value&(0x00FF));
-  checkDigit^=out_buf[3];
-  out_buf[4]=checkDigit;
+  outBuf[0]=4;                                     // Start transmission with non_null byte (size of the message after)
+  byte checkDigit=outBuf[0];
+  outBuf[1]=(byte)parameter;                       // Number of parameter to set
+  checkDigit^=outBuf[1];
+  outBuf[2]=(byte)((value>>8)&(0x00FF));           // Value of parameter
+  checkDigit^=outBuf[2];
+  outBuf[3]=(byte)(value&(0x00FF));
+  checkDigit^=outBuf[3];
+  outBuf[4]=checkDigit;
   writeToMaster = true;                           // notify SPI interrupt that it can start sending bytes as soon as the transmission starts
   //Serial.println(F("Sent param")); 
 }
@@ -376,7 +332,6 @@ void setup() {
   Serial.begin(9600);  
   SPI_slave_init();
   lcd.begin(20, 4);
-  
   // set configurable parameters
   delay(3000);                        // let Serial init 
   addParam(0, "RPM", 3, PARAM_STEPPER_SPEED);
@@ -503,14 +458,14 @@ ISR (SPI_STC_vect)
   //////////////
 
   if (!pos){                            // start sending out bytes when the first byte is received
-    is_start = true;  
+    isStart = true;  
   }
   
-  if (is_start && writeToMaster){     // send bytes if begining of communication and if their is something...
-    SPDR = out_buf[pos];                // ...new to send to the master  
+  if (isStart && writeToMaster){     // send bytes if begining of communication and if their is something...
+    SPDR = outBuf[pos];                // ...new to send to the master  
     if(pos+1>=OUT_BUF_SIZE){
       writeToMaster=false;
-      is_start = false;
+      isStart = false;
     }
   }
   else

@@ -20,7 +20,7 @@ byte buff[2*MAX_PARAM+2]; //2 of overhead for correct comm
 
 //SPI buffer prep --> returns total buffer size
 byte toBuff(byte buffSize) {
-  buff[0]=2*buffSize ; //message type
+  buff[0]=2*buffSize ;
   byte checkDigit=buff[0];
   for(byte i = 0; i < buffSize; i++) {
     buff[2*i+1]=(byte)((getParameter(i)>>8)&(0x00FF));
@@ -113,12 +113,12 @@ NIL_THREAD(ThreadLCD, arg) {
   nilThdSleepMilliseconds(1000);
   byte buffSize=0;
   while(true) {
-  buffSize= allParamsToBuff();              //Load Last Parameters Into SPI buffer
+  buffSize= allParamsToBuff();//Load Last Parameters Into SPI buffer
   protectThread();
   sendBuffer(buffSize);
   unprotectThread();
   parseReturnBuff();
-  nilThdSleepMilliseconds(100);
+  nilThdSleepMilliseconds(500);
   }
 }
 #endif
