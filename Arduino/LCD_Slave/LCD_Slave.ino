@@ -431,9 +431,9 @@ ISR (SPI_STC_vect)
   if (pos==0){
     isStart = true;  // start sending out bytes when the first byte is received
     buffSize=c;      // first message holds the size incoming msg
-  }else if (pos =< buffSize){ // '=<'  not '<'because we have a XOR at the end
+  }else if (pos <= buffSize){ // '=<'  not '<'because we have a XOR at the end
     buf[pos-1] = c;       //read until message length is reached                  
-    if(pos==bufferSize) processIt=true; //message captured
+    if(pos==buffSize) processIt=true; //message captured
   }
   
   //send Data
