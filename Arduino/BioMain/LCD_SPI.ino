@@ -19,17 +19,17 @@ void setupLCD(){
 byte buff[2*MAX_PARAM+2]; //2 of overhead for correct comm
 
 //SPI buffer prep --> returns total buffer size
-byte toBuff(byte buffSize) {
-  buff[0]=2*buffSize ;
+byte toBuff(byte nbParams) {
+  buff[0]=2*nbParams ;
   byte checkDigit=buff[0];
-  for(byte i = 0; i < buffSize; i++) {
+  for(byte i = 0; i < nbParams; i++) {
     buff[2*i+1]=(byte)((getParameter(i)>>8)&(0x00FF));
     checkDigit^=buff[2*i+1];
     buff[2*(i+1)]=(byte)((getParameter(i))&(0x00FF));
     checkDigit^=buff[2*(i+1)];
   }
-  buff[buffSize+2]=checkDigit;
-  return buffSize+2; //total size
+  buff[2*nbParams+1]=checkDigit;
+  return 2*nbParams+1; //total size
 }
 
 //sensors flash params

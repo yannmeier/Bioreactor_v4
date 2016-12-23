@@ -19,7 +19,6 @@ static boolean pushing  =true;       // debounce management
 boolean A_set = false;              
 boolean B_set = false;
 volatile boolean processIt=false;     // SPI buffer ready to be parsed ?
-volatile boolean firstReturn=false;   // is first return in ending of SPI com from master?
 /************************************************
               Parameter Utilities
 *************************************************/
@@ -62,7 +61,7 @@ void addParam(int pos, char * id, int id_length, int number){
 byte outBuf [OUT_BUF_SIZE];            // buffer for output to motherboard 
 boolean writeToMaster=false;                // flag indicating if their is something to send to the motherboard
 boolean isStart=false;                     // flag indicating if it's the beginning of the communication with the motherboard
-byte buf [2*MAX_PARAM+2];     // buffer for input from motherboard
+byte buf [2*MAX_PARAM+1];     // buffer for input from motherboard
 volatile byte pos;            // position of incoming byte in SPI buffer
 
 void SPI_slave_init()
@@ -429,24 +428,26 @@ void doEncoderButton(){
 ISR (SPI_STC_vect)
 {
   byte c = SPDR;  // Read entering byte on SPI Data Register  
-  if (pos < sizeof(buf))
-  {
-    buf[pos] = c;                     //add byte to buffer                                   
-    if (c=='\n') firstReturn=true;  // example: newline means time to process buffer
-    if (c=='\n' && firstReturn==true) processIt = true;
-    else firstReturn=false; 
-  }  //full
-
-  if (!pos) isStart = true;          // start sending out bytes when the first byte is received 
-  if (isStart && writeToMaster){     // send bytes if begining of communication and if their is something...
-    SPDR = outBuf[pos];              // ...new to send to the master  
+  byte buffSize=0;
+  
+  //receive Data
+  if (pos==0){
+    isStart = true;  // start sending out bytes when the first byte is received
+    buffSize=c;      // first message holds the size incoming msg
+  }else if (pos =< buffSize){ // '=<'  not '<'because we have a XOR at the end
+    buf[pos-1] = c;       //read until message length is reached                  
+    if(pos==bufferSize) processIt=true; //message captured
+  }
+  
+  //send Data
+  if (isStart && writeToMaster){   // send bytes if begining of COM AND if their is something
+    SPDR = outBuf[pos];            // ...new to send to the master  
     if(pos+1>=OUT_BUF_SIZE){
       writeToMaster=false;
       isStart = false;
     }
-  }
-  else SPDR = 0;
-
+  }else SPDR = 0;
+  //increment counter
   pos++;
-}// end of SPI ISR
+}
 
