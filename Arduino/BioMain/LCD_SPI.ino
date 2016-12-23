@@ -65,7 +65,7 @@ void parseReturnBuff(){
   int  paramValue=0;
   byte checkDigit=0;
   if(buffReturn[0]!=0){
-    byte checkDigit=buffReturn[0];
+    byte checkDigit=buffReturn[0]; //contains the size of the message
     checkDigit^=buffReturn[1];
     checkDigit^=buffReturn[2];
     checkDigit^=buffReturn[3];
