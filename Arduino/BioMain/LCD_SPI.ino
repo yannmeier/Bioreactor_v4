@@ -33,12 +33,12 @@ byte toBuff(byte buffSize) {
 }
 
 //sensors flash params
-void Last_Params_To_SPI_buff() {
-  toBuff(NB_PARAMETERS_LINEAR_LOGS);
+byte lastParamsToBuff() {
+  return toBuff(NB_PARAMETERS_LINEAR_LOGS);
 }
 //all params
-void All_Params_To_SPI_buff() {
-  toBuff(MAX_PARAM);
+byte allParamsToBuff() {
+  return toBuff(MAX_PARAM);
 }
 /****************************************************************
          SPI  buffer send and receive
@@ -111,10 +111,13 @@ boolean checkParameterData(int parameter, int value){
 NIL_WORKING_AREA(waThreadLCD, 24);
 NIL_THREAD(ThreadLCD, arg) {
   nilThdSleepMilliseconds(1000);
+  byte buffSize=0;
   while(true) {
-  Last_Params_To_SPI_buff();              //Load Last Parameters Into SPI buffer
+  buffSize= allParamsToBuff();              //Load Last Parameters Into SPI buffer
   protectThread();
+  sendBuffer(buffSize);
   unprotectThread();
+  parseReturnBuff();
   nilThdSleepMilliseconds(100);
   }
 }
