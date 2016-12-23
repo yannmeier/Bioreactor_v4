@@ -1,6 +1,7 @@
 /************************************************
  *               PINS DEF
  ***********************************************/
+//#define LCD_SELECT RXLED //pin SS (D8)
 const int LCDD7 = A6;
 const int LCDD6 = 12;
 const int LCDD5 = 6;

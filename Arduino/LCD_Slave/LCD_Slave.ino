@@ -1,9 +1,8 @@
 #include <LiquidCrystal.h>
 #include <SPI.h>
 #include "LCD_Slave.h"
-// initialize the library with the numbers of the interface pins
+// initialize the lib with the nbr of the interface pins
 LiquidCrystal lcd(LCDRS,LCDE,LCDD4,LCDD5,LCDD6,LCDD7);
-
 /************************************************
           Encoder position variables
 *************************************************/
@@ -21,7 +20,6 @@ boolean A_set = false;
 boolean B_set = false;
 volatile boolean processIt=false;     // SPI buffer ready to be parsed ?
 volatile boolean firstReturn=false;   // is first return in ending of SPI com from master?
-
 /************************************************
               Parameter Utilities
 *************************************************/
@@ -61,7 +59,6 @@ void addParam(int pos, char * id, int id_length, int number){
 /************************************************
          Arduino SPI Slave Functions
 *************************************************/
-//#define LCD_SELECT RXLED //pin SS (D8)
 byte outBuf [OUT_BUF_SIZE];            // buffer for output to motherboard 
 boolean writeToMaster=false;                // flag indicating if their is something to send to the motherboard
 boolean isStart=false;                     // flag indicating if it's the beginning of the communication with the motherboard
@@ -128,7 +125,7 @@ void sendParameter(int parameter, int value){
   checkDigit^=outBuf[3];
   outBuf[4]=checkDigit;
   writeToMaster = true;                           // notify SPI interrupt that it can start sending bytes as soon as the transmission starts
-  //Serial.println(F("Sent param")); 
+  Serial.println(F("Sent param")); 
 }
 /************************************************
        Main function to refresh the LCD
@@ -151,7 +148,7 @@ void menuRefresh()
     default:
       return;
   }
-  toBeRefreshed=0;
+  toBeRefreshed=false;
 }
 
 void valuesRefresh()
@@ -175,9 +172,9 @@ void valuesRefresh()
       return;
   }
 }
-/********************************************
-       "Menu Display" Utilities Set
-*********************************************/
+/************************************************************
+            "Values Display" Utilities Set
+*************************************************************/
 void displayParamValue(int value, int space, int x, int y){
   lcd.setCursor(x, y);
   lcd.print(value);
@@ -187,6 +184,49 @@ void displayParamValue(int value, int space, int x, int y){
   }    
 }
 
+
+void displayValueSelector()
+{     
+ if(encoderTempValue!=encoderLastValue){
+    lcd.setCursor(16,0);
+    lcd.print((encoderTempValue%3)+1);
+    lcd.setCursor(0,(encoderTempValue%3)+1);
+    encoderLastValue=encoderTempValue;
+  }
+}
+
+
+void displayValueSensor()
+{
+  displayParamValue(param[PARAM_TEMP_LIQ], 7, 3, 0);       //display liquid temperature
+  displayParamValue(param[PARAM_STEPPER_SPEED], 6, 14, 0); //display motor speed in RPM
+  displayParamValue(param[PARAM_WEIGHT], 7, 3, 2);         //display weight
+}
+
+
+void displayValueConfig()
+{     
+  for(int paramNum = 0; paramNum < MAX_CONFIG_PARAM; paramNum++){  // print all parameters
+    displayParamValue(param[configMenuParams[paramNum]->paramNum], 
+                       8-(configMenuParams[paramNum]->paramNameLength)-1, 
+                       10*((paramNum+1)%2)+configMenuParams[paramNum]->paramNameLength+3, 
+                       (paramNum+1)/2);
+  }
+  lcd.setCursor(10*((encoderTempValue%8)%2),(encoderTempValue%8)/2);
+}
+
+
+void displayValueCalibr()
+{     
+ if(encoderTempValue!=encoderLastValue){
+    lcd.setCursor(10*((encoderTempValue%5)%2),(encoderTempValue%5)/2);
+    encoderLastValue=encoderTempValue;
+  }
+}
+
+/************************************************************
+            "Menu Display" Utilities Set
+*************************************************************/
 void displayMenuSelector()
 {
   lcd.begin(20, 4);
@@ -200,17 +240,6 @@ void displayMenuSelector()
     lcd.print(F("3)Scale Calibration"));  
     lcd.setCursor(0,(encoderTempValue%3)+1);
 }
-
-void displayValueSelector()
-{     
- if(encoderTempValue!=encoderLastValue){
-    lcd.setCursor(16,0);
-    lcd.print((encoderTempValue%3)+1);
-    lcd.setCursor(0,(encoderTempValue%3)+1);
-    encoderLastValue=encoderTempValue;
-  }
-}
-
 
 void displayMenuSensor()
 {
@@ -227,63 +256,20 @@ void displayMenuSensor()
     lcd.print(F("gr:"));
 }
 
-void displayValueSensor()
-{
-  //display liquid temperature
-  displayParamValue(param[PARAM_TEMP_LIQ], 7, 3, 0);
-  //display motor speed in RPM
-  displayParamValue(param[PARAM_STEPPER_SPEED], 6, 14, 0);
-  //display weight
-  displayParamValue(param[PARAM_WEIGHT], 7, 3, 2);
-}
+
 
 void displayMenuConfig()
 {
   lcd.begin(20, 4);                             // Clear Screen
-  
   lcd.setCursor(0,0);                           // print back button
   lcd.print(F("0)Bck"));
-  
   for(int paramPos = 0; paramPos < MAX_CONFIG_PARAM; paramPos++){  // print all parameters
     lcd.setCursor(10*((paramPos+1)%2),(paramPos+1)/2);
     lcd.print(paramPos+1);
     lcd.print(")");
     lcd.print(configMenuParams[paramPos]->paramName);
     lcd.print(":");
-  }
-  
-}
-
-
-void displayValueConfig()
-{     
-  for(int paramNum = 0; paramNum < MAX_CONFIG_PARAM; paramNum++){  // print all parameters
-    displayParamValue(param[configMenuParams[paramNum]->paramNum], 8-(configMenuParams[paramNum]->paramNameLength)-1, 10*((paramNum+1)%2)+configMenuParams[paramNum]->paramNameLength+3, (paramNum+1)/2);
-  }
-  lcd.setCursor(10*((encoderTempValue%8)%2),(encoderTempValue%8)/2);
-}
-
-void configSetValue()
-{
-  byte paramNum = (encoderTempValue%8)-1;
-  byte paramValPos [2] = {10*((encoderTempValue%8)%2)+configMenuParams[paramNum]->paramNameLength+2, (encoderTempValue%8)/2}; // {char_num, line_num}
-  int temp_value = param[configMenuParams[paramNum]->paramNum];
-  lcd.setCursor(paramValPos[0], paramValPos[1]);
-  if(paramNum >=0){
-    while(encoderMenuSelect==MENU_SET_VALUE){
-      if(encoderTempValue!=encoderLastValue){
-        if(encoderTempValue>encoderLastValue){
-          temp_value+=5;        
-        } else {
-          temp_value-=5;
-        }
-        displayParamValue(temp_value, 8-configMenuParams[paramNum]->paramNameLength-1, paramValPos[0]+1, paramValPos[1]);
-        lcd.setCursor(paramValPos[0], paramValPos[1]);
-        encoderLastValue = encoderTempValue;
-      }  
-    }
-    sendParameter(configMenuParams[paramNum]->paramNum, temp_value);
-  } 
+  }  
 }
 
 
@@ -305,12 +291,28 @@ void displayMenuCalibr() //all is to be implemented
     lcd.setCursor(10*((encoderTempValue%5)%2),(encoderTempValue%5)/2);
 }
 
-void displayValueCalibr()
-{     
- if(encoderTempValue!=encoderLastValue){
-    lcd.setCursor(10*((encoderTempValue%5)%2),(encoderTempValue%5)/2);
-    encoderLastValue=encoderTempValue;
-  }
+
+void configSetValue()
+{
+  byte paramNum = (encoderTempValue%8)-1;
+  byte paramValPos [2] = {10*((encoderTempValue%8)%2)+configMenuParams[paramNum]->paramNameLength+2, (encoderTempValue%8)/2}; // {char_num, line_num}
+  int tempVal = param[configMenuParams[paramNum]->paramNum];
+  lcd.setCursor(paramValPos[0], paramValPos[1]);
+  if(paramNum >=0){
+    while(encoderMenuSelect==MENU_SET_VALUE){
+      if(encoderTempValue!=encoderLastValue){
+        if(encoderTempValue>encoderLastValue){
+          tempVal+=5;        
+        } else {
+          tempVal-=5;
+        }
+        displayParamValue(tempVal, 8-configMenuParams[paramNum]->paramNameLength-1, paramValPos[0]+1, paramValPos[1]);
+        lcd.setCursor(paramValPos[0], paramValPos[1]);
+        encoderLastValue = encoderTempValue;
+      }  
+    }
+    sendParameter(configMenuParams[paramNum]->paramNum, tempVal);
+  } 
 }
 
 /**************************************************
@@ -344,7 +346,7 @@ void setup() {
   
 }
 
-// main loop, work is done by interrupt service routines, this one only prints stuff
+// main loop, work is done by ISRs, this one only prints stuff
 void loop() { 
   //refresh the menu if needed
   if(toBeRefreshed)
@@ -359,9 +361,6 @@ void loop() {
   lcd.blink();  
   delay(20);
   rotating = true; 
-  
- 
-
 }
 
 /***************************************************************
@@ -398,13 +397,9 @@ void doEncoderB(){
 // Interrupt on B changing state, same as A above
 void doEncoderButton(){
   if (pushing){
-    //main menu case
-    if(encoderMenuSelect==MENU_SELECTOR )  
-      encoderMenuSelect=(encoderTempValue%3)+1;
-    //sensor display case
-    else if(encoderMenuSelect==MENU_SENSOR)
-      encoderMenuSelect=MENU_SELECTOR;
-    //setting parameters case
+    //main menu 
+    if(encoderMenuSelect==MENU_SELECTOR) encoderMenuSelect=(encoderTempValue%3)+1;  //sensor display case
+    else if(encoderMenuSelect==MENU_SENSOR) encoderMenuSelect=MENU_SELECTOR;        //setting parameters case
     else if(encoderMenuSelect==MENU_CONFIG){
       if((encoderTempValue%8)==0){
         encoderMenuSelect=MENU_SELECTOR;
@@ -414,15 +409,13 @@ void doEncoderButton(){
     } 
     else if (encoderMenuSelect==MENU_SET_VALUE)
       encoderMenuSelect=MENU_CONFIG;
-      
-    //calibration menu case
+    //calibration menu 
     else if(encoderMenuSelect==MENU_CALIBRATION){
       if((encoderTempValue%5)==0)
           encoderMenuSelect=MENU_SELECTOR;  
     }  
-    pushing=false;     //debouncer  
+    pushing=false;   //debouncer  
     toBeRefreshed=1; //refresh flag
-
     //sendParameter(PARAM_STEPPER_SPEED, 30); //notify motherboard on button pressed
   }
   else 
@@ -430,47 +423,30 @@ void doEncoderButton(){
   delay(10);
 }
 
-
-// SPI interrupt routine
+/***************************************************************
+                      SPI     ISR
+****************************************************************/
 ISR (SPI_STC_vect)
 {
-  byte c = SPDR;  // grab byte from SPI Data Register
-  
-  /////////////////////
-  // Read entering byte
-  /////////////////////
-  
-  // add to buffer if room
+  byte c = SPDR;  // Read entering byte on SPI Data Register  
   if (pos < sizeof(buf))
   {
-     buf [pos] = c;                   //add byte to buffer
-                                        // example: newline means time to process buffer
-    if (c == '\n')
-      firstReturn=true;
-    if (c=='\n' && firstReturn==true)  
-      processIt = true;
-    else
-      firstReturn=false; 
-  }  // end of room available
+    buf[pos] = c;                     //add byte to buffer                                   
+    if (c=='\n') firstReturn=true;  // example: newline means time to process buffer
+    if (c=='\n' && firstReturn==true) processIt = true;
+    else firstReturn=false; 
+  }  //full
 
-  //////////////
-  // Send answer
-  //////////////
-
-  if (!pos){                            // start sending out bytes when the first byte is received
-    isStart = true;  
-  }
-  
+  if (!pos) isStart = true;          // start sending out bytes when the first byte is received 
   if (isStart && writeToMaster){     // send bytes if begining of communication and if their is something...
-    SPDR = outBuf[pos];                // ...new to send to the master  
+    SPDR = outBuf[pos];              // ...new to send to the master  
     if(pos+1>=OUT_BUF_SIZE){
       writeToMaster=false;
       isStart = false;
     }
   }
-  else
-    SPDR = 0;
+  else SPDR = 0;
 
   pos++;
-}  // end of interrupt routine SPI_STC_vect
+}// end of SPI ISR
 
