@@ -1,7 +1,6 @@
 # Bill Of Material (BOM)
 
 
-
 | Denomination                  | Qty | Unit Price | Supplier        | Image | Remarks |
 |-------------------------------|-----|-------|-----------------|-------| ------- |
 | 12V 10A power supply 100V-265V| 1   | 17    | [ebay](http://www.ebay.com/itm/161929667263) |  <img src="images/Power-supply.jpg" width="48"> | |
@@ -26,10 +25,16 @@
  
 ### Components
 
+#### microcontroller
+
 | Denomination                  | Qty | Unit Price | Supplier        | Image | Remarks |
-| ----------------------------- | --- | ----- | --------------- | ----- | ------- |
-| Atmega32U4 44TQFP             | 1   | 3.6   | [aliexpress](https://www.aliexpress.com/item/10pcs-lot-ATMEGA32U4-AU-ATMEGA32U4-TQFP-44-IC-8-bit-Microcontroller-with-16-32K-Bytes-of/32720185776.html?spm=2114.13010608.0.0.Brw1qI) | <img src="images/atmega32u4-au.jpg" width="48"> | |
-| SST26VF064B-104I/SM           | 1   | 2.0   | [aliexpress](https://www.aliexpress.com/item/SST26VF064B-I-SM-SST26VF064B-I-SST26VF064B-new-original/32760981168.html?spm=2114.13010608.0.0.vhdFdY) | <img src="images/SST26vf064b.jpg" width="48"> | |
+| ----------------------------- | --- | ---------- | --------------- | ----- | ------- |
+| Atmega32U4 44TQFP             | 1   | 3.6        | [aliexpress](https://www.aliexpress.com/item/10pcs-lot-ATMEGA32U4-AU-ATMEGA32U4-TQFP-44-IC-8-bit-Microcontroller-with-16-32K-Bytes-of/32720185776.html?spm=2114.13010608.0.0.Brw1qI) | <img src="images/atmega32u4-au.jpg" width="48"> | |
+| Capacitor 100 nF 0805         | 4   |            |                      |
+| Capacitor 22 pF 0805          | 2   |            |                      |
+| Resistor 1M 0805              | 1   |            |                      |
+| Resistor 10k 0805             | 2   |            |                      |
+
 
 #### Power
 
@@ -40,8 +45,9 @@
 | Resistor 10k 0805             | 1   |            |                      |
 | Jack PJ-063BH                 | 1   |            |                      |
 | Capacitor 100 nF 0805         | 2   |            |                      |
-| Capacitor 10 uF 0805          | 2   |            |                      |
+| Capacitor 10 uF 0805          | 4   |            |                      |
 | Schottky 1N581 1206           | 3   |            |                      |
+| LDO MCP1703 3.3v - SOT223     | 1   |            |                      |
 
 
 
@@ -115,7 +121,7 @@
 | Connector 1 ????????          | 1   |            |                      |
 | Connector 2 ????????          | 1   |            |                      |
 
-### LORA
+#### LORA
 
 | Denomination                  | Qty | Unit Price | Supplier             |
 | ----------------------------- | --- | ---------- | -------------------- |
@@ -124,6 +130,26 @@
 | Resistor 100k 0805            | 1   |            |                      |
 | Microchip Lora RN2483         | 1   |            |                      |
 | SMA Edge connector            | 1   |            |                      |
+
+#### Stepper
+
+| Denomination                  | Qty | Unit Price | Supplier             |
+| ----------------------------- | --- | ---------- | -------------------- |
+| Header 6 pins  KF2510-6P      | 1   |            | | | |
+| Cable 6 pins   KF2510-6P      | 1   |            |  |  | |
+| BSP75 SOT223                  | 1   |            |                      |
+| Resistor 10k 0805             | 4   |            |                      |
+| Led Red 0805                  | 4   |            |                      |
+
+#### Memory
+
+| Denomination                  | Qty | Unit Price | Supplier             |
+| ----------------------------- | --- | ---------- | -------------------- |
+| SST26VF064B-104I/SM           | 1   | 2.0        | [aliexpress](https://www.aliexpress.com/item/SST26VF064B-I-SM-SST26VF064B-I-SST26VF064B-new-original/32760981168.html?spm=2114.13010608.0.0.vhdFdY) | <img src="images/SST26vf064b.jpg" width="48"> | |
+| Resistor 10k 0805             | 2   |            |                      |
+| Resistor 1k 0805              | 1   |            |                      |
+| Capacitor 100 nF 0805         | 1   |            |                      |
+
 
 
 (DS18B20U - µSOP-8 - less than $1) https://www.aliexpress.com/item/100-new-original-DS18B20U-T-R-DS18B20U-T-DS18B20U-DS18B20U-MSOP8/32720211527.html?spm=2114.30010308.3.33.1by9Q7&ws_ab_test=searchweb0_0,searchweb201602_3_10065_10068_10084_10083_10080_10082_10081_10060_10061_10062_10056_10055_10037_10054_10033_10059_10032_10099_10078_10079_10077_10105_427_10103_10073_10102_10096_10052_10050_10051,searchweb201603_1&btsid=ccf9ed95-49e6-437b-9c58-c6d8852da00b
