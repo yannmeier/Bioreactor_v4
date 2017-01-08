@@ -6,26 +6,15 @@
 | 12V 10A power supply 100V-265V| 1   | 17    | [ebay](http://www.ebay.com/itm/161929667263) |  <img src="images/Power-supply.jpg" width="48"> | |
 | Magnetic Stirrer bar 5cm      | 1   | 3.6   | [ebay](http://www.ebay.com/itm/332037093368) |  <img src="images/Stirrer-bar.jpg" width="48"> | |
 | MK3 heating plate             | 1   | 12.3  | [aliexpress](https://www.aliexpress.com/item/3D-printer-heatbed-Heat-bed-MK3-standard-aluminum-plate-3mm-hot-bed-Free-shipping/1941676934.html?spm=2114.13010608.0.0.eVVdIm) |  <img src="images/MK3.jpg" width="48"> | |
-| Stepper (agitation)           | 1   | ~15   |  |   | |
-| Plexiglass 600 x 500 x 6 mm   | 1   | 25    | [Plexiglass.ch](https://roehmschweiz.ch/fr/produits/plaques/plexiglas/xt-allround/incolore-0a000/)  | |
-| Plexiglass 120OD 114ID 150 mm | 1   | 6     | [Plexiglass.ch](https://roehmschweiz.ch/fr/produits/tubes-batons/tubes/plexiglas/incolore-xt-0a070-110-mm/) |   | |
-| Aluminium cylinder base       | 1   | ?     | | |
+| Plexiglass 600 x 500 x 6 mm   | 1   | 25    | [Plexiglass.ch](https://roehmschweiz.ch/fr/produits/plaques/plexiglas/xt-allround/incolore-0a000/)  | |
+| Plexiglass 120OD 114ID 150 mm | 1   | 6     | [Plexiglass.ch](https://roehmschweiz.ch/fr/produits/tubes-batons/tubes/plexiglas/incolore-xt-0a070-110-mm/) |   | |
+| Aluminium cylinder base       | 1   | 10    | Need to check price !!!| |
+| PCB                           | 1   | 5     | [PCB way]()
+| Miscellaneous small material  | 1   | 5     |
 
 
 ## Electronic
 
-
-### Connectors
-
-
-| Denomination                  | Qty | Unit Price | Supplier        | Image | Remarks |
-| ----------------------------- | --- | ----- | --------------- | ----- | ------- |
-| Header 5 pins  KF2510-5P      | 1   | 0.2   | | | |
-| Cable 5 pins   KF2510-5P      | 1   | 0.6   |  |  | |
-| Header 4 pins  KF2510-4P      | 1   | 0.1   | [ebay](http://www.ebay.com/itm/201726148721) | <img src="images/Header-KF5410-4P.jpg" width="48"> | |
-| Cable 4 pins   KF2510-4P      | 1   | 0.5   | [ebay](http://www.ebay.com/itm/231277926061) | <img src="images/Cable-KF5410-4P.jpg" width="48"> | |
-| PCB                           | 1   | 5     | [PCB way]()
- 
 ### Components
 
 #### microcontroller
@@ -71,7 +60,7 @@
 
 | Denomination                  | Qty | Unit Price | Supplier             |
 | ----------------------------- | --- | ---------- | -------------------- |
-| DS18B20Z One wire MSOP8       | 1   | 2.1        | [aliexpress](https://www.aliexpress.com/item/Free-Shipping-10PCS-Hot-new-original-authentic-DS18B20-DS18B20Z-temperature-sensor-SOP8-YF1128/32550585751.html?spm=2114.13010608.0.0.tzWGQM) | <img src="images/ds18b20z.jpg" width="48"> | |
+| DS18B20Z One wire MSOP8       | 1   | 1.1        | [aliexpress](https://www.aliexpress.com/item/100-new-original-DS18B20U-T-R-DS18B20U-T-DS18B20U-DS18B20U-MSOP8/32720211527.html?spm=2114.30010308.3.33.1by9Q7&ws_ab_test=searchweb0_0,searchweb201602_3_10065_10068_10084_10083_10080_10082_10081_10060_10061_10062_10056_10055_10037_10054_10033_10059_10032_10099_10078_10079_10077_10105_427_10103_10073_10102_10096_10052_10050_10051,searchweb201603_1&btsid=ccf9ed95-49e6-437b-9c58-c6d8852da00b) | <img src="images/ds18b20z.jpg" width="48"> | |
 | DS18B20 temperature with cable| 1   | 1.4        | [ebay](http://www.ebay.com/itm/331828375684) |  <img src="images/s-l300.jpg" width="48"> | |
 | IRF3704 - D2 pack             | 1   | 0.1        | [aliexpress](https://www.aliexpress.com/item/IRF3704STRLPBF-IRF3704S-IRF3704-3704-F3704S-F3704-IR-D2PAK-Absolute-Imported-Original-20PCS-LOT/32504980315.html?spm=2114.13010608.0.0.HaejuK) |
 | Led Red 0805                  | 1   | 0.01       |                      |
@@ -80,7 +69,6 @@
 | Resistor 4.7k 0805            | 2   | 0.01       |                      |
 | 3.5 mm male plug              | 1   | 0.1        | [ebay](http://www.ebay.com/itm/172001125871) | <img src="images/35mm-plug.jpg" width="48"> | |
 | 3.5 Female jack PCB PF3024M   | 1   | 0.3        | [ebay](http://www.ebay.com/itm/331809367438) | <img src="images/35mm-female.jpg" width="48"> | |
-
 
 #### USB
 
@@ -100,7 +88,7 @@
 | BSP75 SOT223                  | 2   | 0.3        | [aliexpress](https://www.aliexpress.com/item/Free-shipping-50pcs-lot-BSP75-BSP76-BSP77-SOT223/2026904236.html?spm=2114.30010308.3.10.m2zlgV&ws_ab_test=searchweb0_0,searchweb201602_3_10065_10068_10000009_10084_10083_10080_10082_10081_10060_10062_10056_10055_10037_10054_10059_10032_10099_10078_10079_10077_10000012_426_10103_10073_10102_10000015_10096_10052_10053_10107_10050_10106_10051,searchweb201603_1,afswitch_3_afChannel,single_sort_0_default&btsid=413c08f9-9370-41e8-b673-9b6507cf92a5) |  | |
 | Header 2 pins  KF2510-2P      | 2   | 0.1        | [ebay](http://www.ebay.com/itm/251255708763) | <img src="images/Header-KF5410-2P.jpg" width="48"> | |
 | Cable 2 pins   KF2510-2P      | 2   | 0.5        | ebay | | |
-| Peristaltic pumps             | 2   | ~7         |       |   | |
+| Peristaltic pumps             | 2   | 7          | [ebay](http://www.ebay.com/itm/201749015545?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT) |   | |
 
 #### Weight
 
@@ -114,9 +102,9 @@
 | Resistor 20k 0805             | 1   | 0.01       |                      |
 | Capacitor 100 nF 0805         | 4   | 0.01       |                      |
 | Capacitor 10 uF 0805          | 2   | 0.01       |                      |
-| Transistor MMBT4403 SOT23-3   | 1   |            |                      |
-| Connector 1 ????????          | 1   |            |                      |
-| Connector 2 ????????          | 1   |            |                      |
+| Transistor MMBT4403 SOT23-3   | 1   | 0.03       | [ebay](http://www.ebay.com/itm/100-PCS-MMBT4403-SOT-23-2N4403-SMD-PNP-transistor-/371086000069?hash=item566672ffc5:g:Gg8AAOSwBvNTouQY) |
+| Header 5 pins  KF2510-5P      | 1   | 0.2   | | | |
+| Cable 5 pins   KF2510-5P      | 1   | 0.6   |  |  | |
 
 #### LORA
 
@@ -125,18 +113,19 @@
 | Capacitor 100 nF 0805         | 1   | 0.01       |                      |
 | Capacitor 10 uF 0805          | 1   | 0.01       |                      |
 | Resistor 100k 0805            | 1   | 0.01       |                      |
-| Microchip Lora RN2483         | 1   |            |                      |
-| SMA Edge connector            | 1   |            |                      |
+| Microchip Lora RN2483         | 1   | 15         | [mouser](http://www.mouser.ch/ProductDetail/Microchip-Technology/RN2483-I-RM101/?qs=sGAEpiMZZMuI1aKsGLfKZOQCMfxWOhw5J%2fmjVNtRvb8%3d) |
+| SMA Edge connector            | 1   | 0.3        | [ebay](http://www.ebay.com/itm/172409963484?_trksid=p2060353.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT) |
 
 #### Stepper
 
 | Denomination                  | Qty | Unit Price | Supplier             |
 | ----------------------------- | --- | ---------- | -------------------- |
-| Header 6 pins  KF2510-6P      | 1   |            | | | |
-| Cable 6 pins   KF2510-6P      | 1   |            |                      |
+| Header 6 pins  KF2510-6P      | 1   | 0.3        | | | |
+| Cable 6 pins   KF2510-6P      | 1   | 0.7        |                      |
 | BSP75 SOT223                  | 4   | 0.3        | [aliexpress](https://www.aliexpress.com/item/Free-shipping-50pcs-lot-BSP75-BSP76-BSP77-SOT223/2026904236.html?spm=2114.30010308.3.10.m2zlgV&ws_ab_test=searchweb0_0,searchweb201602_3_10065_10068_10000009_10084_10083_10080_10082_10081_10060_10062_10056_10055_10037_10054_10059_10032_10099_10078_10079_10077_10000012_426_10103_10073_10102_10000015_10096_10052_10053_10107_10050_10106_10051,searchweb201603_1,afswitch_3_afChannel,single_sort_0_default&btsid=413c08f9-9370-41e8-b673-9b6507cf92a5) |  | |
 | Resistor 10k 0805             | 4   | 0.01       |                      |
 | Led Red 0805                  | 4   | 0.01       |                      |
+| Stepper (agitation)           | 1   | 15         | Need to confirm price |   | |
 
 #### Memory
 
@@ -147,6 +136,3 @@
 | Resistor 1k 0805              | 1   | 0.01       |                      |
 | Capacitor 100 nF 0805         | 1   | 0.01       |                      |
 
-
-
-(DS18B20U - µSOP-8 - less than $1) https://www.aliexpress.com/item/100-new-original-DS18B20U-T-R-DS18B20U-T-DS18B20U-DS18B20U-MSOP8/32720211527.html?spm=2114.30010308.3.33.1by9Q7&ws_ab_test=searchweb0_0,searchweb201602_3_10065_10068_10084_10083_10080_10082_10081_10060_10061_10062_10056_10055_10037_10054_10033_10059_10032_10099_10078_10079_10077_10105_427_10103_10073_10102_10096_10052_10050_10051,searchweb201603_1&btsid=ccf9ed95-49e6-437b-9c58-c6d8852da00b
