@@ -21,9 +21,7 @@ IRF3704 - D2 pack	1	0.1
 LDO MCP1703 3.3v - SOT223	1	0.03
 Led Blue 0805 (blink)	1	0.01
 Led Green 0805	2	0.01
-Led Red 0805	3	0.01
-Led RED 0805	2	0.01
-Led Red 0805	4	0.01
+Led Red 0805	9	0.01
 Led Yellow 0805	2	0.01
 Load cell 2kg YZC-133	3	2.7
 Magnetic Stirrer bar 5cm	1	3.6
