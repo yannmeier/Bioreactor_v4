@@ -33,7 +33,7 @@
 
 | Denomination                  | Qty | Unit Price | Supplier             |
 | ----------------------------- | --- | ---------- | -------------------- |
-| Led RED 0805                  | 2   | 0.01       |                      |
+| Led Red 0805                  | 2   | 0.01       |                      |
 | Resistor 1k 0805              | 1   | 0.01       |                      |
 | Resistor 10k 0805             | 1   | 0.01       |                      |
 | Power socket DC 5.5x2.5       | 1   | 0.2        | [aliexpress](https://www.aliexpress.com/item/Big-Discount-10pcs-DC-Power-Supply-Female-Jack-Socket-5-5-x-2-5mm-Barrel-Type/32406071366.html?spm=2114.30010308.3.2.fdXBrh&ws_ab_test=searchweb0_0,searchweb201602_3_10065_10068_10000009_10084_10083_10080_10082_10081_10060_10062_10056_10055_10037_10054_10059_10032_10099_10078_10079_10077_10000012_426_10103_10073_10102_10000015_10096_10052_10053_10107_10050_10106_10051,searchweb201603_1,afswitch_3_afChannel,single_sort_0_default&btsid=359acd27-d1e9-45e2-ac8a-c8276f44f4d0)                     |
