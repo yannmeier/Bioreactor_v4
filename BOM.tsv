@@ -1,22 +1,15 @@
+	0	0
 12V 10A power supply 100V-265V	1	17
 3.5 Female jack PCB PF3024M	1	0.3
 3.5 mm male plug	1	0.1
 Aluminium cylinder base	1	10
 Atmega32U4 44TQFP	1	3.6
-BSP75 SOT223	2	0.3
-BSP75 SOT223	4	0.3
+BSP75 SOT223	6	0.3
 Cable 2 pins   KF2510-2P	2	0.5
 Cable 5 pins   KF2510-5P	1	0.6
 Cable 6 pins   KF2510-6P	1	0.7
-Capacitor 100 nF 0805	1	0.01
-Capacitor 100 nF 0805	1	0.01
-Capacitor 100 nF 0805	2	0.01
-Capacitor 100 nF 0805	4	0.01
-Capacitor 100 nF 0805	4	0.01
-Capacitor 10 uF 0805	1	0.01
-Capacitor 10 uF 0805	1	0.01
-Capacitor 10 uF 0805	2	0.01
-Capacitor 10 uF 0805	4	0.01
+Capacitor 100 nF 0805	12	0.01
+Capacitor 10 uF 0805	8	0.01
 Capacitor 22 pF 0805	2	0.02
 Crystal 8MHz 5032	1	0.25
 DS18B20 temperature with cable	1	1.4
@@ -29,8 +22,7 @@ IRF3704 - D2 pack	1	0.1
 LDO MCP1703 3.3v - SOT223	1	0.03
 Led Blue 0805 (blink)	1	0.01
 Led Green 0805	2	0.01
-Led Red 0805	1	0.01
-Led Red 0805	2	0.01
+Led Red 0805	3	0.01
 Led RED 0805	2	0.01
 Led Red 0805	4	0.01
 Led Yellow 0805	2	0.01
@@ -43,22 +35,11 @@ PCB	1	5
 Peristaltic pumps	2	7
 Plexiglass 120OD 114ID 150 mm	1	6
 Plexiglass 600 x 500 x 6 mm	1	25
-Power socket DC 5.5x2.5	1	0.2
-Power socket DC 5.5x2.5	1	0.2
+Power socket DC 5.5x2.5	2	0.2
 Resistor 100 0805	2	0.01
 Resistor 100k 0805	1	0.01
-Resistor 10k 0805	1	0.01
-Resistor 10k 0805	1	0.01
-Resistor 10k 0805	2	0.01
-Resistor 10k 0805	2	0.01
-Resistor 10k 0805	2	0.01
-Resistor 10k 0805	3	0.01
-Resistor 10k 0805	4	0.01
-Resistor 1k 0805	1	0.01
-Resistor 1k 0805	1	0.01
-Resistor 1k 0805	2	0.01
-Resistor 1k 0805	4	0.01
-Resistor 1k 0805	5	0.01
+Resistor 10k 0805	15	0.01
+Resistor 1k 0805	13	0.01
 Resistor 1M 0805	1	0.01
 Resistor 20k 0805	1	0.01
 Resistor 22 ohms 0805	2	0.01
@@ -71,4 +52,3 @@ SST26VF064B-104I/SM	1	2.0
 Stepper (agitation)	1	15
 Transistor MMBT4403 SOT23-3	1	0.03
 USB mini PCB connector	1	0.05
-ZIF connector FH12-08S-1SH	1	0.16
