@@ -14,12 +14,7 @@
 | PCB                           | 1   | 5     | [PCB way]()
 | Miscellaneous small material  | 1   | 5     |
 
-
-## Electronic
-
-### Components
-
-#### microcontroller
+## microcontroller
 
 | Denomination                  | Qty | Unit Price | Supplier        | Image | Remarks |
 | ----------------------------- | --- | ---------- | --------------- | ----- | ------- |
@@ -30,8 +25,7 @@
 | Resistor 1M 0805              | 1   | 0.01       |                      |
 | Resistor 10k 0805             | 2   | 0.01       |                      |
 
-
-#### Power
+## Power
 
 | Denomination                  | Qty | Unit Price | Supplier             |
 | ----------------------------- | --- | ---------- | -------------------- |
@@ -44,9 +38,7 @@
 | Schottky 1N581 1206           | 3   | 0.03       | [ebay](http://www.ebay.com/itm/121381924838?_trksid=p2060353.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT)|
 | LDO MCP1703 3.3v - SOT223     | 1   | 0.03       | [aliexpress](https://www.aliexpress.com/item/FREE-SHIPPING-MCP1703T-5002E-DB-MCP1703T-5002-MCP1703T-MCP1703-1703-SOT223-3-20PCS/32762396595.html?spm=2114.30010308.3.11.xKbAqb&ws_ab_test=searchweb0_0,searchweb201602_3_10065_10068_10000009_10084_10083_10080_10082_10081_10060_10062_10056_10055_10037_10054_10033_10059_10032_10099_10078_10079_10077_10000012_426_10103_10073_10102_10000015_10096_10052_10053_10107_10050_10106_10051,searchweb201603_1,afswitch_3_afChannel,single_sort_0_default&btsid=ef49b3f4-8176-408d-a7fd-03e2827db7a2) |
 
-
-
-#### Communication
+## Communication
 
 | Denomination                  | Qty | Unit Price | Supplier             |
 | ----------------------------- | --- | ---------- | -------------------- |
@@ -58,7 +50,7 @@
 | ZIF connector FH12-08S-1SH    | 1   | 0.16       | [aliexpress](https://www.aliexpress.com/snapshot/7326978877.html?orderId=72887395416335&productId=32468149160)                |
 | RJ-11 connector 6P6C (RJ12)   | 2   | 0.1        | [aliexpress] (https://www.aliexpress.com/item/100PCS-RJ11-socket-Gray-RJ11-telephone-90-degrees-6pin-crystal-female-6p6c-socket/32778483833.html?spm=2114.30010308.3.19.zamS8u&ws_ab_test=searchweb0_0,searchweb201602_3_10065_10068_10000009_10084_10083_10080_10082_10081_10060_10062_10056_10055_10037_10054_10059_10032_10099_10078_10079_10077_10000012_426_10103_10073_10102_10000015_10096_10052_10053_10107_10050_10106_10051,searchweb201603_1,afswitch_3_afChannel,single_sort_0_default&btsid=7dc23b32-807b-416b-9b43-88c36e40e12c)|
 
-#### One wire & PID
+## One wire & PID
 
 | Denomination                  | Qty | Unit Price | Supplier             |
 | ----------------------------- | --- | ---------- | -------------------- |
@@ -72,7 +64,7 @@
 | 3.5 mm male plug              | 1   | 0.1        | [ebay](http://www.ebay.com/itm/172001125871) | <img src="images/35mm-plug.jpg" width="48"> | |
 | 3.5 Female jack PCB PF3024M   | 1   | 0.3        | [ebay](http://www.ebay.com/itm/331809367438) | <img src="images/35mm-female.jpg" width="48"> | |
 
-#### USB
+## USB
 
 | Denomination                  | Qty | Unit Price | Supplier             |
 | ----------------------------- | --- | ---------- | -------------------- |
@@ -80,7 +72,7 @@
 | USB mini PCB connector        | 1   | 0.05       | [ebay](http://www.ebay.com/itm/20-Pcs-Replacement-USB-Mini-5-Pin-Female-SMT-PCB-Mount-Jacks-LW-/171817138823?hash=item2801197a87:g:KUgAAOSwEgVWT4m-) |
 | Capacitor 10 uF 0805          | 1   | 0.01       |                      |
 
-#### Food
+## Food
 
 | Denomination                  | Qty | Unit Price | Supplier             |
 | ----------------------------- | --- | ---------- | -------------------- |
@@ -92,7 +84,7 @@
 | Cable 2 pins   KF2510-2P      | 2   | 0.5        | ebay | | |
 | Peristaltic pumps             | 2   | 7          | [ebay](http://www.ebay.com/itm/201749015545?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT) |   | |
 
-#### Weight
+## Weight
 
 | Denomination                  | Qty | Unit Price | Supplier             |
 | ----------------------------- | --- | ---------- | -------------------- |
@@ -108,7 +100,7 @@
 | Header 5 pins  KF2510-5P      | 1   | 0.2   | | | |
 | Cable 5 pins   KF2510-5P      | 1   | 0.6   |  |  | |
 
-#### LORA
+## LORA
 
 | Denomination                  | Qty | Unit Price | Supplier             |
 | ----------------------------- | --- | ---------- | -------------------- |
@@ -118,7 +110,7 @@
 | Microchip Lora RN2483         | 1   | 15         | [mouser](http://www.mouser.ch/ProductDetail/Microchip-Technology/RN2483-I-RM101/?qs=sGAEpiMZZMuI1aKsGLfKZOQCMfxWOhw5J%2fmjVNtRvb8%3d) |
 | SMA Edge connector            | 1   | 0.3        | [ebay](http://www.ebay.com/itm/172409963484?_trksid=p2060353.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT) |
 
-#### Stepper
+## Stepper
 
 | Denomination                  | Qty | Unit Price | Supplier             |
 | ----------------------------- | --- | ---------- | -------------------- |
@@ -129,7 +121,7 @@
 | Led Red 0805                  | 4   | 0.01       |                      |
 | Stepper (agitation)           | 1   | 15         | Need to confirm price |   | |
 
-#### Memory
+## Memory
 
 | Denomination                  | Qty | Unit Price | Supplier             |
 | ----------------------------- | --- | ---------- | -------------------- |
@@ -138,3 +130,17 @@
 | Resistor 1k 0805              | 1   | 0.01       |                      |
 | Capacitor 100 nF 0805         | 1   | 0.01       |                      |
 
+## LCD
+
+| Denomination                  | Qty | Unit Price | Supplier        | Image | Remarks |
+| ----------------------------- | --- | ---------- | --------------- | ----- | ------- |
+| Atmega32U4 44TQFP             | 1   | 3.6        | [aliexpress](https://www.aliexpress.com/item/10pcs-lot-ATMEGA32U4-AU-ATMEGA32U4-TQFP-44-IC-8-bit-Microcontroller-with-16-32K-Bytes-of/32720185776.html?spm=2114.13010608.0.0.Brw1qI) | <img src="images/atmega32u4-au.jpg" width="48"> | |
+| Capacitor 100 nF 0805         | ?   | 0.01       |                      |
+| Capacitor 22 pF 0805          | 2   | 0.02       |                      |
+| Crystal 16MHz 5032            | 1   | 0.25       | |
+| Resistor 1M 0805              | 1   | 0.01       |                      |
+| Resistor 10k 0805             | ?   | 0.01       |                      |
+| ZIF connector FH12-08S-1SH    | 1   | 0.16       | [aliexpress](https://www.aliexpress.com/snapshot/7326978877.html?orderId=72887395416335&productId=32468149160)                |
+| FPC 8-pin 1mm AWM 20624       | 1   | 0.2        | |
+| 12mm Rotary Encoder w switch  | 1   |            | [aliexpress](https://www.aliexpress.com/snapshot/7321568543.html?spm=2114.13010608.0.0.WuBkow&orderId=72780181866335&productId=32346748762)|
+| LCD 20x4 HD44780 5v           | 1   | 4          | [ebay](http://www.ebay.com/itm/2004-204-20x4-Character-LCD-Display-Module-HD44780-Controller-Blue-Blacklight-/381374605432?hash=item58cbb2a878:g:urwAAOSwj0NUjt4w) |
