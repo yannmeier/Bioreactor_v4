@@ -136,6 +136,7 @@
 | ----------------------------- | --- | ---------- | --------------- | ----- | ------- |
 | Atmega32U4 44TQFP             | 1   | 3.6        | [aliexpress](https://www.aliexpress.com/item/10pcs-lot-ATMEGA32U4-AU-ATMEGA32U4-TQFP-44-IC-8-bit-Microcontroller-with-16-32K-Bytes-of/32720185776.html?spm=2114.13010608.0.0.Brw1qI) | <img src="images/atmega32u4-au.jpg" width="48"> | |
 | Capacitor 100 nF 0805         | ?   | 0.01       |                      |
+| Capacitor 10 uF 0805          | 1   | 0.01       |                      |
 | Capacitor 22 pF 0805          | 2   | 0.02       |                      |
 | Crystal 16MHz 5032            | 1   | 0.25       | |
 | Resistor 1M 0805              | 1   | 0.01       |                      |
