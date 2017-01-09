@@ -143,5 +143,5 @@
 | Resistor 10k 0805             | ?   | 0.01       |                      |
 | ZIF connector FH12-08S-1SH    | 1   | 0.16       | [aliexpress](https://www.aliexpress.com/snapshot/7326978877.html?orderId=72887395416335&productId=32468149160)                |
 | FPC 8-pin 1mm AWM 20624       | 1   | 0.2        | |
-| 12mm Rotary Encoder w switch  | 1   |            | [aliexpress](https://www.aliexpress.com/snapshot/7321568543.html?spm=2114.13010608.0.0.WuBkow&orderId=72780181866335&productId=32346748762)|
+| 12mm Rotary Encoder w switch  | 1   | 0.5        | [aliexpress](https://www.aliexpress.com/snapshot/7321568543.html?spm=2114.13010608.0.0.WuBkow&orderId=72780181866335&productId=32346748762)|
 | LCD 20x4 HD44780 5v           | 1   | 4          | [ebay](http://www.ebay.com/itm/2004-204-20x4-Character-LCD-Display-Module-HD44780-Controller-Blue-Blacklight-/381374605432?hash=item58cbb2a878:g:urwAAOSwj0NUjt4w) |
