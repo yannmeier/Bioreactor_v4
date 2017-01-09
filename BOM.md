@@ -1,4 +1,4 @@
-[Current stock}(https://docs.google.com/spreadsheets/d/1mCMbyp-5vMcfMzT4ovZjpsKi10JSWpNIOFcre1nF27s/edit?usp=sharing)
+[Current stock](https://docs.google.com/spreadsheets/d/1mCMbyp-5vMcfMzT4ovZjpsKi10JSWpNIOFcre1nF27s/edit?usp=sharing)
 
 # Bill Of Material (BOM)
 
