@@ -1,39 +1,30 @@
 <?xml version="1.0"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="586.5mm" height="524.5mm" viewBox="0 0 586.5 524.5" xmlns="http://www.w3.org/2000/svg" version="1.1">
-<g id="Sketch" transform="translate(300.750000,220.750000) scale(1,-1)">
-<path id="Sketch_w0000"  d="M 230.0 22.0 L 236.0 22.0 L 236.0 34.0 L 230.0 34.0 L 230.0 46.0 L 16.0 46.0 L 16.0 34.0 L 10.0 34.0 L 10.0 22.0 L 16.0 22.0 L 16.0 10.0 L 230.0 10.0 L 230.0 22.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
-<title>BASE_JUPE_MALE</title>
-</g>
-<g id="Sketch014" transform="translate(300.750000,220.750000) scale(1,-1)">
-<path id="Sketch014_w0000"  d="M -236.0 152.0 L -230.0 152.0 L -230.0 164.0 L -236.0 164.0 L -236.0 175.0 A 40.0 40.0 0 0 0 -196.0 215.0 L -50.0 215.0 A 40.0 40.0 0 0 0 -10.0000000001 174.999936462 L -10.0000000001 164.0 L -16.0 164.0 L -16.0 152.0 L -10.0 152.0 L -10.0 140.0 L -236.0 140.0 L -236.0 152.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
+<svg width="627.3mm" height="525.3mm" viewBox="0 0 627.3 525.3" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<g id="Sketch014" transform="translate(301.150000,221.150000) scale(1,-1)">
+<path id="Sketch014_w0000"  d="M -236.0 152.0 L -230.0 152.0 L -230.0 164.0 L -236.0 164.0 L -236.0 175.0 A 40.0 40.0 0 0 0 -196.0 215.0 L -50.0 215.0 A 40.0 40.0 0 0 0 -10.0000000001 174.999936462 L -10.0 164.0 L -16.0 164.0 L -16.0 152.0 L -10.0 152.0 L -10.0 140.0 L -236.0 140.0 L -236.0 152.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
 <title>BASE_JUPE_FEMELLE001</title>
 </g>
-<g id="Sketch001" transform="translate(300.750000,220.750000) scale(1,-1)">
+<g id="Sketch001" transform="translate(301.150000,221.150000) scale(1,-1)">
 <path id="Sketch001_w0000"  d="M -236.0 27.0 L -230.0 27.0 L -230.0 39.0 L -236.0 39.0 L -236.0 50.0 A 40.0 40.0 0 0 0 -196.0 90.0 L -50.0 90.0 A 40.0 40.0 0 0 0 -10.0000000001 50.0000868632 L -10.0000000001 39.0 L -16.0 39.0 L -16.0 27.0 L -10.0 27.0 L -10.0 15.0 L -236.0 15.0 L -236.0 27.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
 <title>BASE_JUPE_FEMELLE</title>
 </g>
-<g id="Sketch002" transform="translate(300.750000,220.750000) scale(1,-1)">
-<path id="Sketch002_w0000"  d="M 0.0 0.0 L 0.0 -67.5 L 6.0 -67.5 L 6.0 -142.5 L 0.0 -142.5 L 0.0 -210.0 L 67.5 -210.0 L 67.5 -204.0 L 142.5 -204.0 L 142.5 -210.0 L 210.0 -210.0 L 210.0 -175.5 L 245.0 -175.5 L 245.0 -169.5 L 280.0 -169.5 L 280.0 -128.5 L 274.0 -128.5 L 274.0 -81.5 L 280.0 -81.5 L 280.0 -40.5 L 245.0 -40.5 L 245.0 -34.5 L 210.0 -34.5 L 210.0 0.0 L 142.5 0.0 L 142.5 -6.0 L 67.5 -6.0 L 67.5 0.0 L 0.0 0.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
-<path id="Sketch002_w0001"  d="M 204.0 -67.5 L 210.0 -67.5 L 210.0 -142.5 L 204.0 -142.5 L 204.0 -67.5 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
-<title>BASE_FOND</title>
-</g>
-<g id="Sketch003" transform="translate(300.750000,220.750000) scale(1,-1)">
+<g id="Sketch003" transform="translate(301.150000,221.150000) scale(1,-1)">
 <path id="Sketch003_w0000"  d="M 0.0 -224.0 L 67.5 -224.0 L 67.5 -218.0 L 142.5 -218.0 L 142.5 -224.0 L 210.0 -224.0 L 210.0 -245.0 L 204.0 -245.0 L 204.0 -261.0 L 210.0 -261.0 L 210.0 -282.0 L 172.5 -282.0 L 172.5 -288.0 L 127.5 -288.0 L 127.5 -282.0 L 82.5 -282.0 L 82.5 -288.0 L 37.5 -288.0 L 37.5 -282.0 L 0.0 -282.0 L 0.0 -261.0 L 6.0 -261.0 L 6.0 -245.0 L 0.0 -245.0 L 0.0 -224.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
-<circle cx="32.3608252152" cy="-250.5" r="14.5" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
-<circle cx="20.0" cy="-229.0" r="2.0" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
-<circle cx="44.7216504303" cy="-272.0" r="2.0" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
-<circle cx="104.721153552" cy="-271.755817426" r="2.0" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
-<circle cx="92.1503532968" cy="-250.377908713" r="14.5" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
-<circle cx="79.5795530415" cy="-229.0" r="2.0" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
+<circle cx="37.0" cy="-252.0" r="14.5" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
+<circle cx="20.0" cy="-233.943422251" r="2.0" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
+<circle cx="54.0" cy="-270.056577749" r="2.0" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
+<circle cx="114.0" cy="-270.056577749" r="2.0" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
+<circle cx="97.0" cy="-252.0" r="14.5" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
+<circle cx="80.0" cy="-233.943422251" r="2.0" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
 <title>BASE_PAROI_FEMELLE_SIDE</title>
 </g>
-<g id="Sketch005" transform="translate(300.750000,220.750000) scale(1,-1)">
-<path id="Sketch005_w0000"  d="M -10.0 -220.0 L -31.0 -220.0 L -31.0 -226.0 L -47.0 -226.0 L -47.0 -220.0 L -68.0 -220.0 L -68.0 -182.5 L -74.0 -182.5 L -74.0 -137.5 L -68.0 -137.5 L -68.0 -92.5 L -74.0 -92.5 L -74.0 -47.5 L -68.0 -47.5 L -68.0 -10.0 L -47.0 -10.0 L -47.0 -4.0 L -31.0 -4.0 L -31.0 -10.0 L -10.0 -10.0 L -10.0 -77.5 L -4.0 -77.5 L -4.0 -152.5 L -10.0 -152.5 L -10.0 -220.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
+<g id="Sketch005" transform="translate(301.150000,221.150000) scale(1,-1)">
+<path id="Sketch005_w0000"  d="M -10.0 -208.0 L -31.0 -208.0 L -31.0 -214.0 L -47.0 -214.0 L -47.0 -208.0 L -68.0 -208.0 L -68.0 -176.5 L -74.0 -176.5 L -74.0 -131.5 L -68.0 -131.5 L -68.0 -86.5 L -74.0 -86.5 L -74.0 -41.5 L -68.0 -41.5 L -68.0 -10.0 L -47.0 -10.0 L -47.0 -4.0 L -31.0 -4.0 L -31.0 -10.0 L -10.0 -10.0 L -10.0 -71.5 L -4.0 -71.5 L -4.0 -146.5 L -10.0 -146.5 L -10.0 -208.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
 <path id="Sketch005_w0001"  d="M -41.0 -30.0 L -16.0 -30.0 L -16.0 -120.0 L -41.0 -120.0 L -41.0 -30.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
 <title>BASE_PAROI_MALE_BACK</title>
 </g>
-<g id="Sketch006" transform="translate(300.750000,220.750000) scale(1,-1)">
+<g id="Sketch006" transform="translate(301.150000,221.150000) scale(1,-1)">
 <path id="Sketch006_w0000"  d="M -295.0 -5.0 L -257.5 -5.0 L -257.5 -11.0 L -212.5 -11.0 L -212.5 -5.0 L -167.5 -5.0 L -167.5 -11.0 L -122.5 -11.0 L -122.5 -5.0 L -85.0 -5.0 L -85.0 -42.5 L -91.0 -42.5 L -91.0 -87.5 L -85.0 -87.5 L -85.0 -132.5 L -91.0 -132.5 L -91.0 -177.5 L -85.0 -177.5 L -85.0 -215.0 L -122.5 -215.0 L -122.5 -209.0 L -167.5 -209.0 L -167.5 -215.0 L -212.5 -215.0 L -212.5 -209.0 L -257.5 -209.0 L -257.5 -215.0 L -295.0 -215.0 L -295.0 -177.5 L -289.0 -177.5 L -289.0 -132.5 L -295.0 -132.5 L -295.0 -87.5 L -289.0 -87.5 L -289.0 -42.5 L -295.0 -42.5 L -295.0 -5.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
 <circle cx="-190.0" cy="-110.0" r="6.0" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
 <circle cx="-174.549754342" cy="-95.0487489118" r="2.0" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
@@ -51,7 +42,7 @@
 <circle cx="-187.5" cy="-42.5" r="2.5" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
 <title>BASE_INTERMEDIAIRE</title>
 </g>
-<g id="Sketch007" transform="translate(300.750000,220.750000) scale(1,-1)">
+<g id="Sketch007" transform="translate(301.150000,221.150000) scale(1,-1)">
 <path id="Sketch007_w0000"  d="M 15.0 60.0 L 82.5 60.0 L 82.5 54.0 L 157.5 54.0 L 157.5 60.0 L 225.0 60.0 L 225.0 81.0 L 231.0 81.0 L 231.0 97.0 L 225.0 97.0 L 225.0 118.0 L 187.5 118.0 L 187.5 124.0 L 142.5 124.0 L 142.5 118.0 L 97.5 118.0 L 97.5 124.0 L 52.5 124.0 L 52.5 118.0 L 15.0 118.0 L 15.0 97.0 L 9.0 97.0 L 9.0 81.0 L 15.0 81.0 L 15.0 60.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
 <path id="Sketch007_w0001"  d="M 92.5 66.0 L 147.5 66.0 L 147.5 60.0 L 92.5 60.0 L 92.5 66.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
 <path id="Sketch007_w0002"  d="M 56.0 88.0 L 184.0 88.0 L 184.0 92.0 L 56.0 92.0 L 56.0 88.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
@@ -59,25 +50,39 @@
 <path id="Sketch007_w0004"  d="M 56.0 82.0 L 50.0 82.0 L 50.0 76.0 L 56.0 76.0 L 56.0 82.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
 <title>BASE_PAROI_MALE_LCD</title>
 </g>
-<g id="Sketch008" transform="translate(300.750000,220.750000) scale(1,-1)">
+<g id="Sketch002" transform="translate(301.150000,221.150000) scale(1,-1)">
+<path id="Sketch002_w0000"  d="M 0.0 0.0 L 0.0 -67.5 L 6.0 -67.5 L 6.0 -142.5 L 0.0 -142.5 L 0.0 -210.0 L 67.5 -210.0 L 67.5 -204.0 L 142.5 -204.0 L 142.5 -210.0 L 210.0 -210.0 L 210.0 -175.5 L 245.0 -175.5 L 245.0 -169.5 L 280.0 -169.5 L 280.0 -128.5 L 274.0 -128.5 L 274.0 -81.5 L 280.0 -81.5 L 280.0 -40.5 L 245.0 -40.5 L 245.0 -34.5 L 210.0 -34.5 L 210.0 0.0 L 142.5 0.0 L 142.5 -6.0 L 67.5 -6.0 L 67.5 0.0 L 0.0 0.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
+<path id="Sketch002_w0001"  d="M 204.0 -67.5 L 210.0 -67.5 L 210.0 -142.5 L 204.0 -142.5 L 204.0 -67.5 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
+<title>BASE_FOND</title>
+</g>
+<g id="Sketch" transform="translate(301.150000,221.150000) scale(1,-1)">
+<path id="Sketch_w0000"  d="M 230.0 22.0 L 236.0 22.0 L 236.0 34.0 L 230.0 34.0 L 230.0 46.0 L 16.0 46.0 L 16.0 34.0 L 10.0 34.0 L 10.0 22.0 L 16.0 22.0 L 16.0 10.0 L 230.0 10.0 L 230.0 22.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
+<title>BASE_JUPE_MALE</title>
+</g>
+<g id="Sketch008" transform="translate(301.150000,221.150000) scale(1,-1)">
 <path id="Sketch008_w0000"  d="M -43.0 101.0 L -78.0 101.0 L -78.0 117.0 L -84.0 117.0 L -84.0 123.0 L -78.0 123.0 L -78.0 129.0 L -14.0 129.0 L -14.0 115.0 L -8.0 115.0 L -8.0 95.0 L -43.0 95.0 L -43.0 101.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
 <title>BASE_PAROI_LCD1</title>
 </g>
-<g id="Sketch009" transform="translate(300.750000,220.750000) scale(1,-1)">
+<g id="Sketch009" transform="translate(301.150000,221.150000) scale(1,-1)">
 <path id="Sketch009_w0000"  d="M -90.0 95.0 L -125.0 95.0 L -125.0 101.0 L -160.0 101.0 L -160.0 117.0 L -166.0 117.0 L -166.0 123.0 L -160.0 123.0 L -160.0 129.0 L -96.0 129.0 L -96.0 115.0 L -90.0 115.0 L -90.0 95.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
 <title>BASE_PAROI_LCD2</title>
 </g>
-<g id="Sketch010" transform="translate(300.750000,220.750000) scale(1,-1)">
+<g id="Sketch010" transform="translate(301.150000,221.150000) scale(1,-1)">
 <path id="Sketch010_w0000"  d="M 15.0 130.0 L 156.0 130.0 L 156.0 144.0 L 150.0 144.0 L 150.0 158.0 L 109.0 158.0 L 109.0 164.0 L 62.0 164.0 L 62.0 158.0 L 21.0 158.0 L 21.0 144.0 L 15.0 144.0 L 15.0 130.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
 <path id="Sketch010_w0001"  d="M 52.0 152.0 L 72.0 152.0 L 72.0 142.0 L 52.0 142.0 L 52.0 152.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
 <title>BASE_LCD_PAROI_MALE</title>
 </g>
-<g id="Sketch013" transform="translate(300.750000,220.750000) scale(1,-1)">
-<path id="Sketch013_w0000"  d="M 230.0 182.0 L 236.0 182.0 L 236.0 194.0 L 230.0 194.0 L 230.0 206.0 L 16.0 206.0 L 16.0 194.0 L 10.0 194.0 L 10.0 182.0 L 16.0 182.0 L 16.0 170.0 L 230.0 170.0 L 230.0 182.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
-<title>BASE_JUPE_MALE001</title>
+<g id="Sketch011" transform="translate(301.150000,221.150000) scale(1,-1)">
+<path id="Sketch011_w0000"  d="M 320.0 3.0 L 320.0 143.0 L 250.0 143.0 L 250.0 137.0 L 244.0 137.0 L 244.0 9.0 L 250.0 9.0 L 250.0 3.0 L 320.0 3.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
+<circle cx="283.0" cy="22.0" r="3.5" stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none"/>
+<title>BASE_COUVERCLE_LCD</title>
 </g>
-<g id="Sketch012" transform="translate(300.750000,220.750000) scale(1,-1)">
+<g id="Sketch012" transform="translate(301.150000,221.150000) scale(1,-1)">
 <path id="Sketch012_w0000"  d="M -230.0 -234.0 L -162.5 -234.0 L -162.5 -228.0 L -87.5 -228.0 L -87.5 -234.0 L -20.0 -234.0 L -20.0 -255.0 L -26.0 -255.0 L -26.0 -271.0 L -20.0 -271.0 L -20.0 -292.0 L -57.5 -292.0 L -57.5 -298.0 L -102.5 -298.0 L -102.5 -292.0 L -147.5 -292.0 L -147.5 -298.0 L -192.5 -298.0 L -192.5 -292.0 L -230.0 -292.0 L -230.0 -271.0 L -224.0 -271.0 L -224.0 -255.0 L -230.0 -255.0 L -230.0 -234.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
 <title>BASE_PAROI_FEMELLE_SIDE002</title>
+</g>
+<g id="Sketch013" transform="translate(301.150000,221.150000) scale(1,-1)">
+<path id="Sketch013_w0000"  d="M 230.0 182.0 L 236.0 182.0 L 236.0 194.0 L 230.0 194.0 L 230.0 206.0 L 16.0 206.0 L 16.0 194.0 L 10.0 194.0 L 10.0 182.0 L 16.0 182.0 L 16.0 170.0 L 230.0 170.0 L 230.0 182.0 " stroke="#000000" stroke-width="0.35 px" style="stroke-width:0.35;stroke-miterlimit:4;stroke-dasharray:none;fill:none;fill-rule: evenodd "/>
+<title>BASE_JUPE_MALE001</title>
 </g>
 </svg>
