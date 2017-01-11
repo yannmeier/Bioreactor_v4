@@ -47,7 +47,7 @@
 | Led Blue 0805 (blink)         | 1   | 0.01       |                      |
 | Resistor 1k 0805              | 5   | 0.01       |                      |
 | Resistor 10k 0805             | 3   | 0.01       |                      |
-| ZIF connector FH12-08S-1SH    | 1   | 0.16       | [aliexpress](https://www.aliexpress.com/snapshot/7326978877.html?orderId=72887395416335&productId=32468149160)                |
+| FPC 8-pin 1mm AWM 20624       | 1   | 0.16       | [aliexpress](https://www.aliexpress.com/snapshot/7326978877.html?orderId=72887395416335&productId=32468149160)                |
 | RJ-11 connector 6P6C (RJ12)   | 2   | 0.1        | [aliexpress] (https://www.aliexpress.com/item/100PCS-RJ11-socket-Gray-RJ11-telephone-90-degrees-6pin-crystal-female-6p6c-socket/32778483833.html?spm=2114.30010308.3.19.zamS8u&ws_ab_test=searchweb0_0,searchweb201602_3_10065_10068_10000009_10084_10083_10080_10082_10081_10060_10062_10056_10055_10037_10054_10059_10032_10099_10078_10079_10077_10000012_426_10103_10073_10102_10000015_10096_10052_10053_10107_10050_10106_10051,searchweb201603_1,afswitch_3_afChannel,single_sort_0_default&btsid=7dc23b32-807b-416b-9b43-88c36e40e12c)|
 
 ## One wire & PID
@@ -119,7 +119,8 @@
 | BSP75 SOT223                  | 4   | 0.3        | [aliexpress](https://www.aliexpress.com/item/Free-shipping-50pcs-lot-BSP75-BSP76-BSP77-SOT223/2026904236.html?spm=2114.30010308.3.10.m2zlgV&ws_ab_test=searchweb0_0,searchweb201602_3_10065_10068_10000009_10084_10083_10080_10082_10081_10060_10062_10056_10055_10037_10054_10059_10032_10099_10078_10079_10077_10000012_426_10103_10073_10102_10000015_10096_10052_10053_10107_10050_10106_10051,searchweb201603_1,afswitch_3_afChannel,single_sort_0_default&btsid=413c08f9-9370-41e8-b673-9b6507cf92a5) |  | |
 | Resistor 10k 0805             | 4   | 0.01       |                      |
 | Led Red 0805                  | 4   | 0.01       |                      |
-| Stepper (agitation)           | 1   | 15         | Need to confirm price |   | |
+| Nema 17 Unipolar Stepper 12v  | 1   | 15         | [stepperonline](http://www.omc-stepperonline.com/nema-17-unipolar-stepper-031a-158ncm224ozin-17hs130316s-p-65.html) | <img src="images/stepper.jpg" width="48"> | |
+| Round magnet 20 x 5mm         | 2   | 0.75       | [ebay](http://www.ebay.com/itm/20Pcs-N50-Super-Strong-Disc-Cylinder-Round-Magnets-20x5mm-Rare-Earth-Neodymium-/371778047624?var=&hash=item568fb2ce88:m:mIjauxTTiDkmOyNvGzp6vmw) | <img src="images/magnet.jpg" width="48"> |
 
 ## Memory
 
@@ -141,7 +142,8 @@
 | Crystal 16MHz 5032            | 1   | 0.25       | |
 | Resistor 1M 0805              | 1   | 0.01       |                      |
 | Resistor 10k 0805             | ?   | 0.01       |                      |
-| ZIF connector FH12-08S-1SH    | 1   | 0.16       | [aliexpress](https://www.aliexpress.com/snapshot/7326978877.html?orderId=72887395416335&productId=32468149160)                |
-| FPC 8-pin 1mm AWM 20624       | 1   | 0.2        | |
+| FPC 8-pin 1mm AWM 20624       | 1   | 0.16       | [aliexpress](https://www.aliexpress.com/snapshot/7326978877.html?orderId=72887395416335&productId=32468149160)                |
 | 12mm Rotary Encoder w switch  | 1   | 0.5        | [aliexpress](https://www.aliexpress.com/snapshot/7321568543.html?spm=2114.13010608.0.0.WuBkow&orderId=72780181866335&productId=32346748762)|
 | LCD 20x4 HD44780 5v           | 1   | 4          | [ebay](http://www.ebay.com/itm/2004-204-20x4-Character-LCD-Display-Module-HD44780-Controller-Blue-Blacklight-/381374605432?hash=item58cbb2a878:g:urwAAOSwj0NUjt4w) |
+| Flat cable 8-pin 1mm 20cm     | 1   | 0.3        | |
+

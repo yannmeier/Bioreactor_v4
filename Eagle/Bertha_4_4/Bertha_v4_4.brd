@@ -5449,10 +5449,10 @@
 <text x="78.112784375" y="33.918525" size="0.8128" layer="27" rot="R180">D5</text>
 <text x="61.888696875" y="41.784025" size="0.8128" layer="27" rot="R180">D10</text>
 <text x="9.567934375" y="74.024946875" size="0.8128" layer="25" rot="R180">D11</text>
-<hole x="-2" y="76" drill="4"/>
-<hole x="92" y="76" drill="4"/>
-<hole x="-2" y="3" drill="4"/>
-<hole x="92" y="3" drill="4"/>
+<hole x="-2" y="76" drill="3.2"/>
+<hole x="92" y="76" drill="3.2"/>
+<hole x="-2" y="3" drill="3.2"/>
+<hole x="92" y="3" drill="3.2"/>
 <text x="94.049428125" y="7.40274375" size="2.54" layer="27" rot="R90">BerthaV4.4</text>
 <text x="-1.595646875" y="10.453128125" size="2.54" layer="27" rot="R90">BerthaV4.4</text>
 <text x="-1.4505875" y="52.556009375" size="2.54" layer="27" rot="R90">BerthaV4.4</text>
