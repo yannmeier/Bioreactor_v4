@@ -81,12 +81,13 @@ In this project we use many non standard libraries. By default the Arduino IDE
 will look for them in `~/Arduino/libraries`
 
 If you are using only our project it is easier to directly point this folder
-to the libraries that are present in the github.
+to the libraries that are present in the github. 
 
 ```
 mkdir ~/Arduino/
 ln -s ~/git/bioreactor/Bioreactor_v4/Arduino/libraries/ ~/Arduino/
 ```
+Attention: Time library update v1.5.0 change commited in BioMain including TimeLib.h instead of Time.h resolves bugs on OSX 
 
 ## That's it
 
