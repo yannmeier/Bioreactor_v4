@@ -4,7 +4,7 @@
 #include <NilRTOS.h> //MultiThread
 #include <SPI.h>     //Flash SPI
 #include <avr/wdt.h> //Watchdog
-#include <Time.h>
+#include <TimeLib.h>
 /******************
  * DEFINE CARD TYPE
  ******************/
