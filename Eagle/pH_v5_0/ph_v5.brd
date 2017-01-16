@@ -5433,9 +5433,9 @@
 <wire x1="21.2626875" y1="63.61193125" x2="21.2346" y2="63.58384375" width="0.4064" layer="25"/>
 <text x="1.21031875" y="77.5162625" size="1.016" layer="25">SPI </text>
 <text x="9.567934375" y="74.024946875" size="0.8128" layer="25" rot="R180">D11</text>
-<hole x="-2" y="76" drill="2"/>
-<hole x="92" y="76" drill="2"/>
-<hole x="-2" y="3" drill="2"/>
+<hole x="-2" y="76" drill="3.2"/>
+<hole x="92" y="76" drill="3.2"/>
+<hole x="-2" y="3" drill="3.2"/>
 <text x="-1.595646875" y="10.453128125" size="2.54" layer="25" rot="R90">pH V5.0</text>
 <text x="-1.46399375" y="57.638521875" size="2.54" layer="25" rot="R90">pH V5.0</text>
 <text x="94.378559375" y="57.770325" size="2.54" layer="25" rot="R90">pH V5.0</text>
