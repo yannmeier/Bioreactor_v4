@@ -36,7 +36,7 @@ void pid_ctrl()
   uint16_t target=(uint16_t)(getParameter(PARAM_TEMP_TARGET)) ;
   if(target> TEMP_MAX_HARD || target> getParameter(PARAM_TEMP_MAX)){
     //some error event for setting the temp to high here
-    setAndSaveParameter(PARAM_TEMP_TARGET,min(TEMP_MAX_HARD,getParameter(PARAM_TEMP_MAX)));
+    setParameter(PARAM_TEMP_TARGET,min(TEMP_MAX_HARD,getParameter(PARAM_TEMP_MAX)));
     target=min(TEMP_MAX_HARD,getParameter(PARAM_TEMP_MAX));
   }
   heatingRegInput = getParameter(PARAM_TEMP_LIQ);
