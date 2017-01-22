@@ -27,8 +27,8 @@
 #define NB_PARAMETERS_LINEAR_LOGS  26
 
 
-//When parameters are set (and saved) an event is recorded (256-281 : A-Z + .... (if more parameters than 26))
 #define EVENT_SAVE_ALL_PARAMETER     255
+//When parameters are set (and saved) an event is recorded (256-281 : A-Z + .... (if more parameters than 262 ...)
 #define EVENT_PARAMETER_SET          256
 
 
