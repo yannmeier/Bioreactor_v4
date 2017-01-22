@@ -34,47 +34,13 @@ As project name just enter 'BioMain' and for the location: `~/git/bioreactor/Bio
 After don't select any template (just normal .ino files that are already in the folder). The program
 will automatically import the libraries if there are placed correctly (see just after).
 
-## Hardware support for Leonardo 8MHz
+## Hardware support for Leonardo 8MHz = Lilipad Arduino USB
 
-The version 4.2 of the bioreactor is opeerating at 8MHz/3V3 instead of the standard 16MHz/5V, thus the boards.txt files that defines the options to burn the bootloader must be adjusted (file can be found under your arduino installation directory, eg: (for Linux) /usr/share/arduino-1.6.13/hardware/arduino/boards.txt OR (for OSX) /Applications/Arduino.app/Contents/Java/hardware/arduino/avr/boards.txt for the Arduino IDE (or /etc/arduino/boards.txt) in fedora OR /usr/lib64/eclipse/arduinoPlugin/packages/arduino/hardware/avr/1.6.15/boards.txt for the Eclipse IDE) by adding the follwing lines:
-```
-leonardo8.name=Arduino Leonardo 8MHz
-leonardo8.vid.0=0x2341
-leonardo8.pid.0=0x0036
-leonardo8.vid.1=0x2341
-leonardo8.pid.1=0x8036
-leonardo8.vid.2=0x2A03
-leonardo8.pid.2=0x0036
-leonardo8.vid.3=0x2A03
-leonardo8.pid.3=0x8036
+The version 4.2 of the bioreactor is opeerating at 8MHz/3V3 instead of the standard 16MHz/5V.
+In order to have the correct boadloader just use Lilipad Arduino USB as board.
 
-leonardo8.upload.tool=avrdude
-leonardo8.upload.protocol=avr109
-leonardo8.upload.maximum_size=28672 
-leonardo8.upload.maximum_data_size=2560
-leonardo8.upload.speed=57600
-leonardo8.upload.disable_flushing=true
-leonardo8.upload.use_1200bps_touch=true
-leonardo8.upload.wait_for_upload_port=true
+If you do any mistake and try to pretend it is a normal Leonardo, you will be able to flash the program but the USB port will not be recognized. You will have to reflash the bootleader !!!```
 
-leonardo8.bootloader.tool=avrdude
-leonardo8.bootloader.low_fuses=0xff
-leonardo8.bootloader.high_fuses=0xd8
-leonardo8.bootloader.extended_fuses=0xcb
-leonardo8.bootloader.file=caterina-LilyPadUSB/Caterina-LilyPadUSB.hex
-leonardo8.bootloader.unlock_bits=0x3F
-leonardo8.bootloader.lock_bits=0x2F
-
-leonardo8.build.mcu=atmega32u4
-leonardo8.build.f_cpu=8000000L
-leonardo8.build.vid=0x2341
-leonardo8.build.pid=0x8036
-leonardo8.build.usb_product="Arduino Leonardo"
-leonardo8.build.board=AVR_LEONARDO
-leonardo8.build.core=arduino
-leonardo8.build.variant=leonardo
-leonardo8.build.extra_flags={build.usb_flags}
-```
 ## Libraries
 
 In this project we use many non standard libraries. By default the Arduino IDE
