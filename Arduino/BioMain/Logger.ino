@@ -29,7 +29,14 @@
 #if defined(SST64) || defined(SST32) 
 
 
-SST sst=SST('B',6); //D10 is B6
+#if FLASH_SELECT == D10 //Flash SS_SPI
+  SST sst=SST('B',6); //D10 is B6
+#endif
+#if FLASH_SELECT == A3 //Flash SS_SPI
+  SST sst=SST('F',4); // A3 is F4
+#endif
+
+
 
 static uint32_t nextEntryID = 0;
 boolean logActive=false;
@@ -361,6 +368,7 @@ void validateFlash(Print* output) {
 
 
 #ifdef LOG_INTERVAL
+
 #ifdef DEBUG_LOGS
 NIL_WORKING_AREA(waThreadLogger, 120);
 #else

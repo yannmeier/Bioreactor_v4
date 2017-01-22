@@ -4,7 +4,7 @@
 #include <NilRTOS.h> //MultiThread
 #include <SPI.h>     //Flash SPI
 #include <avr/wdt.h> //Watchdog
-#include <TimeLib.h>
+#include <Time.h>
 /******************
  * DEFINE CARD TYPE
  ******************/
@@ -15,7 +15,7 @@
 /*******************************************
  * DEFINE CARD VERSION (default is nothing)
  ******************************************/
-#define BEFORE_43  1
+//#define BEFORE_43  1
 //#define VERSION_43 1
 
 /******************************************
@@ -88,7 +88,6 @@
 
 #ifdef TYPE_GAS
 #define GAS_CTRL           1
-#define THR_LINEAR_LOGS 	1
 #define THR_MONITORING     1  // starts the blinking led and the watch dog counter
 #define MONITORING_LED     13
 #endif
@@ -121,6 +120,9 @@
   #endif
   #define LOG_INTERVAL 10  //Interval in (s) between logs
 #endif
+
+
+
 /*******************************
  * CARD DEFINITION (HARD CODED)
  *******************************/
