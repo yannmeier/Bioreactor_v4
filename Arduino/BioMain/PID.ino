@@ -33,21 +33,21 @@ NIL_THREAD(Thread_PID, arg)
 
 void pid_ctrl()
 {
-  uint16_t target=(uint16_t)(getParameter(PARAM_TEMP_TARGET)) ;
-  if(target> TEMP_MAX_HARD || target> getParameter(PARAM_TEMP_MAX)){
+  int target=getParameter(PARAM_TEMP_TARGET);
+  if (target>TEMP_MAX_HARD || target>getParameter(PARAM_TEMP_MAX)){
     //some error event for setting the temp to high here
-    setParameter(PARAM_TEMP_TARGET,min(TEMP_MAX_HARD,getParameter(PARAM_TEMP_MAX)));
+    setAndSaveParameter(PARAM_TEMP_TARGET,min(TEMP_MAX_HARD,getParameter(PARAM_TEMP_MAX)));
     target=min(TEMP_MAX_HARD,getParameter(PARAM_TEMP_MAX));
   }
   heatingRegInput = getParameter(PARAM_TEMP_LIQ);
   heatingRegSetpoint = target;
   heatingRegPID.Compute();                                   // the computation takes only 30ms!
-  if((getParameter(PARAM_TEMP_PCB)<SAFETY_TEMP)
+  if ((getParameter(PARAM_TEMP_PCB)<SAFETY_TEMP)
       && (getParameter(PARAM_TEMP_PCB) != ERROR_VALUE)
       && (getParameter(PARAM_TEMP_LIQ)   !=ERROR_VALUE)
       && getParameterBit(PARAM_STATUS,FLAG_PID_CONTROL) ){
        analogWrite(TEMP_PID, heatingRegOutput);
-   }else {
+   } else {
      analogWrite(TEMP_PID,0);
    }
 }
