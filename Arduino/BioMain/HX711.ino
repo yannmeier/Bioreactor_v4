@@ -1,8 +1,6 @@
 #if defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
 
 #include "HX711.h"
-
-#define calibration_factor -7050.10 //From SparkFun_HX711_Calibration sketch
 HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
 
 
@@ -34,7 +32,6 @@ NIL_THREAD(ThreadWeight, arg) {
   unsigned long tsinceLastEvent=0;        
   unsigned long lastCycleMillis=millis(); // when was the last food cycle
   all_off();                              //clear flags, shut down pumps
-  scale.set_scale(calibration_factor);    //Default from SparkFun_HX711_Calibration sketch  
   nilThdSleepMilliseconds(2000);
 
   //get to the last log status, worst case: just 18 seconds lag with current state
@@ -60,8 +57,9 @@ NIL_THREAD(ThreadWeight, arg) {
     	nilThdSleepMilliseconds(10);
     }
     protectThread();
-    weight = 3*scale.get_units(); //to be improved (change calib values for the HX711)
+    weight=(int)round((float)(scale.read_average(5)+(long)getParameter(PARAM_WEIGHT_OFFSET)*20)/(-1*(float)getParameter(PARAM_WEIGHT_FACTOR)/50));
     unprotectThread();
+    Serial.println(weight);
 
     /***********************************************
              Standby and Error management

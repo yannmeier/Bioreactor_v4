@@ -57,8 +57,8 @@ void resetParameters() {
   setAndSaveParameter(PARAM_SEDIMENTATION_TIME, 30);
   setAndSaveParameter(PARAM_FILLED_TIME, 30);
   setAndSaveParameter(PARAM_WEIGHT_STATUS, 0);
-  setAndSaveParameter(PARAM_WEIGHT_FACTOR, 5000);
-  setAndSaveParameter(PARAM_WEIGHT_OFFSET, 0);
+  setAndSaveParameter(PARAM_WEIGHT_FACTOR, 16424);
+  setAndSaveParameter(PARAM_WEIGHT_OFFSET, 19776);
 #endif
 
 #ifdef PH_CTRL
