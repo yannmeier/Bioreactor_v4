@@ -13996,7 +13996,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="R27" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="47K"/>
 <part name="C26" library="freetronics-master-v1" deviceset="CAP" device="0805" value="1nF"/>
 <part name="R28" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="0R"/>
-<part name="C27" library="freetronics-master-v1" deviceset="CAP" device="0805" value="100nF"/>
+<part name="C27" library="freetronics-master-v1" deviceset="CAP" device="0805" value="100n"/>
 <part name="R29" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="3k3"/>
 <part name="R30" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="10k"/>
 <part name="R31" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="10k"/>
@@ -14004,7 +14004,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="R33" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="10k"/>
 <part name="R34" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="10k"/>
 <part name="C28" library="freetronics-master-v1" deviceset="CAP" device="0805" value="100nF"/>
-<part name="C29" library="freetronics-master-v1" deviceset="CAP" device="0805" value="220nF"/>
+<part name="C29" library="freetronics-master-v1" deviceset="CAP" device="0805" value="220n"/>
 <part name="R35" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="10k"/>
 <part name="R36" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="10k"/>
 <part name="R37" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="4K7"/>
@@ -14012,8 +14012,8 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="C31" library="freetronics-master-v1" deviceset="CAP" device="0805" value="100nF"/>
 <part name="C32" library="freetronics-master-v1" deviceset="CAP" device="0805" value="100nF"/>
 <part name="C33" library="freetronics-master-v1" deviceset="CAP" device="0805" value="100nF"/>
-<part name="C34" library="freetronics-master-v1" deviceset="CAP" device="0805" value="220nF"/>
-<part name="C35" library="freetronics-master-v1" deviceset="CAP" device="0805" value="220nF"/>
+<part name="C34" library="freetronics-master-v1" deviceset="CAP" device="0805" value="220n"/>
+<part name="C35" library="freetronics-master-v1" deviceset="CAP" device="0805" value="220n"/>
 <part name="R38" library="rcl" deviceset="R-EU_" device="R2010" value="0.2R 1W"/>
 <part name="C47" library="freetronics-original" deviceset="CAP_POL" device="E" value="100uF 50V"/>
 <part name="P+38" library="SparkFun" deviceset="3.3V" device=""/>
