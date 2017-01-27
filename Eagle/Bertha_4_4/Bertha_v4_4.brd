@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.5.0">
+<eagle version="6.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
@@ -148,10 +148,10 @@
 </layers>
 <board>
 <plain>
-<wire x1="-5" y1="-2.9" x2="95" y2="-2.9" width="0" layer="20"/>
-<wire x1="95" y1="-2.9" x2="95" y2="81.7" width="0" layer="20"/>
+<wire x1="-5" y1="-1.9" x2="95" y2="-1.9" width="0" layer="20"/>
+<wire x1="95" y1="-1.9" x2="95" y2="81.7" width="0" layer="20"/>
 <wire x1="95" y1="81.7" x2="-5" y2="81.7" width="0" layer="20"/>
-<wire x1="-5" y1="81.7" x2="-5" y2="-2.9" width="0" layer="20"/>
+<wire x1="-5" y1="81.7" x2="-5" y2="-1.9" width="0" layer="20"/>
 <rectangle x1="42.99585" y1="35.87115" x2="68.98005" y2="35.90925" layer="203" rot="R180"/>
 <rectangle x1="42.99585" y1="35.90925" x2="68.98005" y2="35.94735" layer="203" rot="R180"/>
 <rectangle x1="42.99585" y1="35.94735" x2="68.98005" y2="35.98545" layer="203" rot="R180"/>
@@ -6811,9 +6811,6 @@ design rules under a new name.</description>
 <autorouter>
 <pass name="Default">
 <param name="RoutingGrid" value="6mil"/>
-<param name="AutoGrid" value="1"/>
-<param name="Efforts" value="0"/>
-<param name="TopRouterVariant" value="1"/>
 <param name="tpViaShape" value="round"/>
 <param name="PrefDir.1" value="|"/>
 <param name="PrefDir.2" value="0"/>
