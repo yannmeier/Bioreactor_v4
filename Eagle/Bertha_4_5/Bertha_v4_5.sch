@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.5.0">
+<eagle version="7.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
@@ -13804,7 +13804,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="RK1" library="resistor" deviceset="R-EU_" device="M0805" value="10K"/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
 <part name="GND27" library="supply1" deviceset="GND" device=""/>
-<part name="HX1" library="transistor-power" deviceset="IRF3704" device="S"/>
+<part name="HX1" library="transistor-power" deviceset="IRF3704" device="S" value="IPB081N06L3GATMA1"/>
 <part name="R11" library="rcl" deviceset="R-EU_" device="R0805" value="1K"/>
 <part name="P+2" library="supply1" deviceset="+12V" device=""/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
