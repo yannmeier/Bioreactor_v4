@@ -13130,7 +13130,7 @@ Source: http://www.lumberg.com/Produkte/PDFs/1503_09.pdf</description>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
 <part name="GND27" library="supply1" deviceset="GND" device=""/>
 <part name="HX1" library="transistor-power" deviceset="IRF3704" device="S" value="IPB081N06L3GATMA1"/>
-<part name="R11" library="rcl" deviceset="R-EU_" device="R0805" value="1K"/>
+<part name="R11" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
 <part name="P+2" library="supply1" deviceset="+12V" device=""/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
 <part name="GND11" library="supply1" deviceset="GND" device=""/>
