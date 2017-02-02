@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.5.0">
+<eagle version="7.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
@@ -13804,7 +13804,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="RK1" library="resistor" deviceset="R-EU_" device="M0805" value="10K"/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
 <part name="GND27" library="supply1" deviceset="GND" device=""/>
-<part name="HX1" library="transistor-power" deviceset="IRF3704" device="S"/>
+<part name="HX1" library="transistor-power" deviceset="IRF3704" device="S" value="IPB081N06L3GATMA1"/>
 <part name="R11" library="rcl" deviceset="R-EU_" device="R0805" value="1K"/>
 <part name="P+2" library="supply1" deviceset="+12V" device=""/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
@@ -13996,7 +13996,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="R27" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="47K"/>
 <part name="C26" library="freetronics-master-v1" deviceset="CAP" device="0805" value="1nF"/>
 <part name="R28" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="0R"/>
-<part name="C27" library="freetronics-master-v1" deviceset="CAP" device="0805" value="100nF"/>
+<part name="C27" library="freetronics-master-v1" deviceset="CAP" device="0805" value="100n"/>
 <part name="R29" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="3k3"/>
 <part name="R30" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="10k"/>
 <part name="R31" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="10k"/>
@@ -14004,7 +14004,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="R33" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="10k"/>
 <part name="R34" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="10k"/>
 <part name="C28" library="freetronics-master-v1" deviceset="CAP" device="0805" value="100nF"/>
-<part name="C29" library="freetronics-master-v1" deviceset="CAP" device="0805" value="220nF"/>
+<part name="C29" library="freetronics-master-v1" deviceset="CAP" device="0805" value="220n"/>
 <part name="R35" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="10k"/>
 <part name="R36" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="10k"/>
 <part name="R37" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="4K7"/>
@@ -14012,8 +14012,8 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="C31" library="freetronics-master-v1" deviceset="CAP" device="0805" value="100nF"/>
 <part name="C32" library="freetronics-master-v1" deviceset="CAP" device="0805" value="100nF"/>
 <part name="C33" library="freetronics-master-v1" deviceset="CAP" device="0805" value="100nF"/>
-<part name="C34" library="freetronics-master-v1" deviceset="CAP" device="0805" value="220nF"/>
-<part name="C35" library="freetronics-master-v1" deviceset="CAP" device="0805" value="220nF"/>
+<part name="C34" library="freetronics-master-v1" deviceset="CAP" device="0805" value="220n"/>
+<part name="C35" library="freetronics-master-v1" deviceset="CAP" device="0805" value="220n"/>
 <part name="R38" library="rcl" deviceset="R-EU_" device="R2010" value="0.2R 1W"/>
 <part name="C47" library="freetronics-original" deviceset="CAP_POL" device="E" value="100uF 50V"/>
 <part name="P+38" library="SparkFun" deviceset="3.3V" device=""/>

@@ -41,6 +41,19 @@ In order to have the correct boadloader just use Lilipad Arduino USB as board.
 
 If you do any mistake and try to pretend it is a normal Leonardo, you will be able to flash the program but the USB port will not be recognized. You will have to reflash the bootleader !!!```
 
+## Using USBtiny
+By default the last version of Fedora will only give you a USB readonly access and will prevent to burn the board loader.
+In order for the USBTiny to have r/w access you should add a USB rules:
+```
+# UDEV rule for Arduino ISP R3 programmer board,
+# to prevent having to run Arduino IDE as root to get it to program.
+# Copy this file to /etc/udev/rules.d so
+
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="1781", ATTRS{idProduct}=="0c9f", GROUP="plugdev", MODE="0666"
+
+```
+
+
 ## Libraries
 
 In this project we use many non standard libraries. By default the Arduino IDE
