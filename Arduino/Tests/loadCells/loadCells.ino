@@ -13,9 +13,9 @@ void setup() {
 }
 
 void loop() {
-   uint16_t offset=39552;
-   uint16_t factor=32849;
+   uint16_t offset=36259; // v4.3 -> 39552
+   uint16_t factor=31152; // v4.3 -> 32849
      //to be improved (change calib values for the HX711)
-    weight= (int)round((float)(scale.read_average(50)+(long)offset*10)/(-1*(float)factor/100));
+    weight= (int)round((float)((scale.read_average(50)-(long)offset*10)/((float)factor/100))); //(int)round((float)(scale.read_average(50)+(long)offset*10)/(-1*(float)factor/100));
     Serial.println(weight);
 }
