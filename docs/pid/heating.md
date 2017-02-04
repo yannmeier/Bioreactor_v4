@@ -41,6 +41,7 @@ In order to turn on the heating you should check the following parameters:
 * A - The liquid temperature. It should be between 1000 and 6000 (10°C to 60°C)
 * B - The temperature of the PCB (Printed Circuit Board). It should be between 1000 and 7000
 * AA - The target temperature. It should be between 1000 and 6000 (10 to 60°C)
+* FLAG_PID_CONTROL - The PARAM_STATUS bit FLAG_PID_CONTROL should be 1
 
 The heating will also depend of the status of the weight.
 

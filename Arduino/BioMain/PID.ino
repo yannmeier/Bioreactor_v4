@@ -36,7 +36,7 @@ NIL_THREAD(Thread_PID, arg)
 /*Temperature PID Control addressing relay*/
 
 void pid_ctrl() {
-  if (getParameterBit(PARAM_STATUS, FLAG_PID_CONTROL)) { // PID is disabled
+  if (! getParameterBit(PARAM_STATUS, FLAG_PID_CONTROL)) { // PID is disabled
     analogWrite(TEMP_PID, 0);
     return;
   }
