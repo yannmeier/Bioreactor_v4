@@ -219,19 +219,22 @@
 #define FLAG_GAS_CONTROL         2   //0 to stop gas
 #define FLAG_FOOD_CONTROL        3   //1 for food ctrl
 #define FLAG_PID_CONTROL         4   //0 to stop PID
+#define FLAG_PCB_TEMP_ERROR      5   // temperature of the PCB is outside range
+#define FLAG_LIQ_TEMP_ERROR      6   // temperature of liquid is outsid range
 
-#define FLAG_PH_CALIBRATE        5
+
 
 #define FLAG_RELAY_FILLING       8
 #define FLAG_RELAY_EMPTYING      9
 
+#define FLAG_PH_CALIBRATE        11
 #define FLAG_RELAY_ACID          12
 #define FLAG_RELAY_BASE          13
 
 #define SERIAL_MAX_PARAM_VALUE_LENGTH  32
 
 void writeLog(uint16_t event_number, int parameter_value);
-void clearParameterBit(byte number, byte bitToClear);
+boolean clearParameterBit(byte number, byte bitToClear);
 void setupMemory();
 void recoverLastEntryN();
 uint8_t loadLastEntryToParameters();

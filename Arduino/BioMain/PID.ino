@@ -3,9 +3,13 @@
 
 #include <PID_v1.h>
 
+#define SAFETY_MAX_PCB_TEMP 7000  // pcb temperature is max 70°C
+#define SAFETY_MIN_PCB_TEMP 1000  // pcb temperatire is min 10°C
+#define SAFETY_MAX_LIQ_TEMP 6000  // liquid temperature is max 60°C
+#define SAFETY_MIN_LIQ_TEMP 1000  // liquid temperature is min 10°C
 
-#define SAFETY_TEMP      5500
-#define TEMP_MAX_HARD    7000
+#define PID_OUTPUT_LIMIT    200  //200 is ~80% of max PWM --> Limits max avg power to ~8A
+
 void pid_ctrl();
 void heatingSetup();
 
@@ -13,51 +17,74 @@ double heatingRegInput;
 double heatingRegOutput;
 double heatingRegSetpoint;
 //Specify the heating regulation links and initial tuning parameters
-PID heatingRegPID(&heatingRegInput, &heatingRegOutput, &heatingRegSetpoint, 1,0.0002, 5, DIRECT);
+PID heatingRegPID(&heatingRegInput, &heatingRegOutput, &heatingRegSetpoint, 1, 0.0002, 5, DIRECT);
 
 NIL_WORKING_AREA(waThread_PID, 120); //tune the allocated mem (here extra is provided)
-NIL_THREAD(Thread_PID, arg) 
+NIL_THREAD(Thread_PID, arg)
 {
-  nilThdSleepMilliseconds(5000); 
+  nilThdSleepMilliseconds(5000);
   pinMode(TEMP_PID, OUTPUT);
   heatingSetup();
-  
-  while(TRUE){
+
+  while (TRUE) {
     pid_ctrl();
-    nilThdSleepMilliseconds(1000);  //refresh every 500ms --> the faster the better the control
+    nilThdSleepMilliseconds(500);  //refresh every 500ms --> the faster the better the control
   }
 }
 
 
 /*Temperature PID Control addressing relay*/
 
-void pid_ctrl()
-{
-  int target=getParameter(PARAM_TEMP_TARGET);
-  if (target>TEMP_MAX_HARD || target>getParameter(PARAM_TEMP_MAX)){
-    //some error event for setting the temp to high here
-    setAndSaveParameter(PARAM_TEMP_TARGET,min(TEMP_MAX_HARD,getParameter(PARAM_TEMP_MAX)));
-    target=min(TEMP_MAX_HARD,getParameter(PARAM_TEMP_MAX));
+void pid_ctrl() {
+  if (getParameterBit(PARAM_STATUS, FLAG_PID_CONTROL)) { // PID is disabled
+    analogWrite(TEMP_PID, 0);
+    return;
   }
+  // We will check if we are in the allowed range
+  if (getParameter(PARAM_TEMP_LIQ) < SAFETY_MIN_LIQ_TEMP || getParameter(PARAM_TEMP_LIQ) > SAFETY_MAX_LIQ_TEMP) {
+    // the temperature of the liquid is out of range
+    if (setParameterBit(PARAM_STATUS, FLAG_LIQ_TEMP_ERROR)) { // the status has changed
+      
+    }
+    analogWrite(TEMP_PID, 0);
+    return;
+  } else {
+    if (clearParameterBit(PARAM_STATUS, FLAG_LIQ_TEMP_ERROR)) { // the status has changed
+      
+    }
+  }
+  
+  if (getParameter(PARAM_TEMP_PCB) < SAFETY_MIN_PCB_TEMP || getParameter(PARAM_TEMP_PCB) > SAFETY_MAX_PCB_TEMP) {
+    // the temperature of the pdb (hardware) is out of range
+    if (setParameterBit(PARAM_STATUS, FLAG_PCB_TEMP_ERROR)) { // the status has changed
+      
+    }
+    analogWrite(TEMP_PID, 0);
+    return;
+  } else {
+    if (clearParameterBit(PARAM_STATUS, FLAG_PCB_TEMP_ERROR)) { // the status has changed
+      
+    }
+  }
+
+  if (getParameter(PARAM_TEMP_TARGET) < SAFETY_MIN_LIQ_TEMP || getParameter(PARAM_TEMP_TARGET) > SAFETY_MAX_LIQ_TEMP) {   // the temperature target is out of range
+
+    analogWrite(TEMP_PID, 0);
+    return;
+  }
+
   heatingRegInput = getParameter(PARAM_TEMP_LIQ);
-  heatingRegSetpoint = target;
+  heatingRegSetpoint = getParameter(PARAM_TEMP_TARGET);
   heatingRegPID.Compute();                                   // the computation takes only 30ms!
-  if ((getParameter(PARAM_TEMP_PCB)<SAFETY_TEMP)
-      && (getParameter(PARAM_TEMP_PCB) != ERROR_VALUE)
-      && (getParameter(PARAM_TEMP_LIQ)   !=ERROR_VALUE)
-      && getParameterBit(PARAM_STATUS,FLAG_PID_CONTROL) ){
-       analogWrite(TEMP_PID, heatingRegOutput);
-   } else {
-     analogWrite(TEMP_PID,0);
-   }
+  analogWrite(TEMP_PID, heatingRegOutput);
 }
 
 // see the rest of oliver's code for sanity checks
 void heatingSetup()
 {
   //tell the PID to range between 0 and the full window size
-  heatingRegPID.SetOutputLimits(0, 200); //200 is ~75% of max PWM --> Limits max avg power to ~7.5A
-  heatingRegPID.SetMode(AUTOMATIC);      //turn the PID on, cf. PID library             
+  heatingRegPID.SetOutputLimits(0, PID_OUTPUT_LIMIT); 
+  heatingRegPID.SetMode(AUTOMATIC);      //turn the PID on, cf. PID library
   heatingRegPID.SetSampleTime(950);      //set PID sampling time to 450ms
 }
 

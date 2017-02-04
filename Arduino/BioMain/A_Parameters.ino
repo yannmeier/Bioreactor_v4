@@ -64,18 +64,22 @@ int getParameter(byte number) {
   return parameters[number];
 }
 
-void setParameterBit(byte number, byte bitToSet) {
+boolean setParameterBit(byte number, byte bitToSet) {
+   if (getParameterBit(number, bitToSet)) return false;
    bitSet(parameters[number], bitToSet);
+   return true;
   // parameters[number]=parameters[number] | (1 << bitToSet);
 }
 
-void clearParameterBit(byte number, byte bitToClear) {
+boolean clearParameterBit(byte number, byte bitToClear) {
+  if (! getParameterBit(number, bitToClear)) return false;
    bitClear(parameters[number], bitToClear);
+   return true;
   // parameters[number]=parameters[number] & ( ~ (1 << bitToClear));
 }
 
-byte getParameterBit(byte number, byte bitToRead) {
-   return bitRead(parameters[number], bitToRead);
+boolean getParameterBit(byte number, byte bitToRead) {
+   return (bitRead(parameters[number], bitToRead) == 1) ? true : false;
   // return (parameters[number] >> bitToRead ) & 1;
 }
 
