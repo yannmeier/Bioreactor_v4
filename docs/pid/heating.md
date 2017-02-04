@@ -12,7 +12,7 @@ In our case we will power the plate in 12v and we will connect them in parallel.
 It is also important to put 2 leds (just to be sure one of them turn on even if you power the plate in the opposite way) and a resistor of 10kΩ.
 This will allow to see when the plate is turned on. Nice to debug !
 
-<img src='connecion.jpg' width=500>
+<img src='connection.jpg' width=500>
 
 With a resistance of 1.2Ω in 12v we will need 10A. This is the limit of the powersuppy and it would be nice if we don't use permanently full power.
 
