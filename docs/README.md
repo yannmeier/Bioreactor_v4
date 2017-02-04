@@ -1,0 +1,3 @@
+The docs should be here ...
+
+This folder is on github in the /docs/ folder
