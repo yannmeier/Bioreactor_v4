@@ -54,6 +54,10 @@ void writeLog() {
   writeLog(0,0);
 }
 
+void writeLog(uint16_t event_number) {
+  writeLog(event_number,0);
+}
+
 void writeLog(uint16_t event_number, int parameter_value) {
   /********************************
              Safeguards

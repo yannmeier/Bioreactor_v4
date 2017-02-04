@@ -44,34 +44,42 @@ void pid_ctrl() {
   if (getParameter(PARAM_TEMP_LIQ) < SAFETY_MIN_LIQ_TEMP || getParameter(PARAM_TEMP_LIQ) > SAFETY_MAX_LIQ_TEMP) {
     // the temperature of the liquid is out of range
     if (setParameterBit(PARAM_STATUS, FLAG_LIQ_TEMP_ERROR)) { // the status has changed
-      
+      writeLog(EVENT_TEMP_LIQ_OUTSIDE_RANGE);
     }
     analogWrite(TEMP_PID, 0);
     return;
   } else {
     if (clearParameterBit(PARAM_STATUS, FLAG_LIQ_TEMP_ERROR)) { // the status has changed
-      
+      writeLog(EVENT_TEMP_LIQ_INSIDE_RANGE);
     }
   }
-  
+
   if (getParameter(PARAM_TEMP_PCB) < SAFETY_MIN_PCB_TEMP || getParameter(PARAM_TEMP_PCB) > SAFETY_MAX_PCB_TEMP) {
     // the temperature of the pdb (hardware) is out of range
     if (setParameterBit(PARAM_STATUS, FLAG_PCB_TEMP_ERROR)) { // the status has changed
-      
+      writeLog(EVENT_TEMP_PCB_OUTSIDE_RANGE);
     }
     analogWrite(TEMP_PID, 0);
     return;
   } else {
     if (clearParameterBit(PARAM_STATUS, FLAG_PCB_TEMP_ERROR)) { // the status has changed
-      
+      writeLog(EVENT_TEMP_PCB_INSIDE_RANGE);
     }
   }
 
   if (getParameter(PARAM_TEMP_TARGET) < SAFETY_MIN_LIQ_TEMP || getParameter(PARAM_TEMP_TARGET) > SAFETY_MAX_LIQ_TEMP) {   // the temperature target is out of range
-
+    // the temperature of the pdb (hardware) is out of range
+    if (setParameterBit(PARAM_STATUS, FLAG_RANGE_TEMP_ERROR)) { // the status has changed
+      writeLog(EVENT_TEMP_TARGET_OUTSIDE_RANGE);
+    }
     analogWrite(TEMP_PID, 0);
     return;
+  } else {
+    if (clearParameterBit(PARAM_STATUS, FLAG_RANGE_TEMP_ERROR)) { // the status has changed
+      writeLog(EVENT_TEMP_TARGET_INSIDE_RANGE);
+    }
   }
+
 
   heatingRegInput = getParameter(PARAM_TEMP_LIQ);
   heatingRegSetpoint = getParameter(PARAM_TEMP_TARGET);
@@ -83,7 +91,7 @@ void pid_ctrl() {
 void heatingSetup()
 {
   //tell the PID to range between 0 and the full window size
-  heatingRegPID.SetOutputLimits(0, PID_OUTPUT_LIMIT); 
+  heatingRegPID.SetOutputLimits(0, PID_OUTPUT_LIMIT);
   heatingRegPID.SetMode(AUTOMATIC);      //turn the PID on, cf. PID library
   heatingRegPID.SetSampleTime(950);      //set PID sampling time to 450ms
 }

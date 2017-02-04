@@ -1,25 +1,25 @@
-  /**************
- * LIBRAIRIES
- **************/
+/**************
+  LIBRAIRIES
+**************/
 #include <NilRTOS.h> //MultiThread
 #include <SPI.h>     //Flash SPI
 #include <avr/wdt.h> //Watchdog
 #include <TimeLib.h>
 /******************
- * DEFINE CARD TYPE
+   DEFINE CARD TYPE
  ******************/
 #define TYPE_MAIN     1   // card to control the basic functions: food, motor, temperature
 //#define TYPE_PH
 //#define TYPE_GAS
 
 /*******************************************
- * DEFINE CARD VERSION (default is nothing)
+   DEFINE CARD VERSION (default is nothing)
  ******************************************/
 //#define BEFORE_43  1
 //#define VERSION_43 1
 
 /******************************************
- * DEFINE FLASH VERSION (default is SST64)
+   DEFINE FLASH VERSION (default is SST64)
  *****************************************/
 //support SST25VF064C, SST26VF064B (64Mbits) or similar from Cypress
 #define SST64 1
@@ -27,14 +27,14 @@
 //#define SST32 1
 
 /******************
- * OPERATION MODE
+   OPERATION MODE
  ******************/
 //if you choose the calibration mode, you have to select a GENERAL card type first!
 //(not the GAS card, even when you calibrate the anemometer)
 //#define MODE_CALIBRATE    1 //In this mode, you start the interactive calibration process.
 
 /********************
- * PIN&ADRESS MAPPING
+   PIN&ADRESS MAPPING
  *********************/
 //I2C addresses
 //#define I2C_FLUX          106//B01101000 --> to be redefined (AT32u4 slave)
@@ -56,33 +56,33 @@
 #define D23  23 //weight clock
 
 /**************************************
- * ACTIVE THREAD DEPENDING CARD TYPE
+   ACTIVE THREAD DEPENDING CARD TYPE
  **************************************/
 #ifdef TYPE_MAIN
-  #ifdef BEFORE_43
-    #define STEPPER {D18,D19}
-  #else
-    //pins 4-5 of port B and 6-7 of port F --> change for _BV (easier to manipulate)
-    #define STEPPER {0b00010000,0b00100000,0b01000000,0b10000000}
-  #endif
-  #define FOOD_CTRL          1
- #if defined(VERSION_43) || defined(BEFORE_43)
-  #define FOOD_IN            D20
-  #define FOOD_OUT           D21
- #else
-  #define FOOD_IN            D10
-  #define FOOD_OUT           D5
- #endif
-  #define WEIGHT_DATA        D22
-  #define WEIGHT_CLK         D23     //need to redefine the calibration parameters and process (see "HX711")
-  #define TEMPERATURE_CTRL   1
-    #define TEMP_LIQ         D4
-    #define TEMP_PCB         D12
-    #define TEMP_PID         D6
-  #define THR_MONITORING     1
-    #define MONITORING_LED   D13
-  //#define THR_LORA         1
-  #define  LCD_SELECT       D11    //LCD screen SS_SPI
+#ifdef BEFORE_43
+#define STEPPER {D18,D19}
+#else
+//pins 4-5 of port B and 6-7 of port F --> change for _BV (easier to manipulate)
+#define STEPPER {0b00010000,0b00100000,0b01000000,0b10000000}
+#endif
+#define FOOD_CTRL          1
+#if defined(VERSION_43) || defined(BEFORE_43)
+#define FOOD_IN            D20
+#define FOOD_OUT           D21
+#else
+#define FOOD_IN            D10
+#define FOOD_OUT           D5
+#endif
+#define WEIGHT_DATA        D22
+#define WEIGHT_CLK         D23     //need to redefine the calibration parameters and process (see "HX711")
+#define TEMPERATURE_CTRL   1
+#define TEMP_LIQ         D4
+#define TEMP_PCB         D12
+#define TEMP_PID         D6
+#define THR_MONITORING     1
+#define MONITORING_LED   D13
+//#define THR_LORA         1
+#define  LCD_SELECT       D11    //LCD screen SS_SPI
 #endif
 
 
@@ -103,52 +103,51 @@
 #endif
 
 /******************************
-* SERIAL, LOGGER AND DEBUGGERS
+  SERIAL, LOGGER AND DEBUGGERS
 *******************************/
 #define THR_SERIAL         1
 #define THR_LINEAR_LOGS    1
 //#define DEBUG_LOGS         1
-//#define DEBUG_WEIGHT       1 
+//#define DEBUG_WEIGHT       1
 //#define DEBUG_LCD          1
 //#define DEBUG_ONEWIRE      1
 
 #ifdef THR_LINEAR_LOGS
-  #if defined(VERSION_43) ||defined(BEFORE_43)
-    #define FLASH_SELECT D10 //Flash SS_SPI
-  #else
-    #define FLASH_SELECT A3 //Flash SS_SPI
-  #endif
-  #define LOG_INTERVAL 10  //Interval in (s) between logs
+#if defined(VERSION_43) ||defined(BEFORE_43)
+#define FLASH_SELECT D10 //Flash SS_SPI
+#else
+#define FLASH_SELECT A3 //Flash SS_SPI
+#endif
+#define LOG_INTERVAL 10  //Interval in (s) between logs
 #endif
 
 
 
 /*******************************
- * CARD DEFINITION (HARD CODED)
+   CARD DEFINITION (HARD CODED)
  *******************************/
 #ifdef STEPPER
-  #define PARAM_STEPPER_SPEED       38   // motor speed, parameter S (!!!!!TO BE REPROGRAMMED IN RPM!!!!!!!)
-  #define PARAM_STEPPER_STEPS       28
+#define PARAM_STEPPER_SPEED       38   // motor speed, parameter S (!!!!!TO BE REPROGRAMMED IN RPM!!!!!!!)
+#define PARAM_STEPPER_STEPS       28
 #endif
 
 #ifdef     TEMPERATURE_CTRL
-  #define PARAM_TEMP_LIQ      0   // temperature of the solution
-  #define PARAM_TEMP_PCB      1   // temperature of the heating plate
-  #define PARAM_TEMP_TARGET   26  // target temperature of the liquid
-  #define PARAM_TEMP_MAX       27  // maximal temperature of the plate
+#define PARAM_TEMP_LIQ      0   // temperature of the solution
+#define PARAM_TEMP_PCB      1   // temperature of the heating plate
+#define PARAM_TEMP_TARGET   26  // target temperature of the liquid
 #endif
 
 /*************************************/
 
 #if defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
-  #define PARAM_WEIGHT_FACTOR        33  // Weight calibration: conversion factor digital -> gr (weight=FACTOR*dig_unit)
-  #define PARAM_WEIGHT_OFFSET        34  // Weight calibration: digital offset value when bioreactor is empty
-  #define PARAM_WEIGHT               2   // in gr
-  #define PARAM_WEIGHT_MIN           29
-  #define PARAM_WEIGHT_MAX           30
-  #define PARAM_SEDIMENTATION_TIME   31  // MINUTES to wait without rotation before emptying
-  #define PARAM_FILLED_TIME          32  // MINUTES to stay in the filled state
-  #define PARAM_WEIGHT_STATUS        3  // current STATUS // BBBAAAAA AAAAAAAA : A = wait time in minutes, B = status
+#define PARAM_WEIGHT_FACTOR        33  // Weight calibration: conversion factor digital -> gr (weight=FACTOR*dig_unit)
+#define PARAM_WEIGHT_OFFSET        34  // Weight calibration: digital offset value when bioreactor is empty
+#define PARAM_WEIGHT               2   // in gr
+#define PARAM_WEIGHT_MIN           29
+#define PARAM_WEIGHT_MAX           30
+#define PARAM_SEDIMENTATION_TIME   31  // MINUTES to wait without rotation before emptying
+#define PARAM_FILLED_TIME          32  // MINUTES to stay in the filled state
+#define PARAM_WEIGHT_STATUS        3   // current STATUS // BBBAAAAA AAAAAAAA : A = wait time in minutes, B = status
 #endif
 
 /*************************************/
@@ -210,7 +209,7 @@
 #endif
 
 /******************
- * FLAG DEFINITION
+   FLAG DEFINITION
  ******************/
 #define PARAM_STATUS       25
 
@@ -220,7 +219,8 @@
 #define FLAG_FOOD_CONTROL        3   //1 for food ctrl
 #define FLAG_PID_CONTROL         4   //0 to stop PID
 #define FLAG_PCB_TEMP_ERROR      5   // temperature of the PCB is outside range
-#define FLAG_LIQ_TEMP_ERROR      6   // temperature of liquid is outsid range
+#define FLAG_LIQ_TEMP_ERROR      6   // temperature of liquid is outside range
+#define FLAG_RANGE_TEMP_ERROR    7   // target temperature is outisde range
 
 
 

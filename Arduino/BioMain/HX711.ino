@@ -59,7 +59,6 @@ NIL_THREAD(ThreadWeight, arg) {
     protectThread();
     weight=(int)round((float)(scale.read_average(5)+(long)getParameter(PARAM_WEIGHT_OFFSET)*20)/(-1*(float)getParameter(PARAM_WEIGHT_FACTOR)/50));
     unprotectThread();
-    Serial.println(weight);
 
     /***********************************************
              Standby and Error management

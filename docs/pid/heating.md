@@ -35,6 +35,18 @@ The following parameters are define in PID.ino
 * SAFETY_MIN_LIQ_TEMP 1000
 * PID_OUTPUT_LIMIT    200 
 
+# Enabling heating
+
+In order to turn on the heating you should check the following parameters:
+* A - The liquid temperature. It should be between 1000 and 6000 (10°C to 60°C)
+* B - The temperature of the PCB (Printed Circuit Board). It should be between 1000 and 7000
+* AA - The target temperature. It should be between 1000 and 6000 (10 to 60°C)
+
+The heating will depends of the parameters of the PID
+
+
+Now the heating will depend of the status of the weight
+
 
 # Disabling heating
 

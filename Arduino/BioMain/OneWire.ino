@@ -44,6 +44,7 @@ NIL_WORKING_AREA(waThreadTemp, 240);  // should be 50 without Serial.println
 #else
 NIL_WORKING_AREA(waThreadTemp, 180);  // should be 50 without Serial.println
 #endif
+
 NIL_THREAD(ThreadTemp, arg) {
   nilThdSleepMilliseconds(200);
   #ifdef DEBUG_ONEWIRE

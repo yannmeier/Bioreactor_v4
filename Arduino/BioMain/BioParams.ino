@@ -26,9 +26,10 @@
 #define EVENT_TEMP_PCB_RECOVER          53
 #define EVENT_TEMP_LIQ_OUTSIDE_RANGE    54
 #define EVENT_TEMP_LIQ_INSIDE_RANGE     55
-#define EVENT_TEMP_PCB_OUTSIDE_RANGE    55
-#define EVENT_TEMP_PCB_INSIDE_RANGE     56
-
+#define EVENT_TEMP_PCB_OUTSIDE_RANGE    56
+#define EVENT_TEMP_PCB_INSIDE_RANGE     57
+#define EVENT_TEMP_TARGET_OUTSIDE_RANGE 58
+#define EVENT_TEMP_TARGET_INSIDE_RANGE  59
 
 #define EVENT_WEIGHT_FAILURE           129
 #define EVENT_WEIGHT_BACK_TO_NORMAL    130
@@ -48,7 +49,6 @@ void resetParameters() {
   setAndSaveParameter(PARAM_TEMP_LIQ, ERROR_VALUE);
   setAndSaveParameter(PARAM_TEMP_PCB, ERROR_VALUE);
   setAndSaveParameter(PARAM_TEMP_TARGET, 3000);
-  setAndSaveParameter(PARAM_TEMP_MAX, 0);
 #endif
 
 #ifdef FOOD_CTRL 
