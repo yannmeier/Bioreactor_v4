@@ -31,7 +31,7 @@
  ******************/
 //if you choose the calibration mode, you have to select a GENERAL card type first!
 //(not the GAS card, even when you calibrate the anemometer)
-//#define MODE_CALIBRATE    1 //In this mode, you start the interactive calibration process.
+
 
 /********************
    PIN&ADRESS MAPPING
@@ -212,12 +212,15 @@
    FLAG DEFINITION
  ******************/
 #define PARAM_ERROR        24
-#define FLAG_TEMP_PCB_PROBE_ERROR      0   // temperature of the PCB is outside range
-#define FLAG_TEMP_LIQ_PROBE_ERROR      1   // temperature of liquid is outside range
-#define FLAG_TEMP_PCB_RANGE_ERROR      2   // temperature of liquid is outside range
-#define FLAG_TEMP_LIQ_RANGE_ERROR      3   // target temperature is outisde range
-#define FLAG_TEMP_TARGET_RANGE_ERROR   4   // target temperature is outisde range
-#define MASK_TEMP_ERROR          0b00011111  // where are the bit for temperature error
+#define FLAG_TEMP_PCB_PROBE_ERROR      0   // pcb probe failed (one wire not answering)
+#define FLAG_TEMP_LIQ_PROBE_ERROR      1   // liquid probe failed (one wire not answering)
+#define FLAG_TEMP_PCB_RANGE_ERROR      2   // temperature of pcb is outside range
+#define FLAG_TEMP_LIQ_RANGE_ERROR      3   // temperature of liquid is outside range
+#define FLAG_TEMP_TARGET_RANGE_ERROR   4   // target temperature is outside range
+#define MASK_TEMP_ERROR                0b00011111  // where are the bit for temperature error
+
+#define FLAG_WEIGHT_RANGE_ERROR        5   // the weight is outside range
+#define MASK_WEIGHT_ERROR              0b00100000  // where are the bit for weight error
 
 
 

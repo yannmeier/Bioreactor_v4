@@ -26,7 +26,8 @@ NIL_THREAD(ThreadWeight, arg) {
   /********************************************
                initialisation
   ********************************************/
-  int weight = int(getParameter(PARAM_WEIGHT));
+  int weight;
+
   byte weight_status = 0;
   byte previous_status = WEIGHT_STATUS_ERROR;
   unsigned long tsinceLastEvent = 0;
@@ -46,19 +47,25 @@ NIL_THREAD(ThreadWeight, arg) {
                Thread Loop
   ********************************************/
   while (true) {
-    //sensor read
-#ifdef MODE_CALIBRATE
-    nilThdSleepMilliseconds(10); //in calibration mode, we have much faster weight changes. ---> remove that and change for dynamic calibration
-#else
     nilThdSleepMilliseconds(1000);
-#endif
-    if (weight_status != WEIGHT_STATUS_ERROR) previous_status = weight_status;
-    while (!scale.is_ready()) {
-      nilThdSleepMilliseconds(10);
+
+    weight = getWeight(); //sensor read
+    setParameter(PARAM_WEIGHT, weight);
+    // are we outside ranges ?
+    if (weight < (0.80 * getParameter(PARAM_WEIGHT_MIN)) || weight > (1.20 * getParameter(PARAM_WEIGHT_MAX))) {
+      saveAndLogError(true, MASK_WEIGHT_ERROR);
+    } else {
+      saveAndLogError(false, MASK_WEIGHT_ERROR);
     }
-    protectThread();
-    weight = (int)round((float)(scale.read_average(5) + (long)getParameter(PARAM_WEIGHT_OFFSET) * 20) / (-1 * (float)getParameter(PARAM_WEIGHT_FACTOR) / 50));
-    unprotectThread();
+
+
+
+
+
+
+
+    if (weight_status != WEIGHT_STATUS_ERROR) previous_status = weight_status;
+
 
     /***********************************************
              Standby and Error management
@@ -86,7 +93,7 @@ NIL_THREAD(ThreadWeight, arg) {
         weight_status = WEIGHT_STATUS_ERROR;
 
 #ifdef DEBUG_WEIGHT
-        Serial.print(F("wght err:"));
+        Serial.print(F("Weight error:"));
         Serial.println(weight);
 #endif
 
@@ -102,7 +109,7 @@ NIL_THREAD(ThreadWeight, arg) {
       }
     }
 
-    setParameter(PARAM_WEIGHT, weight);
+
     setParameter(PARAM_WEIGHT_STATUS, (((uint16_t)(tsinceLastEvent / 60000)) | ((uint16_t)(weight_status << 13))));
 
 #ifdef DEBUG_WEIGHT
@@ -211,6 +218,12 @@ NIL_THREAD(ThreadWeight, arg) {
 }
 
 
+
+
+
+
+
+
 void printWeightHelp(Print* output) {
   output->println(F("Weight help"));
   output->println(F("(we) Empty (tare)"));
@@ -228,7 +241,13 @@ int getWeight() { // we can not avoid to have some errors measuring the weight
   byte counter = 0;
   long weight = 0;
   while (counter < 4) {
+    while (!scale.is_ready()) {
+      nilThdSleepMilliseconds(10);
+    }
+    protectThread();
     long currentWeight = scale.read();
+    unprotectThread();
+
     if ((currentWeight & 0b11111111) != 1) {
       if (weight == 0) {
         weight += currentWeight;
@@ -249,12 +268,8 @@ int getWeight() { // we can not avoid to have some errors measuring the weight
   return weight / counter / 100;
 }
 
-int getWeightInG() {
-  return convertWeightToG(getWeight());
-}
-
 int convertWeightToG(int weight) {
-  return ((long)(weight - getParameter(PARAM_WEIGHT_OFFSET))*1000) / getParameter(PARAM_WEIGHT_FACTOR);
+  return ((long)(weight - getParameter(PARAM_WEIGHT_OFFSET)) * 1000) / getParameter(PARAM_WEIGHT_FACTOR);
 }
 
 
