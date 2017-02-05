@@ -28,20 +28,25 @@ NIL_THREAD(ThreadWeight, arg) {
   ********************************************/
   int weight;
 
-  byte weight_status = 0;
-  byte previous_status = WEIGHT_STATUS_ERROR;
-  unsigned long tsinceLastEvent = 0;
-  unsigned long lastCycleMillis = millis(); // when was the last food cycle
-  all_off();                              //clear flags, shut down pumps
-  nilThdSleepMilliseconds(2000);
+  nilThdSleepMilliseconds(1000);
 
-  //get to the last log status, worst case: just 18 seconds lag with current state
-  if (getParameter(PARAM_WEIGHT_STATUS) != -1) {
-    weight_status = (((uint16_t)getParameter(PARAM_WEIGHT_STATUS)) >> 13);
-    tsinceLastEvent = (((uint16_t)getParameter(PARAM_WEIGHT_STATUS)) & 0b0001111111111111) * 60000;
+  if (false) {
+    byte weight_status = 0;
+    byte previous_status = WEIGHT_STATUS_ERROR;
+    unsigned long tsinceLastEvent = 0;
+    unsigned long lastCycleMillis = millis(); // when was the last food cycle
+    all_off();                              //clear flags, shut down pumps
+
+    //get to the last log status, worst case: just 18 seconds lag with current state
+    if (getParameter(PARAM_WEIGHT_STATUS) != -1) {
+      weight_status = (((uint16_t)getParameter(PARAM_WEIGHT_STATUS)) >> 13);
+      tsinceLastEvent = (((uint16_t)getParameter(PARAM_WEIGHT_STATUS)) & 0b0001111111111111) * 60000;
+    } else {
+      weight_status = WEIGHT_STATUS_ERROR;
+    }
   }
-  else
-    weight_status = WEIGHT_STATUS_ERROR;
+
+
 
   /********************************************
                Thread Loop
@@ -60,161 +65,164 @@ NIL_THREAD(ThreadWeight, arg) {
 
 
 
+    if (false) {
 
 
 
-
-    if (weight_status != WEIGHT_STATUS_ERROR) previous_status = weight_status;
-
-
-    /***********************************************
-             Standby and Error management
-    ************************************************/
-    //flag down stands for deactivated weight control
-    //if weight control is on this first loop manages the standby and error cases (wake-up cases)
-    if (! getStatus(FLAG_FOOD_CONTROL)) {
-      weight_status = WEIGHT_STATUS_STANDBY;
-    } else {
-
-      if (weight_status == WEIGHT_STATUS_STANDBY) {
-        weight_status = WEIGHT_STATUS_NORMAL;
-#ifdef DEBUG_WEIGHT
-        Serial.println(F("sb>ok"));
-#endif
-      }
-      //safety measures
-      if (weight < (0.80 * getParameter(PARAM_WEIGHT_MIN)) || weight > (1.20 * getParameter(PARAM_WEIGHT_MAX))) {
-
-#ifdef EVENT_LOGGING
-        if (weight_status != WEIGHT_STATUS_ERROR) writeLog(EVENT_WEIGHT_FAILURE, weight);
-#endif
-
-        all_off();
-        weight_status = WEIGHT_STATUS_ERROR;
-
-#ifdef DEBUG_WEIGHT
-        Serial.print(F("Weight error:"));
-        Serial.println(weight);
-#endif
-
-      } else if (weight_status == WEIGHT_STATUS_ERROR) {
-#ifdef EVENT_LOGGING
-        writeLog(EVENT_WEIGHT_BACK_TO_NORMAL, 0);
-#endif
-        if (previous_status == WEIGHT_STATUS_ERROR) weight_status = WEIGHT_STATUS_NORMAL;
-        else weight_status = previous_status;
-#ifdef DEBUG_WEIGHT
-        Serial.println(F("er>ok"));
-#endif
-      }
-    }
+      if (weight_status != WEIGHT_STATUS_ERROR) previous_status = weight_status;
 
 
-    setParameter(PARAM_WEIGHT_STATUS, (((uint16_t)(tsinceLastEvent / 60000)) | ((uint16_t)(weight_status << 13))));
+      /***********************************************
+               Standby and Error management
+      ************************************************/
+      //flag down stands for deactivated weight control
+      //if weight control is on this first loop manages the standby and error cases (wake-up cases)
+      if (! getStatus(FLAG_FOOD_CONTROL)) {
+        weight_status = WEIGHT_STATUS_STANDBY;
+      } else {
 
-#ifdef DEBUG_WEIGHT
-    Serial.print(weight_status);
-    Serial.print(F(" "));
-    Serial.println(weight);
-#endif
-
-    /**************************************
-           Weight State Machine
-    **************************************/
-    switch (weight_status) {
-
-      case WEIGHT_STATUS_NORMAL:
-        all_off();
-        setParameterBit(PARAM_STATUS, FLAG_PH_CONTROL);        //pH      ON
-        setParameterBit(PARAM_STATUS, FLAG_STEPPER_CONTROL);   //stepper ON
-        setParameterBit(PARAM_STATUS, FLAG_PID_CONTROL);       //PID ON
-        if (( (uint16_t)(tsinceLastEvent / 60000)) >= getParameter(PARAM_FILLED_TIME)) {          //switch to Sedimentation
-          weight_status = WEIGHT_STATUS_WAITING;
-          tsinceLastEvent = 0;
-#ifdef EVENT_LOGGING
-          writeLog(EVENT_PUMPING_WAITING, 0);
-          writeLog(EVENT_MOTOR_STOP, 0);
-#endif
-        }
-        break;
-
-      case WEIGHT_STATUS_WAITING:
-        all_off();
-        if (( (uint16_t)(tsinceLastEvent / 60000)) >= getParameter(PARAM_SEDIMENTATION_TIME)) {  //switch to Emptying
-          weight_status = WEIGHT_STATUS_EMPTYING;
-          tsinceLastEvent = 0;
-#ifdef EVENT_LOGGING
-          writeLog(EVENT_PUMPING_EMPTYING_START, 0);
-          nilThdSleepMilliseconds(10);
-#endif
-        }
-        break;
-
-      case WEIGHT_STATUS_EMPTYING:
-        all_off();
-        setParameterBit(PARAM_STATUS, FLAG_RELAY_EMPTYING);  //emptying ON
-        if (weight <= getParameter(PARAM_WEIGHT_MIN)) {      //switch fo Filling
-#ifdef DEBUG_WEIGHT
-          Serial.print(F("empty:"));
-          Serial.println(weight);
-#endif
-          weight_status = WEIGHT_STATUS_FILLING;
-          tsinceLastEvent = 0;
-#ifdef EVENT_LOGGING
-          writeLog(EVENT_PUMPING_EMPTYING_STOP, 0);
-          nilThdSleepMilliseconds(10);
-#endif
-          // TURN ON ROTATION
-#ifdef EVENT_LOGGING
-          writeLog(EVENT_MOTOR_START, 0);
-          nilThdSleepMilliseconds(10);
-#endif
-          // turn on filling pump
-#ifdef EVENT_LOGGING
-          writeLog(EVENT_PUMPING_FILLING_START, 0);
-          nilThdSleepMilliseconds(10);
-#endif
-        }
-        break;
-
-      case WEIGHT_STATUS_FILLING:
-        all_off();
-        setParameterBit(PARAM_STATUS, FLAG_RELAY_FILLING);     //filling  ON
-        setParameterBit(PARAM_STATUS, FLAG_STEPPER_CONTROL);   //stepper  ON
-        setParameterBit(PARAM_STATUS, FLAG_PID_CONTROL);       //PID ON
-
-        if (weight >= getParameter(PARAM_WEIGHT_MAX)) {
-#ifdef DEBUG_WEIGHT
-          Serial.print(F("full:"));
-          Serial.println(weight);
-#endif
+        if (weight_status == WEIGHT_STATUS_STANDBY) {
           weight_status = WEIGHT_STATUS_NORMAL;
-          tsinceLastEvent = 0;
-
-#ifdef EVENT_LOGGING
-          writeLog(EVENT_PUMPING_FILLING_STOP, 0);  //need to move the event loggers
-          nilThdSleepMilliseconds(10);
+#ifdef DEBUG_WEIGHT
+          Serial.println(F("sb>ok"));
 #endif
         }
-        break;
+        //safety measures
+        if (weight < (0.80 * getParameter(PARAM_WEIGHT_MIN)) || weight > (1.20 * getParameter(PARAM_WEIGHT_MAX))) {
 
-      case WEIGHT_STATUS_ERROR:
-        all_off();
-    }
+#ifdef EVENT_LOGGING
+          if (weight_status != WEIGHT_STATUS_ERROR) writeLog(EVENT_WEIGHT_FAILURE, weight);
+#endif
+
+          all_off();
+          weight_status = WEIGHT_STATUS_ERROR;
+
+#ifdef DEBUG_WEIGHT
+          Serial.print(F("Weight error:"));
+          Serial.println(weight);
+#endif
+
+        } else if (weight_status == WEIGHT_STATUS_ERROR) {
+#ifdef EVENT_LOGGING
+          writeLog(EVENT_WEIGHT_BACK_TO_NORMAL, 0);
+#endif
+          if (previous_status == WEIGHT_STATUS_ERROR) weight_status = WEIGHT_STATUS_NORMAL;
+          else weight_status = previous_status;
+#ifdef DEBUG_WEIGHT
+          Serial.println(F("er>ok"));
+#endif
+        }
+      }
 
 
-    // Food control with 2 pumps
+      setParameter(PARAM_WEIGHT_STATUS, (((uint16_t)(tsinceLastEvent / 60000)) | ((uint16_t)(weight_status << 13))));
+
+#ifdef DEBUG_WEIGHT
+      Serial.print(weight_status);
+      Serial.print(F(" "));
+      Serial.println(weight);
+#endif
+
+      /**************************************
+             Weight State Machine
+      **************************************/
+      switch (weight_status) {
+
+        case WEIGHT_STATUS_NORMAL:
+          all_off();
+          setParameterBit(PARAM_STATUS, FLAG_PH_CONTROL);        //pH      ON
+          setParameterBit(PARAM_STATUS, FLAG_STEPPER_CONTROL);   //stepper ON
+          setParameterBit(PARAM_STATUS, FLAG_PID_CONTROL);       //PID ON
+          if (( (uint16_t)(tsinceLastEvent / 60000)) >= getParameter(PARAM_FILLED_TIME)) {          //switch to Sedimentation
+            weight_status = WEIGHT_STATUS_WAITING;
+            tsinceLastEvent = 0;
+#ifdef EVENT_LOGGING
+            writeLog(EVENT_PUMPING_WAITING, 0);
+            writeLog(EVENT_MOTOR_STOP, 0);
+#endif
+          }
+          break;
+
+        case WEIGHT_STATUS_WAITING:
+          all_off();
+          if (( (uint16_t)(tsinceLastEvent / 60000)) >= getParameter(PARAM_SEDIMENTATION_TIME)) {  //switch to Emptying
+            weight_status = WEIGHT_STATUS_EMPTYING;
+            tsinceLastEvent = 0;
+#ifdef EVENT_LOGGING
+            writeLog(EVENT_PUMPING_EMPTYING_START, 0);
+            nilThdSleepMilliseconds(10);
+#endif
+          }
+          break;
+
+        case WEIGHT_STATUS_EMPTYING:
+          all_off();
+          setParameterBit(PARAM_STATUS, FLAG_RELAY_EMPTYING);  //emptying ON
+          if (weight <= getParameter(PARAM_WEIGHT_MIN)) {      //switch fo Filling
+#ifdef DEBUG_WEIGHT
+            Serial.print(F("empty:"));
+            Serial.println(weight);
+#endif
+            weight_status = WEIGHT_STATUS_FILLING;
+            tsinceLastEvent = 0;
+#ifdef EVENT_LOGGING
+            writeLog(EVENT_PUMPING_EMPTYING_STOP, 0);
+            nilThdSleepMilliseconds(10);
+#endif
+            // TURN ON ROTATION
+#ifdef EVENT_LOGGING
+            writeLog(EVENT_MOTOR_START, 0);
+            nilThdSleepMilliseconds(10);
+#endif
+            // turn on filling pump
+#ifdef EVENT_LOGGING
+            writeLog(EVENT_PUMPING_FILLING_START, 0);
+            nilThdSleepMilliseconds(10);
+#endif
+          }
+          break;
+
+        case WEIGHT_STATUS_FILLING:
+          all_off();
+          setParameterBit(PARAM_STATUS, FLAG_RELAY_FILLING);     //filling  ON
+          setParameterBit(PARAM_STATUS, FLAG_STEPPER_CONTROL);   //stepper  ON
+          setParameterBit(PARAM_STATUS, FLAG_PID_CONTROL);       //PID ON
+
+          if (weight >= getParameter(PARAM_WEIGHT_MAX)) {
+#ifdef DEBUG_WEIGHT
+            Serial.print(F("full:"));
+            Serial.println(weight);
+#endif
+            weight_status = WEIGHT_STATUS_NORMAL;
+            tsinceLastEvent = 0;
+
+#ifdef EVENT_LOGGING
+            writeLog(EVENT_PUMPING_FILLING_STOP, 0);  //need to move the event loggers
+            nilThdSleepMilliseconds(10);
+#endif
+          }
+          break;
+
+        case WEIGHT_STATUS_ERROR:
+          all_off();
+      }
+
+
+      // Food control with 2 pumps
 #ifdef FOOD_IN
-    digitalWrite(FOOD_IN, getParameterBit(PARAM_STATUS, FLAG_RELAY_FILLING));
-    delay(10);
+      digitalWrite(FOOD_IN, getParameterBit(PARAM_STATUS, FLAG_RELAY_FILLING));
+      delay(10);
 #endif
 #ifdef FOOD_OUT
-    digitalWrite(FOOD_OUT, getParameterBit(PARAM_STATUS, FLAG_RELAY_EMPTYING));
-    delay(10);
+      digitalWrite(FOOD_OUT, getParameterBit(PARAM_STATUS, FLAG_RELAY_EMPTYING));
+      delay(10);
 #endif
-    tsinceLastEvent += (millis() - lastCycleMillis);
-    lastCycleMillis = millis();
+      tsinceLastEvent += (millis() - lastCycleMillis);
+      lastCycleMillis = millis();
+    }
+
   }
+
 }
 
 
