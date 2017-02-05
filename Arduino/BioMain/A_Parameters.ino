@@ -246,4 +246,13 @@ boolean getStatus(byte statusFlag) {
     return getParameterBit(PARAM_STATUS, statusFlag);
 }
 
+boolean enable(byte statusFlag) {
+    return setParameterBit(PARAM_STATUS, statusFlag);
+}
+
+boolean disable(byte statusFlag) {
+    return clearParameterBit(PARAM_STATUS, statusFlag);
+}
+
+
 
