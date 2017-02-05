@@ -27,6 +27,34 @@
 #define NB_PARAMETERS_LINEAR_LOGS  26
 
 
+
+// Definition of all events to be logged
+#define EVENT_ARDUINO_BOOT              1
+#define EVENT_ARDUINO_SET_SAFE          2
+
+#define EVENT_ERROR_FAILED              6
+#define EVENT_ERROR_RECOVER             7
+
+
+#define EVENT_PUMPING_FILLING_START    10
+#define EVENT_PUMPING_FILLING_STOP     11
+#define EVENT_PUMPING_FILLING_FAILURE  12
+
+#define EVENT_PUMPING_EMPTYING_START   13
+#define EVENT_PUMPING_EMPTYING_STOP    14
+#define EVENT_PUMPING_EMPTYING_FAILURE 15
+
+#define EVENT_PUMPING_WAITING          16
+
+#define EVENT_MOTOR_START            20
+#define EVENT_MOTOR_STOP             21
+
+#define EVENT_WEIGHT_FAILURE           129
+#define EVENT_WEIGHT_BACK_TO_NORMAL    130
+#define EVENT_WEIGHT_READ_FAIL         131
+
+#define EVENT_ERROR_NOT_FOUND_ENTRY_N  150
+
 #define EVENT_SAVE_ALL_PARAMETER     255
 //When parameters are set (and saved) an event is recorded (256-281 : A-Z + .... (if more parameters than 262 ...)
 #define EVENT_PARAMETER_SET          256
@@ -127,6 +155,7 @@ void printParameters(Print* output) {
 }
 
 
+
 // code from http://www.arduino.cc/playground/Code/EepromUtil
 void getStatusEEPROM(Print* output) {
   int bytesPerRow = 16;
@@ -189,6 +218,32 @@ uint16_t getQualifier() {
 
 void setQualifier(uint16_t value) {
   eeprom_write_word((uint16_t*)(EE_QUALIFIER), value);
+}
+
+
+// this method will check if there was a change in the error status and log it in this case
+boolean saveAndLogError(boolean isError, byte errorFlag) {
+  if (isError) {
+    if (setParameterBit(PARAM_ERROR, errorFlag)) { // the status has changed
+      writeLog(EVENT_ERROR_FAILED, errorFlag);
+      return true;
+    }
+  } else {
+    if (clearParameterBit(PARAM_ERROR, errorFlag)) { // the status has changed
+      writeLog(EVENT_ERROR_RECOVER, errorFlag);
+      return true;
+    }
+  }
+  return false;
+}
+
+boolean isError(int filter) {
+  if ((getParameter(PARAM_ERROR) & filter) != 0) return true;
+  return false;
+}
+
+boolean getStatus(byte statusFlag) {
+    return getParameterBit(PARAM_STATUS, statusFlag);
 }
 
 

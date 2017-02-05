@@ -211,18 +211,22 @@
 /******************
    FLAG DEFINITION
  ******************/
-#define PARAM_STATUS       25
+#define PARAM_ERROR        24
+#define FLAG_TEMP_PCB_PROBE_ERROR      0   // temperature of the PCB is outside range
+#define FLAG_TEMP_LIQ_PROBE_ERROR      1   // temperature of liquid is outside range
+#define FLAG_TEMP_PCB_RANGE_ERROR      2   // temperature of liquid is outside range
+#define FLAG_TEMP_LIQ_RANGE_ERROR      3   // target temperature is outisde range
+#define FLAG_TEMP_TARGET_RANGE_ERROR   4   // target temperature is outisde range
+#define MASK_TEMP_ERROR          0b00011111  // where are the bit for temperature error
 
+
+
+#define PARAM_STATUS       25
 #define FLAG_STEPPER_CONTROL     0   //0 to stop engine
 #define FLAG_PH_CONTROL          1   //0 to to stop ph
 #define FLAG_GAS_CONTROL         2   //0 to stop gas
 #define FLAG_FOOD_CONTROL        3   //1 for food ctrl
 #define FLAG_PID_CONTROL         4   //0 to stop PID
-#define FLAG_PCB_TEMP_ERROR      5   // temperature of the PCB is outside range
-#define FLAG_LIQ_TEMP_ERROR      6   // temperature of liquid is outside range
-#define FLAG_RANGE_TEMP_ERROR    7   // target temperature is outisde range
-
-
 
 #define FLAG_RELAY_FILLING       8
 #define FLAG_RELAY_EMPTYING      9

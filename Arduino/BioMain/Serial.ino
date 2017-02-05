@@ -253,10 +253,19 @@ void printResult(char* data, Print* output) {
       printParameters(output);
       break;
     case 't':
-      for (byte i=0; i<16; i++) {
+      output->print(F("Status: "));
+      output->println(getParameter(PARAM_STATUS));
+      for (byte i = 0; i < 16; i++) {
         output->print(i);
         output->print(": ");
-        output->println(getParameterBit(PARAM_STATUS,i));
+        output->println(getParameterBit(PARAM_STATUS, i));
+      }
+      output->print(F("Error: "));
+      output->println(getParameter(PARAM_ERROR));
+      for (byte i = 0; i < 16; i++) {
+        output->print(i);
+        output->print(": ");
+        output->println(getParameterBit(PARAM_ERROR, i));
       }
       break;
     case 'w':

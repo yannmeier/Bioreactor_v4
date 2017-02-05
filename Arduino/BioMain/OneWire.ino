@@ -1,25 +1,25 @@
 #ifdef TEMPERATURE_CTRL
 
 /*******************************************
- *  THREAD TEMPERATURE
- *  This module reads the temperature of the different temperature sensors.
- *  The sensor is a dallas 1-wire ds18b20.
- *  
- *  There is only one device per plug. Instead of searching for the 
- *  adresses of the devices, we use the skip rom command which allow 
- *  us to directly ask any device on the line without address.
- *  
- *  The sequence is as follow: 
- *  We ask the sensor to update its value :
- *  1. Issue a Reset pulse and observe the Presence of the thermometer
- *  2. Issue the Skip Rom command (0xCC)
- *  3. Issue the Convert T command (0×44)
- *  
- *  The conversion in 12 bits take 750ms, so we actually read the previous value :
- *  1. Issue a Reset pulse and observe the Presence of the thermometer
- *  2. Issue the Skip Rom command (0xCC)
- *  3. Issue the Read Scratchpad command (0xBE)
- *  4. Read the next two bytes which represent the temperature
+    THREAD TEMPERATURE
+    This module reads the temperature of the different temperature sensors.
+    The sensor is a dallas 1-wire ds18b20.
+
+    There is only one device per plug. Instead of searching for the
+    adresses of the devices, we use the skip rom command which allow
+    us to directly ask any device on the line without address.
+
+    The sequence is as follow:
+    We ask the sensor to update its value :
+    1. Issue a Reset pulse and observe the Presence of the thermometer
+    2. Issue the Skip Rom command (0xCC)
+    3. Issue the Convert T command (0×44)
+
+    The conversion in 12 bits take 750ms, so we actually read the previous value :
+    1. Issue a Reset pulse and observe the Presence of the thermometer
+    2. Issue the Skip Rom command (0xCC)
+    3. Issue the Read Scratchpad command (0xBE)
+    4. Read the next two bytes which represent the temperature
  *********************************************/
 
 #include <OneWire.h>
@@ -27,18 +27,15 @@
 byte oneWireAddress[8];
 
 #ifdef TEMP_LIQ
-  OneWire oneWire1(TEMP_LIQ);
-  byte errorTempLiq = false;
+OneWire oneWire1(TEMP_LIQ);
 #endif
 
 #ifdef TEMP_PCB
-  OneWire oneWire2(TEMP_PCB);
-  byte errorTempPlate = false;
+OneWire oneWire2(TEMP_PCB);
 #endif
 
-void getTemperature(OneWire &ow, int parameter, byte errorBit, byte failedEvent, byte recoverEvent);
+void getTemperature(OneWire &ow, int parameter, byte errorFlag);
 
-byte errorTemperature=0;
 #ifdef DEBUG_ONEWIRE
 NIL_WORKING_AREA(waThreadTemp, 240);  // should be 50 without Serial.println
 #else
@@ -47,126 +44,123 @@ NIL_WORKING_AREA(waThreadTemp, 180);  // should be 50 without Serial.println
 
 NIL_THREAD(ThreadTemp, arg) {
   nilThdSleepMilliseconds(200);
-  #ifdef DEBUG_ONEWIRE
+#ifdef DEBUG_ONEWIRE
   nilThdSleepMilliseconds(2000);
   Serial.println(F("OneWire Thread"));
-  #endif
+#endif
 
-  while(true){
-  #ifdef TEMP_LIQ
-      getTemperature(oneWire1, PARAM_TEMP_LIQ, 0, EVENT_TEMP_LIQ_FAILED, EVENT_TEMP_LIQ_RECOVER);
-  #endif
+  while (true) {
+#ifdef TEMP_LIQ
+    getTemperature(oneWire1, PARAM_TEMP_LIQ, FLAG_TEMP_LIQ_PROBE_ERROR);
+#endif
 
-  #ifdef TEMP_PCB
-      getTemperature(oneWire2, PARAM_TEMP_PCB, 1, EVENT_TEMP_PCB_FAILED, EVENT_TEMP_PCB_RECOVER);
-  #endif
+#ifdef TEMP_PCB
+    getTemperature(oneWire2, PARAM_TEMP_PCB, FLAG_TEMP_PCB_PROBE_ERROR);
+#endif
   }
 }
 
 
-void getTemperature(OneWire &ow, int parameter, byte errorBit, byte failedEvent, byte recoverEvent) {
-  byte i;
+void getTemperature(OneWire &ow, int parameter, byte errorFlag) {
   byte present = 0;
   byte type_s;
   byte data[12];
   byte addr[8];
   float celsius;
-  
+
   if ( !ow.search(addr)) {
-    #ifdef DEBUG_ONEWIRE
+#ifdef DEBUG_ONEWIRE
     Serial.println(F("No more addr."));
     Serial.println();
-    #endif
+#endif
     ow.reset_search();
     nilThdSleepMilliseconds(200);
-    if(!ow.search(addr)){
-     if (bitRead(errorTemperature, errorBit)!=1) {
-      bitSet(errorTemperature, errorBit);
-      writeLog(failedEvent,0);
-      #ifdef DEBUG_ONEWIRE
+    if (!ow.search(addr)) {
+      saveAndLogError(true, errorFlag);
+#ifdef DEBUG_ONEWIRE
       Serial.println(F("Error getting TP"));
-      #endif
+#endif
       setParameter(parameter, ERROR_VALUE);
-    } 
-    return;
-  } else if(bitRead(errorTemperature, errorBit)){
-      bitClear(errorTemperature, errorBit);
-      writeLog(recoverEvent,0);  
+      return;
+    } else {
+      saveAndLogError(false, errorFlag);
     }
+  } else {
+    saveAndLogError(false, errorFlag);
   }
-  
-  #ifdef DEBUG_ONEWIRE
+
+#ifdef DEBUG_ONEWIRE
   Serial.print(F("ROM ="));
-  for( i = 0; i < 8; i++) {
+  for ( i = 0; i < 8; i++) {
     Serial.write(' ');
     Serial.print(addr[i], HEX);
   }
-  #endif
+#endif
 
   if (OneWire::crc8(addr, 7) != addr[7]) {
-      Serial.println(F("CRC invalid!"));
-      return;
+    Serial.println(F("CRC invalid!"));
+    return;
   }
- 
+
   // the first ROM byte indicates which chip
   switch (addr[0]) {
     case 0x10:
-      #ifdef DEBUG_ONEWIRE
+#ifdef DEBUG_ONEWIRE
       Serial.println(F("  Chip = DS18S20"));  // or old DS1820
-      #endif
+#endif
       type_s = 1;
       break;
     case 0x28:
-      #ifdef DEBUG_ONEWIRE
+#ifdef DEBUG_ONEWIRE
       Serial.println(F("  Chip = DS18B20"));
-      #endif
+#endif
       type_s = 0;
       break;
     case 0x22:
-      #ifdef DEBUG_ONEWIRE
+#ifdef DEBUG_ONEWIRE
       Serial.println(F("  Chip = DS1822"));
-      #endif
+#endif
       type_s = 0;
       break;
     default:
-      #ifdef DEBUG_ONEWIRE
+#ifdef DEBUG_ONEWIRE
       Serial.println(F("Device is not a DS18x20"));
-      #endif
+#endif
       return;
-  } 
+  }
 
   protectThread();
   ow.reset();
   ow.select(addr);
   ow.write(0x44, 1);        // start conversion, with parasite power on at the end
   unprotectThread();
-    
+
   nilThdSleepMilliseconds(800);     // maybe 750ms is enough, maybe not
   // we might do a ds.depower() here, but the reset will take care of it.
-  
+
   protectThread();
   present = ow.reset();
-  ow.select(addr);    
+  ow.select(addr);
   ow.write(0xBE);         // Read Scratchpad
   unprotectThread();
 
-  #ifdef DEBUG_ONEWIRE
+#ifdef DEBUG_ONEWIRE
   Serial.print(F("  Data = "));
   Serial.print(present, HEX);
   Serial.print(" ");
-  #endif
-  for ( i = 0; i < 9; i++) {           // we need 9 bytes
+#endif
+  for (byte i = 0; i < 9; i++) {           // we need 9 bytes
     data[i] = ow.read();
-    #ifdef DEBUG_ONEWIRE
+#ifdef DEBUG_ONEWIRE
     Serial.print(data[i], HEX);
     Serial.print(" ");
-    #endif
+#endif
   }
-  #ifdef DEBUG_ONEWIRE
+#ifdef DEBUG_ONEWIRE
   Serial.print(F(" CRC="));
   Serial.print(OneWire::crc8(data, 8), HEX);
   Serial.println();
-  #endif
+#endif
 
   // Convert the data to actual temperature
   // because the result is a 16 bit signed integer, it should
@@ -188,12 +182,12 @@ void getTemperature(OneWire &ow, int parameter, byte errorBit, byte failedEvent,
     //// default is 12 bit resolution, 750 ms conversion time
   }
   celsius = (float)raw / 16.0;
-  #ifdef DEBUG_ONEWIRE
+#ifdef DEBUG_ONEWIRE
   Serial.print(F("  T = "));
   Serial.print(celsius);
   Serial.println(F("C"));
-  #endif
-  setParameter(parameter, (int)(celsius*100));
+#endif
+  setParameter(parameter, (int)(celsius * 100));
   ow.reset_search();
   nilThdSleepMilliseconds(1000);
 }
@@ -203,32 +197,32 @@ void getTemperature(OneWire &ow, int parameter, byte errorBit, byte failedEvent,
 //bus info function
 void oneWireInfo(Print* output) { // TODO
   output->println(F("One wire device list"));
-  #ifdef TEMP_LIQ
+#ifdef TEMP_LIQ
   protectThread();
   oneWire1.reset_search();
   while (oneWire1.search(oneWireAddress)) {
-    for(byte i = 0; i < 8; i++) {
+    for (byte i = 0; i < 8; i++) {
       output->print(' ');
       output->print(oneWireAddress[i], HEX);
     }
     unprotectThread();
     output->println("");
-    nilThdSleepMilliseconds(250);  
+    nilThdSleepMilliseconds(250);
   }
-  #endif
-  #ifdef TEMP_PCB
+#endif
+#ifdef TEMP_PCB
   protectThread();
   oneWire2.reset_search();
   while (oneWire2.search(oneWireAddress)) {
-    for(byte i = 0; i < 8; i++) {
+    for (byte i = 0; i < 8; i++) {
       output->print(' ');
       output->print(oneWireAddress[i], HEX);
     }
     unprotectThread();
     output->println("");
-    nilThdSleepMilliseconds(250);  
+    nilThdSleepMilliseconds(250);
   }
-  #endif
+#endif
 }
 
 #endif

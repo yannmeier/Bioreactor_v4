@@ -32,54 +32,22 @@ NIL_THREAD(Thread_PID, arg)
   }
 }
 
-
 /*Temperature PID Control addressing relay*/
 
 void pid_ctrl() {
-  if (! getParameterBit(PARAM_STATUS, FLAG_PID_CONTROL)) { // PID is disabled
+  saveAndLogError(getParameter(PARAM_TEMP_LIQ) < SAFETY_MIN_LIQ_TEMP || getParameter(PARAM_TEMP_LIQ) > SAFETY_MAX_LIQ_TEMP, FLAG_TEMP_LIQ_RANGE_ERROR);
+  saveAndLogError(getParameter(PARAM_TEMP_PCB) < SAFETY_MIN_PCB_TEMP || getParameter(PARAM_TEMP_PCB) > SAFETY_MAX_PCB_TEMP, FLAG_TEMP_PCB_RANGE_ERROR);
+  saveAndLogError(getParameter(PARAM_TEMP_TARGET) < SAFETY_MIN_LIQ_TEMP || getParameter(PARAM_TEMP_TARGET) > SAFETY_MAX_LIQ_TEMP, FLAG_TEMP_TARGET_RANGE_ERROR);
+
+  if (! getStatus(FLAG_PID_CONTROL)) { // PID is disabled
     analogWrite(TEMP_PID, 0);
     return;
-  }
-  // We will check if we are in the allowed range
-  if (getParameter(PARAM_TEMP_LIQ) < SAFETY_MIN_LIQ_TEMP || getParameter(PARAM_TEMP_LIQ) > SAFETY_MAX_LIQ_TEMP) {
-    // the temperature of the liquid is out of range
-    if (setParameterBit(PARAM_STATUS, FLAG_LIQ_TEMP_ERROR)) { // the status has changed
-      writeLog(EVENT_TEMP_LIQ_OUTSIDE_RANGE);
-    }
-    analogWrite(TEMP_PID, 0);
-    return;
-  } else {
-    if (clearParameterBit(PARAM_STATUS, FLAG_LIQ_TEMP_ERROR)) { // the status has changed
-      writeLog(EVENT_TEMP_LIQ_INSIDE_RANGE);
-    }
   }
 
-  if (getParameter(PARAM_TEMP_PCB) < SAFETY_MIN_PCB_TEMP || getParameter(PARAM_TEMP_PCB) > SAFETY_MAX_PCB_TEMP) {
-    // the temperature of the pdb (hardware) is out of range
-    if (setParameterBit(PARAM_STATUS, FLAG_PCB_TEMP_ERROR)) { // the status has changed
-      writeLog(EVENT_TEMP_PCB_OUTSIDE_RANGE);
-    }
+  if (isError(MASK_TEMP_ERROR)) {
     analogWrite(TEMP_PID, 0);
     return;
-  } else {
-    if (clearParameterBit(PARAM_STATUS, FLAG_PCB_TEMP_ERROR)) { // the status has changed
-      writeLog(EVENT_TEMP_PCB_INSIDE_RANGE);
-    }
   }
-
-  if (getParameter(PARAM_TEMP_TARGET) < SAFETY_MIN_LIQ_TEMP || getParameter(PARAM_TEMP_TARGET) > SAFETY_MAX_LIQ_TEMP) {   // the temperature target is out of range
-    // the temperature of the pdb (hardware) is out of range
-    if (setParameterBit(PARAM_STATUS, FLAG_RANGE_TEMP_ERROR)) { // the status has changed
-      writeLog(EVENT_TEMP_TARGET_OUTSIDE_RANGE);
-    }
-    analogWrite(TEMP_PID, 0);
-    return;
-  } else {
-    if (clearParameterBit(PARAM_STATUS, FLAG_RANGE_TEMP_ERROR)) { // the status has changed
-      writeLog(EVENT_TEMP_TARGET_INSIDE_RANGE);
-    }
-  }
-
 
   heatingRegInput = getParameter(PARAM_TEMP_LIQ);
   heatingRegSetpoint = getParameter(PARAM_TEMP_TARGET);

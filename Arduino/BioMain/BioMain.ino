@@ -18,8 +18,7 @@ void setup() {
   #ifdef LCD_SELECT              //disable SPI modules 
     setupLCD();
   #endif
-  
-  setSafeConditions(false);
+
   nilSysBegin();
 }
 
@@ -36,6 +35,7 @@ void protectThread() {
    }
    lockTimeCriticalZone=true;
 }
+
 void unprotectThread() {
 	lockTimeCriticalZone=false;
 }
