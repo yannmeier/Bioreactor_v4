@@ -18,6 +18,10 @@ This will allow to see when the plate is turned on. Nice to debug !
 
 With a resistance of 1.2Ω in 12v we will need 10A. This is the limit of the powersuppy and it would be nice if we don't use permanently full power.
 
+Note that the Board is operating at 3V3 and the PID is powered in 12V. Thus the PowerFET used to deliver the required current must be picked up carefully to have a low threshold voltage Vgs and a low Rds channel resistance at this operating 3v3 voltage. Good matches are provided here on Mouser: http://www.mouser.ch/Semiconductors/Discrete-Semiconductors/Transistors/MOSFET/_/N-ax1sf?P=1z0yra8Z1z0y182Z1z0z7ptZ1yzxnagZ1yw76g4Z1yw76ckZ1yw76gb&Rl=ax1sfZgjdhsdZ1yjepp1Z1yjenlnSGTax1sfZgjdhp3Z1yw78huZ1y9kq41SGT&Keyword=MOSFET&OrgTerm=mosfet&FS=True&Ns=Pricing|0.
+
+We have chosen the BUK965R8-100E for its steady Rds at los Vgs even for high currents.
+
 
 # Limit values
 
