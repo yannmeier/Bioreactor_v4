@@ -249,26 +249,42 @@ int getWeight() { // we can not avoid to have some errors measuring the weight
   return weight / counter / 100;
 }
 
+int getWeightInG() {
+  return convertWeightToG(getWeight());
+}
+
+int convertWeightToG(int weight) {
+  return ((long)(weight - getParameter(PARAM_WEIGHT_OFFSET))*1000) / getParameter(PARAM_WEIGHT_FACTOR);
+}
+
 
 void processWeightCommand(char command, char* data, Print * output) {
   int weight = getWeight();
   switch (command) {
     case 'e': // define the empty level
       setAndSaveParameter(PARAM_WEIGHT_OFFSET, weight);
+      output->println(weight);
       break;
     case 'k': // define the weight one kg over the tare
       setAndSaveParameter(PARAM_WEIGHT_FACTOR, weight - getParameter(PARAM_WEIGHT_OFFSET));
+      output->println(weight);
       break;
     case 'l': // define low level
       setAndSaveParameter(PARAM_WEIGHT_MIN, weight);
+      output->println(weight);
       break;
     case 'h': // define high level
       setAndSaveParameter(PARAM_WEIGHT_MAX, weight);
+      output->println(weight);
       break;
     case 't':
       output->println(F("Current weight"));
       for (byte i = 0; i < 10; i++) {
-        output->println(getWeight());
+        int weight = getWeight();
+        output->print(weight);
+        output->print(F(" = "));
+        output->print(convertWeightToG(weight));
+        output->println("g");
       }
       break;
     default:
