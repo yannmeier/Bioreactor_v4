@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.5.0">
+<eagle version="6.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
@@ -13129,7 +13129,7 @@ Source: http://www.lumberg.com/Produkte/PDFs/1503_09.pdf</description>
 <part name="RK1" library="resistor" deviceset="R-EU_" device="M0805" value="10K"/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
 <part name="GND27" library="supply1" deviceset="GND" device=""/>
-<part name="HX1" library="transistor-power" deviceset="IRF3704" device="S" value="IPB081N06L3GATMA1"/>
+<part name="HX1" library="transistor-power" deviceset="IRF3704" device="S" value="&lt;3V th / 10A"/>
 <part name="R11" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
 <part name="P+2" library="supply1" deviceset="+12V" device=""/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
@@ -15393,7 +15393,7 @@ Increases noise per read</text>
 <instance part="GND8" gate="1" x="345.44" y="261.62"/>
 <instance part="GND27" gate="1" x="337.82" y="266.7"/>
 <instance part="HX1" gate="G$1" x="358.14" y="30.48"/>
-<instance part="R11" gate="G$1" x="345.44" y="27.94" rot="MR180"/>
+<instance part="R11" gate="G$1" x="347.98" y="27.94" rot="MR180"/>
 <instance part="P+2" gate="1" x="372.872" y="36.83" smashed="yes">
 <attribute name="VALUE" x="374.777" y="36.83" size="1.27" layer="96"/>
 </instance>
@@ -15517,7 +15517,7 @@ Increases noise per read</text>
 <instance part="C1" gate="G$1" x="170.18" y="269.24"/>
 <instance part="Q6" gate="G$1" x="78.74" y="53.34"/>
 <instance part="Q5" gate="G$1" x="78.74" y="27.94"/>
-<instance part="RK14" gate="G$1" x="353.06" y="22.86" rot="R90"/>
+<instance part="RK14" gate="G$1" x="337.82" y="22.86" rot="R90"/>
 <instance part="RK13" gate="G$1" x="68.58" y="20.32" rot="R90"/>
 <instance part="RK12" gate="G$1" x="71.12" y="45.72" rot="R90"/>
 <instance part="R5" gate="G$1" x="60.96" y="50.8" rot="MR180"/>
@@ -15551,7 +15551,7 @@ Increases noise per read</text>
 </instance>
 <instance part="P+7" gate="G$1" x="487.68" y="274.32"/>
 <instance part="GND66" gate="1" x="487.68" y="264.16"/>
-<instance part="LDPID" gate="G$1" x="355.6" y="15.24" rot="MR270"/>
+<instance part="LDPID" gate="G$1" x="355.6" y="17.78" rot="MR270"/>
 <instance part="STEPPER" gate="G$1" x="497.84" y="119.38" rot="R180"/>
 <instance part="LDIN" gate="G$1" x="76.2" y="40.64" rot="MR270"/>
 <instance part="LDOUT" gate="G$1" x="76.2" y="15.24" rot="MR270"/>
@@ -15634,10 +15634,10 @@ Increases noise per read</text>
 <segment>
 <pinref part="HX1" gate="G$1" pin="S"/>
 <pinref part="GND2" gate="1" pin="GND"/>
-<wire x1="360.68" y1="25.4" x2="360.68" y2="15.24" width="0.1524" layer="91"/>
+<wire x1="360.68" y1="25.4" x2="360.68" y2="17.78" width="0.1524" layer="91"/>
 <pinref part="LDPID" gate="G$1" pin="C"/>
-<wire x1="360.68" y1="15.24" x2="360.68" y2="12.7" width="0.1524" layer="91"/>
-<junction x="360.68" y="15.24"/>
+<wire x1="360.68" y1="17.78" x2="360.68" y2="12.7" width="0.1524" layer="91"/>
+<junction x="360.68" y="17.78"/>
 </segment>
 <segment>
 <wire x1="419.1" y1="22.86" x2="419.1" y2="15.24" width="0.1524" layer="91"/>
@@ -16099,8 +16099,11 @@ Increases noise per read</text>
 </segment>
 <segment>
 <pinref part="R11" gate="G$1" pin="1"/>
-<wire x1="340.36" y1="27.94" x2="330.2" y2="27.94" width="0.1524" layer="91"/>
+<wire x1="342.9" y1="27.94" x2="337.82" y2="27.94" width="0.1524" layer="91"/>
 <label x="330.2" y="27.94" size="1.778" layer="95"/>
+<pinref part="RK14" gate="G$1" pin="2"/>
+<wire x1="337.82" y1="27.94" x2="330.2" y2="27.94" width="0.1524" layer="91"/>
+<junction x="337.82" y="27.94"/>
 </segment>
 </net>
 <net name="D10*" class="0">
@@ -16566,16 +16569,6 @@ Increases noise per read</text>
 <junction x="226.06" y="182.88"/>
 </segment>
 </net>
-<net name="N$6" class="0">
-<segment>
-<pinref part="R11" gate="G$1" pin="2"/>
-<pinref part="HX1" gate="G$1" pin="G"/>
-<wire x1="350.52" y1="27.94" x2="353.06" y2="27.94" width="0.1524" layer="91"/>
-<pinref part="RK14" gate="G$1" pin="2"/>
-<wire x1="353.06" y1="27.94" x2="355.6" y2="27.94" width="0.1524" layer="91"/>
-<junction x="353.06" y="27.94"/>
-</segment>
-</net>
 <net name="N$3" class="0">
 <segment>
 <pinref part="R2" gate="G$1" pin="2"/>
@@ -17006,7 +16999,7 @@ Increases noise per read</text>
 <net name="N$26" class="1">
 <segment>
 <pinref part="RK14" gate="G$1" pin="1"/>
-<wire x1="353.06" y1="15.24" x2="353.06" y2="17.78" width="0.1524" layer="91"/>
+<wire x1="353.06" y1="17.78" x2="337.82" y2="17.78" width="0.1524" layer="91"/>
 <pinref part="LDPID" gate="G$1" pin="A"/>
 </segment>
 </net>
@@ -17173,6 +17166,13 @@ Increases noise per read</text>
 <pinref part="R3" gate="G$1" pin="1"/>
 <pinref part="U$1" gate="G$1" pin="CS"/>
 <label x="414.02" y="254" size="1.778" layer="95" rot="R90"/>
+</segment>
+</net>
+<net name="N$4" class="0">
+<segment>
+<pinref part="HX1" gate="G$1" pin="G"/>
+<pinref part="R11" gate="G$1" pin="2"/>
+<wire x1="353.06" y1="27.94" x2="355.6" y2="27.94" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

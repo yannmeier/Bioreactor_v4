@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.7.0">
+<eagle version="6.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
@@ -13804,7 +13804,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="RK1" library="resistor" deviceset="R-EU_" device="M0805" value="10K"/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
 <part name="GND27" library="supply1" deviceset="GND" device=""/>
-<part name="HX1" library="transistor-power" deviceset="IRF3704" device="S" value="IPB081N06L3GATMA1"/>
+<part name="HX1" library="transistor-power" deviceset="IRF3704" device="S" value="&lt;3V th / 10A"/>
 <part name="R11" library="rcl" deviceset="R-EU_" device="R0805" value="1K"/>
 <part name="P+2" library="supply1" deviceset="+12V" device=""/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
@@ -13995,7 +13995,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="R26" library="rcl" deviceset="R-EU_" device="R2010" value="0.2R 1W"/>
 <part name="R27" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="47K"/>
 <part name="C26" library="freetronics-master-v1" deviceset="CAP" device="0805" value="1nF"/>
-<part name="R28" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="0R"/>
+<part name="R28" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="Rlim"/>
 <part name="C27" library="freetronics-master-v1" deviceset="CAP" device="0805" value="100n"/>
 <part name="R29" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="3k3"/>
 <part name="R30" library="freetronics-master-v1" deviceset="RESISTOR" device="0805" value="10k"/>
@@ -14025,6 +14025,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="P+50" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="P+62" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="JP3" library="jumper" deviceset="JP4E" device=""/>
+<part name="R4" library="rcl" deviceset="R-EU_" device="R0805" value="100"/>
 </parts>
 <sheets>
 <sheet>
@@ -16287,7 +16288,7 @@ Increases noise per read</text>
 <instance part="P+34" gate="G$1" x="15.24" y="116.84"/>
 <instance part="P+35" gate="G$1" x="30.48" y="116.84"/>
 <instance part="P+36" gate="G$1" x="274.32" y="27.94"/>
-<instance part="P+37" gate="G$1" x="279.4" y="50.8"/>
+<instance part="P+37" gate="G$1" x="279.4" y="60.96"/>
 <instance part="P+39" gate="G$1" x="401.32" y="45.72"/>
 <instance part="P+40" gate="G$1" x="408.94" y="45.72"/>
 <instance part="P+41" gate="G$1" x="429.26" y="45.72"/>
@@ -16461,6 +16462,7 @@ Increases noise per read</text>
 <instance part="P+50" gate="G$1" x="622.3" y="76.2"/>
 <instance part="P+62" gate="G$1" x="693.42" y="53.34"/>
 <instance part="JP3" gate="G$1" x="673.1" y="48.26" rot="R270"/>
+<instance part="R4" gate="G$1" x="279.4" y="53.34" rot="MR90"/>
 </instances>
 <busses>
 </busses>
@@ -17310,14 +17312,6 @@ Increases noise per read</text>
 <pinref part="U$2" gate="G$1" pin="VDD"/>
 </segment>
 <segment>
-<pinref part="RT1" gate="G$1" pin="1"/>
-<pinref part="P+37" gate="G$1" pin="3.3V"/>
-<wire x1="279.4" y1="50.8" x2="279.4" y2="48.26" width="0.1524" layer="91"/>
-<pinref part="X1" gate="G$1" pin="1"/>
-<junction x="279.4" y="48.26"/>
-<wire x1="279.4" y1="48.26" x2="274.32" y2="48.26" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="RK15" gate="G$1" pin="1"/>
 <pinref part="P+39" gate="G$1" pin="3.3V"/>
 </segment>
@@ -17371,6 +17365,11 @@ Increases noise per read</text>
 <wire x1="693.42" y1="53.34" x2="693.42" y2="50.8" width="0.1524" layer="91"/>
 <pinref part="C32" gate="G$1" pin="1"/>
 <pinref part="P+62" gate="G$1" pin="3.3V"/>
+</segment>
+<segment>
+<pinref part="R4" gate="G$1" pin="2"/>
+<pinref part="P+37" gate="G$1" pin="3.3V"/>
+<wire x1="279.4" y1="60.96" x2="279.4" y2="58.42" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="SDA" class="0">
@@ -18276,6 +18275,15 @@ Increases noise per read</text>
 <wire x1="662.94" y1="43.18" x2="662.94" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="662.94" y1="45.72" x2="670.56" y2="45.72" width="0.1524" layer="91"/>
 <pinref part="JP3" gate="G$1" pin="3"/>
+</segment>
+</net>
+<net name="N$14" class="1">
+<segment>
+<pinref part="RT1" gate="G$1" pin="1"/>
+<pinref part="X1" gate="G$1" pin="1"/>
+<wire x1="279.4" y1="48.26" x2="274.32" y2="48.26" width="0.1524" layer="91"/>
+<pinref part="R4" gate="G$1" pin="1"/>
+<junction x="279.4" y="48.26"/>
 </segment>
 </net>
 </nets>
