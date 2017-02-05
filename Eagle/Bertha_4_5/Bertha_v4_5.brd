@@ -7024,7 +7024,10 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="8.902734375" y="46.40128125" size="0.8128" layer="27" rot="R180"/>
 </element>
 <element name="RK1" library="resistor" package="M0805" value="10K" x="8.82023125" y="48.6536625" smashed="yes" rot="R90"/>
-<element name="HX1" library="transistor-power" package="D2PACK" value="3v3 IGBT" x="7.39551875" y="11.3685"/>
+<element name="HX1" library="transistor-power" package="D2PACK" value="&lt;3V th / 10A" x="7.39551875" y="11.3685" smashed="yes">
+<attribute name="NAME" x="1.80751875" y="18.6075" size="1.27" layer="25"/>
+<attribute name="VALUE" x="3.2" y="7.980075" size="0.8128" layer="27"/>
+</element>
 <element name="R11" library="rcl" package="R0805" value="1K" x="19.194778125" y="14.6140875" smashed="yes" rot="R180">
 <attribute name="NAME" x="21.128021875" y="13.305246875" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="16.854425" y="15.197159375" size="0.8128" layer="27" rot="R180"/>
