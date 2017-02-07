@@ -102,6 +102,8 @@
 #undef TEMPERATURE_CTRL
 #endif
 
+#define EVENT_LOGGING
+
 /******************************
   SERIAL, LOGGER AND DEBUGGERS
 *******************************/
@@ -131,7 +133,7 @@
 #define PARAM_STEPPER_STEPS       28
 #endif
 
-#ifdef     TEMPERATURE_CTRL
+#ifdef TEMPERATURE_CTRL
 #define PARAM_TEMP_LIQ      0   // temperature of the solution
 #define PARAM_TEMP_PCB      1   // temperature of the heating plate
 #define PARAM_TEMP_TARGET   26  // target temperature of the liquid
@@ -140,14 +142,14 @@
 /*************************************/
 
 #if defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
-#define PARAM_WEIGHT_FACTOR        33  // Weight calibration: conversion factor digital -> gr (weight=FACTOR*dig_unit)
-#define PARAM_WEIGHT_OFFSET        34  // Weight calibration: digital offset value when bioreactor is empty
-#define PARAM_WEIGHT               2   // in gr
-#define PARAM_WEIGHT_MIN           29
-#define PARAM_WEIGHT_MAX           30
-#define PARAM_SEDIMENTATION_TIME   31  // MINUTES to wait without rotation before emptying
-#define PARAM_FILLED_TIME          32  // MINUTES to stay in the filled state
-#define PARAM_WEIGHT_STATUS        3   // current STATUS // BBBAAAAA AAAAAAAA : A = wait time in minutes, B = status
+#define PARAM_WEIGHT                  2   // in unit of the balance
+#define PARAM_WEIGHT_SINCE_LAST_EVENT 3   // 
+#define PARAM_WEIGHT_MIN             29
+#define PARAM_WEIGHT_MAX             30
+#define PARAM_SEDIMENTATION_TIME     31  // MINUTES to wait without rotation before emptying
+#define PARAM_FILLED_TIME            32  // MINUTES to stay in the filled state
+#define PARAM_WEIGHT_FACTOR          33  // Weight calibration: conversion factor digital -> gr (weight=FACTOR*dig_unit)
+#define PARAM_WEIGHT_OFFSET          34  // Weight calibration: digital offset value when bioreactor is empty
 #endif
 
 /*************************************/
@@ -224,13 +226,16 @@
 
 
 
-#define PARAM_STATUS       25
+#define PARAM_STATUS             25  // currently active service
+#define PARAM_ENABLED            51  // enabled service (set by user)
 #define FLAG_STEPPER_CONTROL     0   //0 to stop engine
-#define FLAG_PH_CONTROL          1   //0 to to stop ph
-#define FLAG_GAS_CONTROL         2   //0 to stop gas
-#define FLAG_FOOD_CONTROL        3   //1 for food ctrl
-#define FLAG_PID_CONTROL         4   //0 to stop PID
+#define FLAG_FOOD_CONTROL        1   //1 for food ctrl
+#define FLAG_PID_CONTROL         2   //0 to stop PID
 
+#define FLAG_PH_CONTROL          3   //0 to to stop ph
+#define FLAG_GAS_CONTROL         4   //0 to stop gas
+
+#define FLAG_SEDIMENTATION       7
 #define FLAG_RELAY_FILLING       8
 #define FLAG_RELAY_EMPTYING      9
 

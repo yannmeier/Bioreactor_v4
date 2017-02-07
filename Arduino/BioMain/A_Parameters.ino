@@ -32,8 +32,13 @@
 #define EVENT_ARDUINO_BOOT              1
 #define EVENT_ARDUINO_SET_SAFE          2
 
+#define EVENT_STATUS_ENABLE             3
+#define EVENT_STATUS_DISABLE            4
+
 #define EVENT_ERROR_FAILED              6
 #define EVENT_ERROR_RECOVER             7
+
+
 
 
 #define EVENT_PUMPING_FILLING_START    10
@@ -49,9 +54,6 @@
 #define EVENT_MOTOR_START            20
 #define EVENT_MOTOR_STOP             21
 
-#define EVENT_WEIGHT_FAILURE           129
-#define EVENT_WEIGHT_BACK_TO_NORMAL    130
-#define EVENT_WEIGHT_READ_FAIL         131
 
 #define EVENT_ERROR_NOT_FOUND_ENTRY_N  150
 
@@ -225,12 +227,16 @@ void setQualifier(uint16_t value) {
 boolean saveAndLogError(boolean isError, byte errorFlag) {
   if (isError) {
     if (setParameterBit(PARAM_ERROR, errorFlag)) { // the status has changed
+#ifdef EVENT_LOGGING
       writeLog(EVENT_ERROR_FAILED, errorFlag);
+#endif
       return true;
     }
   } else {
     if (clearParameterBit(PARAM_ERROR, errorFlag)) { // the status has changed
+#ifdef EVENT_LOGGING
       writeLog(EVENT_ERROR_RECOVER, errorFlag);
+#endif
       return true;
     }
   }
@@ -242,8 +248,42 @@ boolean isError(int filter) {
   return false;
 }
 
-boolean getStatus(byte statusFlag) {
-    return getParameterBit(PARAM_STATUS, statusFlag);
+boolean isError() {
+  return (getParameter(PARAM_ERROR)!= 0);
 }
+
+boolean getStatus(byte statusFlag) {
+  return getParameterBit(PARAM_STATUS, statusFlag);
+}
+
+boolean isEnabled(byte statusFlag) {
+  return getParameterBit(PARAM_ENABLED, statusFlag);
+}
+
+boolean isRunning(byte statusFlag) {
+  return getParameterBit(PARAM_STATUS, statusFlag);
+}
+
+
+boolean start(byte statusFlag) {
+  boolean statusChanged = setParameterBit(PARAM_STATUS, statusFlag);
+#ifdef EVENT_LOGGING
+  if (statusChanged) {
+    writeLog(EVENT_STATUS_ENABLE, statusFlag);
+  }
+#endif
+  return statusChanged;
+}
+
+boolean stop(byte statusFlag) {
+  boolean statusChanged =  clearParameterBit(PARAM_STATUS, statusFlag);
+#ifdef EVENT_LOGGING
+  if (statusChanged) {
+    writeLog(EVENT_STATUS_DISABLE, statusFlag);
+  }
+#endif
+  return statusChanged;
+}
+
 
 

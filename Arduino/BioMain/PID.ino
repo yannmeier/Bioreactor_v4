@@ -39,15 +39,17 @@ void pid_ctrl() {
   saveAndLogError(getParameter(PARAM_TEMP_PCB) < SAFETY_MIN_PCB_TEMP || getParameter(PARAM_TEMP_PCB) > SAFETY_MAX_PCB_TEMP, FLAG_TEMP_PCB_RANGE_ERROR);
   saveAndLogError(getParameter(PARAM_TEMP_TARGET) < SAFETY_MIN_LIQ_TEMP || getParameter(PARAM_TEMP_TARGET) > SAFETY_MAX_LIQ_TEMP, FLAG_TEMP_TARGET_RANGE_ERROR);
 
-  if (! getStatus(FLAG_PID_CONTROL)) { // PID is disabled
+  if (! isRunning(FLAG_PID_CONTROL) || ! isEnabled(FLAG_PID_CONTROL)) { // PID is disabled
     analogWrite(TEMP_PID, 0);
     return;
   }
 
-  if (isError(MASK_TEMP_ERROR)) {
+  if (isError()) { // any error we should stop heating !
     analogWrite(TEMP_PID, 0);
     return;
   }
+
+
 
   heatingRegInput = getParameter(PARAM_TEMP_LIQ);
   heatingRegSetpoint = getParameter(PARAM_TEMP_TARGET);

@@ -17,6 +17,6 @@ void setup() {
 
 // the loop routine runs over and over again forever:
 void loop() {
-analogWrite(led, 150);
+analogWrite(led, 255);
 delay(3000);
 }
