@@ -11,7 +11,6 @@ NIL_WORKING_AREA(waThreadWeight, 56); // minimum of 32 !
 #endif
 
 
-
 NIL_THREAD(ThreadWeight, arg) {
   nilThdSleepMilliseconds(1234); // wait a little bit not everything starts at once
 
@@ -60,12 +59,17 @@ NIL_THREAD(ThreadWeight, arg) {
 
 
     if (isRunning(FLAG_SEDIMENTATION)) {
+      // just to sure in case more than one flag is active we stop the pumps
+      stop(FLAG_RELAY_EMPTYING);
+      stop(FLAG_RELAY_FILLING);
       if (sinceLastEvent >= getParameter(PARAM_SEDIMENTATION_TIME)) {  //switch to Emptying
         stop(FLAG_SEDIMENTATION);
         start(FLAG_RELAY_EMPTYING);
         timeLastEvent = millis();
       }
     } else if (isRunning(FLAG_RELAY_EMPTYING)) {
+      // just to sure in case more than one flag is active we stop the pumps
+      stop(FLAG_RELAY_FILLING);
       if (weight <= getParameter(PARAM_WEIGHT_MIN)) {      //switch fo Filling
         stop(FLAG_RELAY_EMPTYING);
         start(FLAG_RELAY_FILLING);

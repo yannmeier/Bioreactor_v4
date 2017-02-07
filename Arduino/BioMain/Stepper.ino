@@ -28,20 +28,7 @@ void executeStep(uint16_t numberSteps, boolean forward, byte port1, byte port2) 
   uint8_t counter = 0;
   while (numberSteps > 0) {
 
-    if (! isRunning(FLAG_STEPPER_CONTROL) || ! isEnabled(FLAG_STEPPER_CONTROL)) { // PID is disabled
-      stopStepper();
-      return;
-    }
-
-    if (isError()) { // any error we should stop heating !
-      stopStepper();
-      return;
-    }
-
-    if (isRunning(FLAG_RELAY_EMPTYING) || isRunning(FLAG_SEDIMENTATION)) {
-      stopStepper();
-      return;
-    }
+    if (isStepperStopped()) return;
 
     numberSteps--;
     if (forward) counter++;
@@ -81,20 +68,7 @@ void executeStep(uint16_t numberSteps, boolean forward) {
   uint8_t counter = 0;
   while (numberSteps > 0) {
 
-    if (! isRunning(FLAG_STEPPER_CONTROL) || ! isEnabled(FLAG_STEPPER_CONTROL)) { // PID is disabled
-      stopStepper();
-      return;
-    }
-
-    if (isError()) { // any error we should stop heating !
-      stopStepper();
-      return;
-    }
-
-    if (isRunning(FLAG_RELAY_EMPTYING) || isRunning(FLAG_SEDIMENTATION)) {
-      stopStepper();
-      return;
-    }
+    if (isStepperStopped()) return;
 
     numberSteps--;
     if (forward) counter++;
@@ -124,6 +98,24 @@ void executeStep(uint16_t numberSteps, boolean forward) {
   }
 }
 #endif
+
+boolean isStepperStopped() {
+  if (! isRunning(FLAG_STEPPER_CONTROL) || ! isEnabled(FLAG_STEPPER_CONTROL)) { // PID is disabled
+    stopStepper();
+    return true;
+  }
+
+  if (isError()) { // any error we should stop heating !
+    stopStepper();
+    return true;
+  }
+
+  if (isRunning(FLAG_RELAY_EMPTYING) || isRunning(FLAG_SEDIMENTATION)) {
+    stopStepper();
+    return true;
+  }
+  return false;
+}
 
 
 
