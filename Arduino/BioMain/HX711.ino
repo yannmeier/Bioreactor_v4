@@ -29,11 +29,6 @@ NIL_THREAD(ThreadWeight, arg) {
     nilThdSleepMilliseconds(1000);
 
     int sinceLastEvent = (int)((millis() - timeLastEvent) / 60000);
-Serial.print(millis());
-Serial.print(" - ");
-Serial.print(timeLastEvent);
-Serial.print(" - ");
-Serial.println(sinceLastEvent);
     weight = getWeight(); //sensor read, better to have a higher value if the weight increase
     setParameter(PARAM_WEIGHT, weight);
 
