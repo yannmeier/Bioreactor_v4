@@ -29,8 +29,12 @@ NIL_THREAD(ThreadWeight, arg) {
     nilThdSleepMilliseconds(1000);
 
     int sinceLastEvent = (int)((millis() - timeLastEvent) / 60000);
-
-    weight = getWeight(); //sensor read
+Serial.print(millis());
+Serial.print(" - ");
+Serial.print(timeLastEvent);
+Serial.print(" - ");
+Serial.println(sinceLastEvent);
+    weight = getWeight(); //sensor read, better to have a higher value if the weight increase
     setParameter(PARAM_WEIGHT, weight);
 
     if (! isRunning(FLAG_FOOD_CONTROL) || // Foold control is currently disabled
@@ -41,11 +45,24 @@ NIL_THREAD(ThreadWeight, arg) {
     }
 
     // are we outside ranges ?
-    if (weight < (0.80 * getParameter(PARAM_WEIGHT_MIN)) || weight > (1.20 * getParameter(PARAM_WEIGHT_MAX))) {
-      saveAndLogError(true, MASK_WEIGHT_ERROR);
+
+    int error = (getParameter(PARAM_WEIGHT_MAX) - getParameter(PARAM_WEIGHT_MIN)) / 5;
+
+#ifdef DEBUG_WEIGHT
+  Serial.print(F("Weight error:"));
+  Serial.println(error);
+#endif
+    
+    if ((weight < (getParameter(PARAM_WEIGHT_MIN)-error)) || (weight > (getParameter(PARAM_WEIGHT_MAX)+error))) {
+      saveAndLogError(true, FLAG_WEIGHT_RANGE_ERROR);
     } else {
-      saveAndLogError(false, MASK_WEIGHT_ERROR);
+      saveAndLogError(false, FLAG_WEIGHT_RANGE_ERROR);
     }
+
+#ifdef DEBUG_WEIGHT
+  Serial.print(F("Weight:"));
+  Serial.println(weight);
+#endif
 
     if (isError(MASK_WEIGHT_ERROR)) {  // weight outside range
 #ifdef DEBUG_WEIGHT
@@ -133,12 +150,7 @@ int getWeight() { // we can not avoid to have some errors measuring the weight
       nilThdSleepMilliseconds(10);
     }
   }
-#ifdef DEBUG_WEIGHT
-  Serial.print(weightStatus);
-  Serial.print(F(" "));
-  Serial.println(weight);
-#endif
-  return weight / counter / 100;
+  return - weight / counter / 100;
 }
 
 int convertWeightToG(int weight) {

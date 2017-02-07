@@ -76,4 +76,5 @@ void resetParameters() {
 
   setAndSaveParameter(PARAM_STATUS, active);
   setAndSaveParameter(PARAM_ENABLED, active);
+  setAndSaveParameter(PARAM_ERROR, 0);
 }

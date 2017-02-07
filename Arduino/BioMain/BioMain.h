@@ -109,8 +109,9 @@
 *******************************/
 #define THR_SERIAL         1
 #define THR_LINEAR_LOGS    1
+
 //#define DEBUG_LOGS         1
-//#define DEBUG_WEIGHT       1
+// #define DEBUG_WEIGHT       1
 //#define DEBUG_LCD          1
 //#define DEBUG_ONEWIRE      1
 
@@ -129,8 +130,8 @@
    CARD DEFINITION (HARD CODED)
  *******************************/
 #ifdef STEPPER
-#define PARAM_STEPPER_SPEED       38   // motor speed, parameter S (!!!!!TO BE REPROGRAMMED IN RPM!!!!!!!)
-#define PARAM_STEPPER_STEPS       28
+#define PARAM_STEPPER_SPEED       38   // AM - motor speed, parameter S (!!!!!TO BE REPROGRAMMED IN RPM!!!!!!!)
+#define PARAM_STEPPER_STEPS       28   // AC
 #endif
 
 #ifdef TEMPERATURE_CTRL
@@ -144,12 +145,12 @@
 #if defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
 #define PARAM_WEIGHT                  2   // in unit of the balance
 #define PARAM_WEIGHT_SINCE_LAST_EVENT 3   // 
-#define PARAM_WEIGHT_MIN             29
-#define PARAM_WEIGHT_MAX             30
-#define PARAM_SEDIMENTATION_TIME     31  // MINUTES to wait without rotation before emptying
-#define PARAM_FILLED_TIME            32  // MINUTES to stay in the filled state
-#define PARAM_WEIGHT_FACTOR          33  // Weight calibration: conversion factor digital -> gr (weight=FACTOR*dig_unit)
-#define PARAM_WEIGHT_OFFSET          34  // Weight calibration: digital offset value when bioreactor is empty
+#define PARAM_WEIGHT_MIN             29  // AD
+#define PARAM_WEIGHT_MAX             30  // AE
+#define PARAM_SEDIMENTATION_TIME     31  // AF - MINUTES to wait without rotation before emptying
+#define PARAM_FILLED_TIME            32  // AG - MINUTES to stay in the filled state
+#define PARAM_WEIGHT_FACTOR          33  // AH - Weight calibration: conversion factor digital -> gr (weight=FACTOR*dig_unit)
+#define PARAM_WEIGHT_OFFSET          34  // AI - Weight calibration: digital offset value when bioreactor is empty
 #endif
 
 /*************************************/

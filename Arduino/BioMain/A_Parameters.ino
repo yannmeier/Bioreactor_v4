@@ -96,21 +96,21 @@ int getParameter(byte number) {
 
 boolean setParameterBit(byte number, byte bitToSet) {
   if (getParameterBit(number, bitToSet)) return false;
-  bitSet(parameters[number], bitToSet);
+  parameters[number]=parameters[number] | (1 << bitToSet);
   return true;
-  // parameters[number]=parameters[number] | (1 << bitToSet);
+  // 
 }
 
 boolean clearParameterBit(byte number, byte bitToClear) {
   if (! getParameterBit(number, bitToClear)) return false;
-  bitClear(parameters[number], bitToClear);
+  parameters[number]=parameters[number] & ( ~ (1 << bitToClear));
+  // bitClear(parameters[number], bitToClear);
   return true;
-  // parameters[number]=parameters[number] & ( ~ (1 << bitToClear));
 }
 
 boolean getParameterBit(byte number, byte bitToRead) {
-  return (bitRead(parameters[number], bitToRead) == 1) ? true : false;
-  // return (parameters[number] >> bitToRead ) & 1;
+  // return (bitRead(parameters[number], bitToRead) == 1) ? true : false;
+  return (parameters[number] >> bitToRead ) & 1;
 }
 
 void setParameter(byte number, int value) {
