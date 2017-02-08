@@ -1,0 +1,51 @@
+12V 10A power supply 100V-265V	1	17
+3.5 Female jack PCB PF3024M	1	0.3
+3.5 mm male plug	1	0.1
+Aluminium cylinder base	1	10
+Atmega32U4 44TQFP	1	3.6
+BSP75 SOT223	6	0.3
+Cable 2 pins   KF2510-2P	2	0.5
+Cable 5 pins   KF2510-5P	1	0.6
+Cable 6 pins   KF2510-6P	1	0.7
+Capacitor 100 nF 0805	12	0.01
+Capacitor 10 uF 0805	8	0.01
+Capacitor 22 pF 0805	2	0.02
+Crystal 8MHz 5032	1	0.25
+DS18B20 temperature with cable	1	1.4
+DS18B20Z One wire MSOP8	1	1.1
+Header 2 pins  KF2510-2P	2	0.1
+Header 5 pins  KF2510-5P	1	0.2
+Header 6 pins  KF2510-6P	1	0.3
+HX711 SOP16	1	0.5
+IRF3704 - D2 pack	1	0.1
+LDO MCP1703 3.3v - SOT223	1	0.03
+Led Blue 0805 (blink)	1	0.01
+Led Green 0805	2	0.01
+Led Red 0805	9	0.01
+Led Yellow 0805	2	0.01
+Load cell 2kg YZC-133	3	2.7
+Magnetic Stirrer bar 5cm	1	3.6
+Microchip Lora RN2483	1	15
+Miscellaneous small material	1	5
+MK3 heating plate	1	12.3
+PCB	1	5
+Peristaltic pumps	2	7
+Plexiglass 120OD 114ID 150 mm	1	6
+Plexiglass 600 x 500 x 6 mm	1	25
+Power socket DC 5.5x2.5	2	0.2
+Resistor 100 0805	2	0.01
+Resistor 100k 0805	1	0.01
+Resistor 10k 0805	15	0.01
+Resistor 1k 0805	13	0.01
+Resistor 1M 0805	1	0.01
+Resistor 20k 0805	1	0.01
+Resistor 22 ohms 0805	2	0.01
+Resistor 4.7k 0805	2	0.01
+Resistor 8.2k 0805	1	0.01
+RJ-11 connector 6P6C (RJ12)	2	0.1
+Schottky 1N581 1206	3	0.03
+SMA Edge connector	1	0.3
+SST26VF064B-104I/SM	1	2.0
+Stepper (agitation)	1	15
+Transistor MMBT4403 SOT23-3	1	0.03
+USB mini PCB connector	1	0.05
