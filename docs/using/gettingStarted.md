@@ -28,6 +28,6 @@ You should do the following step in order to callibrate the weight:
 
 You may now check the reproducibility and the weight in g of any object using `wt`
 
-It is important to note that an error (stored in [PARAM_ERROR](/arduino/parameters.md#PARAM_ERROR) will be generated if
+It is important to note that an error (stored in [PARAM_ERROR](/arduino/parameters#PARAM_ERROR) will be generated if
 the weight is either 20% under the minimal value or 20% over the maximal value and this should stop all the functions.
 
