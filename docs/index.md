@@ -1,8 +1,16 @@
-# Introduction
+The open source Bioreactor
 
-# Howto
+# Making the bioreactor
 
-[Getting started](gettingStarted.md)
+[BOM](making/bom)
+
+# Userguide of the bioreactor
+
+* [Getting started](using/gettingStarted.md)
+* [List of qualifiers](using/qualifiers.md)
+
+# Debugging the bioreactor
+
 
 
 # How to create the doc
