@@ -1,8 +1,8 @@
 # Introduction
 
-# How-to
+# Howto
 
-
+[gettingStarted.md](Getting started)
 
 
 # How to create the doc
