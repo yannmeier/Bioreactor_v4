@@ -16,10 +16,10 @@ code.
 There is now a special menu for the weight calibration `w`.
 
 You should do the following step in order to callibrate the weight:
-1. Empty bioreactor : `we`
-2. Empty bioreactor + 1kg : `wk`
-3. Bioreactor filled at low level : `wl`
-4. Bioreactor filled at high level : `wh`
+ 1. Empty bioreactor : `we`
+ 2. Empty bioreactor + 1kg : `wk`
+ 3. Bioreactor filled at low level : `wl`
+ 4. Bioreactor filled at high level : `wh`
 
 You may now check the reproducibility and the weight in g of any object using `wt`
 
