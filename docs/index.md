@@ -1,10 +1,14 @@
+---
+layout: default
+---
+
 The open source Bioreactor
 
 # Making the bioreactor
 
-[BOM](making/bom)
-[Temperature probe](making/onewire)
-[Heating plate and PID](making/pid)
+* [BOM](making/bom)
+* [Temperature probe](making/onewire)
+* [Heating plate and PID](making/pid)
 
 # Userguide of the bioreactor
 
@@ -17,6 +21,5 @@ The open source Bioreactor
 
 # How to create the doc
 
-https://help.github.com/articles/setting-up-your-github-pages-site-locally-with-jekyll/
-
+[Nice documentation on jekyll](https://help.github.com/articles/setting-up-your-github-pages-site-locally-with-jekyll/)
 
