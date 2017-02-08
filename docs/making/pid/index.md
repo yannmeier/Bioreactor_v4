@@ -32,7 +32,8 @@ In order to be able to heat the following conditions have to be met:
 
 The maximal power is 80% of full power that corresponds to around 8A. 
 
-The following parameters are define in PID.ino 
+The following parameters are define in PID.ino
+
 * SAFETY_MAX_PCB_TEMP 7000
 * SAFETY_MIN_PCB_TEMP 1000
 * SAFETY_MAX_LIQ_TEMP 6000
@@ -42,6 +43,7 @@ The following parameters are define in PID.ino
 # Enabling heating
 
 In order to turn on the heating you should check the following parameters:
+
 * A - The liquid temperature. It should be between 1000 and 6000 (10°C to 60°C)
 * B - The temperature of the PCB (Printed Circuit Board). It should be between 1000 and 7000
 * AA - The target temperature. It should be between 1000 and 6000 (10 to 60°C)
