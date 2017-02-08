@@ -8,5 +8,9 @@ Connect via the terminal and reset all the parameters to the defualt parameters
 
 `r1234`
 
-It is also important to set a unique qualifier for the bioreactor.
+It is also important to set a unique qualifier for the bioreactor. You should fill the [list](qualifiers.md) with a free
+code.
+
+# Setup the weight
+
 

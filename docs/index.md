@@ -2,7 +2,7 @@
 
 # Howto
 
-[gettingStarted.md](Getting started)
+[Getting started](gettingStarted.md)
 
 
 # How to create the doc
