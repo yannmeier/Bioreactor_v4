@@ -6,3 +6,6 @@ Arduino/BioMain/Release/
 *DS_Store
 *.project
 */.settings/*
+*/.idea/*
+*/.desktop
+/node_modules/
