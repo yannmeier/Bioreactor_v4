@@ -275,9 +275,11 @@ void printResult(char* data, Print* output) {
         output->println(getParameterBit(PARAM_ERROR, i));
       }
       break;
+#ifdef FOOD_CTRL
     case 'w':
       processWeightCommand(data[1], paramValue, output);
       break;
+#endif
     case 'z':
       getStatusEEPROM(output);
       break;
@@ -303,7 +305,9 @@ void printHelp(Print* output) {
   output->println(F("(r)eset"));
   output->println(F("(s)ettings"));
   output->println(F("s(t)atus"));
+#ifdef FOOD_CTRL
   output->println(F("(w)eight"));
+#endif
   output->println(F("(z) eeprom"));
 }
 

@@ -1,4 +1,4 @@
-#if defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
+#if defined(FOOD_CTRL) && defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
 
 #include "HX711.h"
 HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
