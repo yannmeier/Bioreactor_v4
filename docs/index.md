@@ -13,6 +13,7 @@ The open source Bioreactor
 
 * [Getting started](using/gettingStarted.md)
 * [List of qualifiers](using/qualifiers.md)
+* [FAQ](using/faq.md)
 
 # Programming with the Arduino
 
