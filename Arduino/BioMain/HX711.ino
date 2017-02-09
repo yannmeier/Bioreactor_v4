@@ -49,7 +49,7 @@ NIL_THREAD(ThreadWeight, arg) {
 #endif
 
     if ((error > 0 && ((weight < (getParameter(PARAM_WEIGHT_MIN) - error)) || (weight > (getParameter(PARAM_WEIGHT_MAX) + error)))) ||
-       (error < 0 && ((weight > (getParameter(PARAM_WEIGHT_MIN) - error)) || (weight < (getParameter(PARAM_WEIGHT_MAX) + error))))) {
+        (error < 0 && ((weight > (getParameter(PARAM_WEIGHT_MIN) - error)) || (weight < (getParameter(PARAM_WEIGHT_MAX) + error))))) {
       saveAndLogError(true, FLAG_WEIGHT_RANGE_ERROR);
 #ifdef DEBUG_WEIGHT
       Serial.print(F("Weight range error:"));
@@ -91,12 +91,14 @@ NIL_THREAD(ThreadWeight, arg) {
     } else if (isRunning(FLAG_RELAY_EMPTYING)) {
       // just to sure in case more than one flag is active we stop the pumps
       stop(FLAG_RELAY_FILLING);
-      if (weight <= getParameter(PARAM_WEIGHT_MIN)) {      //switch fo Filling
+      if ((error > 0 && weight <= getParameter(PARAM_WEIGHT_MIN)) ||
+          (error < 0 && weight >= getParameter(PARAM_WEIGHT_MIN))) {      //switch fo Filling
         stop(FLAG_RELAY_EMPTYING);
         start(FLAG_RELAY_FILLING);
       }
     } else if (isRunning(FLAG_RELAY_FILLING)) {
-      if (weight >= getParameter(PARAM_WEIGHT_MAX)) {
+      if ((error > 0 && weight >= getParameter(PARAM_WEIGHT_MAX)) ||
+          (error < 0 && weight <= getParameter(PARAM_WEIGHT_MAX))) {
         stop(FLAG_RELAY_FILLING);
         timeLastEvent = millis();
       }
