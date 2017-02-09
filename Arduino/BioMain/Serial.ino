@@ -168,8 +168,11 @@ void printResult(char* data, Print* output) {
         setTime(atol(paramValue));
         output->println("");
       }
-      else
+      else {
         output->println(now());
+        output->print(F("Uptime:"));
+        output->println(millis()/1000);
+      }
       break;
     case 'f':
       printFreeMemory(output);
