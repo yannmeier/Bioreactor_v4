@@ -7,6 +7,7 @@ The open source Bioreactor
 * [Temperature probe](making/onewire)
 * [Heating plate and PID](making/pid)
 * [pin mapping](making/pinMapping.md)
+* [Loading cells (weight)](making/weight)
 
 # Userguide of the bioreactor
 
