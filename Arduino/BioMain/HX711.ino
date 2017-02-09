@@ -36,7 +36,7 @@ NIL_THREAD(ThreadWeight, arg) {
         ! isEnabled(FLAG_FOOD_CONTROL)) { // Food control is disabled
       stop(FLAG_RELAY_FILLING);    //filling  OFF
       stop(FLAG_RELAY_EMPTYING);   //emptying OFF
-      continue;
+      //continue;
     }
 
     // are we outside ranges ?

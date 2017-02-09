@@ -55,6 +55,11 @@ void pid_ctrl() {
   heatingRegSetpoint = getParameter(PARAM_TEMP_TARGET);
   heatingRegPID.Compute();                                   // the computation takes only 30ms!
   analogWrite(TEMP_PID, heatingRegOutput);
+
+  #ifdef DEBUG_PID
+  Serial.print(F("PID analog value:"));
+  Serial.println(heatingRegOutput);
+  #endif
 }
 
 // see the rest of oliver's code for sanity checks
