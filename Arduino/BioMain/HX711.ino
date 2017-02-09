@@ -90,8 +90,10 @@ void HX711::set_gain(byte gain) {
 long HX711::read() {
   // wait for the chip to become ready
   while (!is_ready()) {
-      nilThdSleepMilliseconds(10);
-      Serial.println(F("Weight not ready"));
+    nilThdSleepMilliseconds(10);
+#ifdef DEBUG_WEIGHT
+    Serial.println(F("Weight not ready"));
+#endif
     // Will do nothing on Arduino but prevent resets of ESP8266 (Watchdog Issue)
     yield();
   }
@@ -120,9 +122,9 @@ long HX711::read() {
 
   // Construct a 32-bit signed integer
   value = ( static_cast<unsigned long>(filler) << 24
-      | static_cast<unsigned long>(data[2]) << 16
-      | static_cast<unsigned long>(data[1]) << 8
-      | static_cast<unsigned long>(data[0]) );
+            | static_cast<unsigned long>(data[2]) << 16
+            | static_cast<unsigned long>(data[1]) << 8
+            | static_cast<unsigned long>(data[0]) );
 
   return static_cast<long>(value);
 }
