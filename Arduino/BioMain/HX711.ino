@@ -44,19 +44,28 @@ NIL_THREAD(ThreadWeight, arg) {
     int error = (getParameter(PARAM_WEIGHT_MAX) - getParameter(PARAM_WEIGHT_MIN)) / 5;
 
 #ifdef DEBUG_WEIGHT
-  Serial.print(F("Weight error:"));
-  Serial.println(error);
+    Serial.print(F("Weight allowed error:"));
+    Serial.println(error);
 #endif
-    
-    if ((weight < (getParameter(PARAM_WEIGHT_MIN)-error)) || (weight > (getParameter(PARAM_WEIGHT_MAX)+error))) {
+
+    if ((error > 0 && ((weight < (getParameter(PARAM_WEIGHT_MIN) - error)) || (weight > (getParameter(PARAM_WEIGHT_MAX) + error)))) ||
+       (error < 0 && ((weight > (getParameter(PARAM_WEIGHT_MIN) - error)) || (weight < (getParameter(PARAM_WEIGHT_MAX) + error))))) {
       saveAndLogError(true, FLAG_WEIGHT_RANGE_ERROR);
+#ifdef DEBUG_WEIGHT
+      Serial.print(F("Weight range error:"));
+      Serial.println(error);
+#endif
     } else {
       saveAndLogError(false, FLAG_WEIGHT_RANGE_ERROR);
+#ifdef DEBUG_WEIGHT
+      Serial.print(F("Weight range ok:"));
+      Serial.println(error);
+#endif
     }
 
 #ifdef DEBUG_WEIGHT
-  Serial.print(F("Weight:"));
-  Serial.println(weight);
+    Serial.print(F("Weight:"));
+    Serial.println(weight);
 #endif
 
     if (isError(MASK_WEIGHT_ERROR)) {  // weight outside range
@@ -145,7 +154,7 @@ int getWeight() { // we can not avoid to have some errors measuring the weight
       nilThdSleepMilliseconds(10);
     }
   }
-  return - weight / counter / 100;
+  return weight / counter / 100;
 }
 
 int convertWeightToG(int weight) {
