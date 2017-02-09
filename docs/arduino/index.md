@@ -72,3 +72,8 @@ Attention: Time library update v1.5.0 change commited in BioMain including TimeL
 
 You should now be able to compile the project from the Arduino IDE.
 You can now proceed burning the bootloader using the Leonardo 8MHz newly created option and upload your code selecting the same Leonardo 8MHz in the list of available MCUs from the IDE. To do so, you must select the Leonardo 8MHz board under /Tools/Boards/ in the Arduino IDE or selecting the proper device during project creation in Eclipse. Note that the LCD board works under 16MHz/5V and must be flashed as a standard Leonardo board not a 8MHz one. You must also select the right board version when programming the board via USB !
+
+
+# The parameters
+
+In order to control the bioreactor you should have a look to the description of the [parameters](parameters.md).
