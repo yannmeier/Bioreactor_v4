@@ -170,8 +170,6 @@ void printResult(char* data, Print* output) {
       }
       else {
         output->println(now());
-        output->print(F("Uptime:"));
-        output->println(millis()/1000);
       }
       break;
     case 'f':
