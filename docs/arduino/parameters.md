@@ -104,3 +104,18 @@ Bit  | PARAM_STATUS         | Comment
 
 If you want to control everything the value of `PARAM_ENABLED` should be 7.
 
+
+PARAM_ERROR
+-----------
+
+Bit  | PARAM_ERROR                  | Comment
+-----|------------------------------|----------------------------------
+0    | FLAG_TEMP_PCB_PROBE_ERROR    | pcb probe failed (one wire not answering)
+1    | FLAG_TEMP_LIQ_PROBE_ERROR    | liquid probe failed (one wire not answering)
+2    | FLAG_TEMP_PCB_RANGE_ERROR    | temperature of pcb is outside range
+3    | FLAG_TEMP_LIQ_RANGE_ERROR    | temperature of liquid is outside range
+4    | FLAG_TEMP_PCB_PROBE_ERROR    | target temperature is outside range
+5    | FLAG_WEIGHT_RANGE_ERROR      | the weight is outside range
+
+
+
