@@ -91,9 +91,10 @@ long HX711::read() {
   // wait for the chip to become ready
   while (!is_ready()) {
     nilThdSleepMilliseconds(10);
-#ifdef DEBUG_WEIGHT
-    Serial.println(F("Weight not ready"));
-#endif
+// #ifdef DEBUG_WEIGHT
+    Serial.print(millis());
+    Serial.println(F(" - Weight not ready"));
+// #endif
     // Will do nothing on Arduino but prevent resets of ESP8266 (Watchdog Issue)
     yield();
   }
