@@ -7278,7 +7278,7 @@ design rules under a new name.</description>
 <attribute name="NAME" x="81.084303125" y="38.333515625" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="81.084303125" y="39.705115625" size="0.8128" layer="27" rot="R180"/>
 </element>
-<element name="RK14" library="rcl" package="R0805" value="1k" x="19.28185625" y="17.94956875" smashed="yes" rot="R180">
+<element name="RK14" library="rcl" package="R0805" value="10k" x="19.28185625" y="17.94956875" smashed="yes" rot="R180">
 <attribute name="VALUE" x="16.145696875" y="18.65589375" size="0.8128" layer="27" rot="R270"/>
 </element>
 <element name="RK13" library="rcl" package="R0805" value="10k" x="85.02300625" y="42.94519375" smashed="yes" rot="R270">
