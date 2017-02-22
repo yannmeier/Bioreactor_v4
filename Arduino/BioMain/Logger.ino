@@ -374,9 +374,9 @@ void validateFlash(Print* output) {
 #ifdef LOG_INTERVAL
 
 #ifdef DEBUG_LOGS
-NIL_WORKING_AREA(waThreadLogger, 120);
+NIL_WORKING_AREA(waThreadLogger, 128);
 #else
-NIL_WORKING_AREA(waThreadLogger, 0); 
+NIL_WORKING_AREA(waThreadLogger, 64); 
 #endif
 
 NIL_THREAD(ThreadLogger, arg) {
