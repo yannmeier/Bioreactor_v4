@@ -39,3 +39,14 @@ Error: 0 - What are the current errors
 - 4: 0 - target temperature is outside range
 - 5: 0 - weight is outside range
 
+What is a cycle ?
+-----------------
+
+The bioreactor has 4 different phases :
+
+Mode               | Heating | Stepper | Till when it last
+-------------------|---------|---------|----------------------------------------
+Normal mode        |   On    |   On    | Last `PARAM_FILLED_TIME` minutes
+Sedimentation mode |   Off   |   Off   | Last `PARAM_SEDIMENTATION_TIME` minutes
+Pumping out        |   Off   |   Off   | Last till `PARAM_WEIGHT_MIN` is reached
+Pumping in         |   On    |   On    | Last till `PARAM_WEIGHT_MAX` is reached
