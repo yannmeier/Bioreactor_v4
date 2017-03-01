@@ -111,7 +111,7 @@
 #define THR_LINEAR_LOGS    1
 
 //#define DEBUG_LOGS         1
-#define DEBUG_WEIGHT       1
+//#define DEBUG_WEIGHT       1
 //#define DEBUG_LCD          1
 //#define DEBUG_ONEWIRE      1
 //#define DEBUG_PID          1

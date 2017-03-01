@@ -119,7 +119,7 @@ boolean isStepperStopped() {
 
 
 
-NIL_WORKING_AREA(waThreadStepper, 0);
+NIL_WORKING_AREA(waThreadStepper, 16);
 NIL_THREAD(ThreadStepper, arg) {
   nilThdSleepMilliseconds(4000);
   boolean forward = true;

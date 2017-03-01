@@ -7,11 +7,13 @@ The open source Bioreactor
 * [Temperature probe](making/onewire)
 * [Heating plate and PID](making/pid)
 * [pin mapping](making/pinMapping.md)
+* [Loading cells (weight)](making/weight)
 
 # Userguide of the bioreactor
 
 * [Getting started](using/gettingStarted.md)
 * [List of qualifiers](using/qualifiers.md)
+* [FAQ](using/faq.md)
 
 # Programming with the Arduino
 

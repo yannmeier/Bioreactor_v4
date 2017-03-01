@@ -85,9 +85,9 @@ Bit  | PARAM_STATUS         | Comment
 13   | FLAG_RELAY_BASE      | enable/disable add base
 
 The status is currently the `Z` parameter. You can change the status by chaging this value. for example
-if you want to force the bioreactor to go in the emptying state you should do ensure that the bit
-`FLAG_RELAY_EMPTYING` is set. In other word you may have to add 2^9 (512) to your value of the
-parameter `Z` (in the case it was not yet enable).
+if you want to force the bioreactor to go in the emptying state you should do ensure that the bits `FLAG_FOOD_CONTROL` &
+`FLAG_RELAY_EMPTYING` are set. In other word you may have to add 2^1 (2) + 2^9 (512) = 514 to your value of the
+parameter `Z` (in the case it was not yet enable). Same procedure is to be implemented for filling.
 
 
 PARAM_ENABLED
@@ -110,7 +110,7 @@ PARAM_ERROR
 
 Bit  | PARAM_ERROR                  | Comment
 -----|------------------------------|----------------------------------
-0    | FLAG_TEMP_PCB_PROBE_ERROR    | pcb probe failed (one wire not answering)
+0    | FLAG_TEMP_PCB_PROBE_ERROR    | pcb probe failed (one wire not answering)1
 1    | FLAG_TEMP_LIQ_PROBE_ERROR    | liquid probe failed (one wire not answering)
 2    | FLAG_TEMP_PCB_RANGE_ERROR    | temperature of pcb is outside range
 3    | FLAG_TEMP_LIQ_RANGE_ERROR    | temperature of liquid is outside range

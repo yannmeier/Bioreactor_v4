@@ -41,7 +41,7 @@ NIL_THREADS_TABLE_ENTRY(NULL, ThreadLora, NULL, waThreadLora, sizeof(waThreadLor
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadStepper, NULL, waThreadStepper, sizeof(waThreadStepper))
 #endif
 
-#if defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
+#if defined(FOOD_CTRL) && defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadWeight, NULL, waThreadWeight, sizeof(waThreadWeight))
 #endif
 

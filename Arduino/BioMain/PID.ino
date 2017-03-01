@@ -49,6 +49,10 @@ void pid_ctrl() {
     return;
   }
 
+  if (isRunning(FLAG_SEDIMENTATION) || isRunning(FLAG_RELAY_EMPTYING)) { // when it is in sedimentation or emptying mode we stop the heating
+    analogWrite(TEMP_PID, 0);
+    return;
+  }
 
 
   heatingRegInput = getParameter(PARAM_TEMP_LIQ);
@@ -56,10 +60,10 @@ void pid_ctrl() {
   heatingRegPID.Compute();                                   // the computation takes only 30ms!
   analogWrite(TEMP_PID, heatingRegOutput);
 
-  #ifdef DEBUG_PID
+#ifdef DEBUG_PID
   Serial.print(F("PID analog value:"));
   Serial.println(heatingRegOutput);
-  #endif
+#endif
 }
 
 // see the rest of oliver's code for sanity checks
