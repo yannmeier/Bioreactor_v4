@@ -7,46 +7,60 @@ bioreactor reboot.
 
 
 
-id | p | name                          | description
----|---|-------------------------------|---------------------------------------------------------------------------------
-0  | A | PARAM_TEMP_LIQ                | temperature of the solution
-1  | B | PARAM_TEMP_PCB                | temperature of the heating plate
-2  | C | PARAM_WEIGHT                  | in unit of the balance
-3  | D | PARAM_WEIGHT_SINCE_LAST_EVENT | 
-4  | E | PARAM_PH                      | current pH
-5  | F | PARAM_PH_STATE                | 0: Pause 1 : normal acquisition, 2 : purge of pipes,  4: calibration pH=4, 7: calibration pH=7, 10: calibration pH=10
-6  | G | PARAM_FLUX_GAS1               |
-7  | H | PARAM_FLUX_GAS2               |
-8  | I | PARAM_FLUX_GAS3               |
-9  | J | PARAM_FLUX_GAS4               |
-10 | K | PARAM_CONDUCTO                |
-24 | Y | PARAM_ERROR                   |
-25 | Z | PARAM_STATUS                  | currently active service
-26 | AA | PARAM_TEMP_TARGET            | target temperature of the liquid
-28 | AC | PARAM_STEPPER_STEPS          | number of steps before changing the direction of the motor
-29 | AD | PARAM_WEIGHT_MIN             |
-30 | AE | PARAM_WEIGHT_MAX             |
+id | p  | name                          | description
+---|----|-------------------------------|---------------------------------------------------------------------------------
+0  | A  | PARAM_TEMP_LIQ                | temperature of the solution
+1  | B  | PARAM_TEMP_PCB                | temperature of the heating plate
+2  | C  | PARAM_TEMP_PID                | current heating power
+3  | D  | PARAM_TEMP_TARGET             | target temperature of the liquid
+4  | E  | PARAM_WEIGHT                  | in unit of the balance
+5  | F  | PARAM_WEIGHT_G                | in unit of the balance
+6  | G  | PARAM_WEIGHT_SINCE_LAST_EVENT |
+7  | H  | PARAM_WEIGHT_MIN              | weight value for low level
+8  | I  | PARAM_WEIGHT_MAX              | weight value for high level
+
+24 | Y  | PARAM_ERROR                   |
+25 | Z  | PARAM_STATUS                  | currently active service
+
+26 | AA | PARAM_STEPPER_SPEED          | motor speed
+27 | AB | PARAM_STEPPER_STEPS          | number of steps before changing the direction of the motor
 31 | AF | PARAM_SEDIMENTATION_TIME     | number of minutes to wait without rotation before emptying
 32 | AG | PARAM_FILLED_TIME            | number of mintues to stay in the filled state
 33 | AH | PARAM_WEIGHT_FACTOR          | weight calibration: conversion factor digital -> gr
 34 | AI | PARAM_WEIGHT_OFFSET          | weight calibration: digital offset value when bioreactor is empty
-35 | AJ | PARAM_TARGET_PH              | desired pH
-36 | AK | PARAM_PH_FACTOR_A            |
-37 | AL | PARAM_PH_FACTOR_B            |
-38 | AM | PARAM_STEPPER_SPEED          | motor speed
-39 | AN | PARAM_DESIRED_FLUX_GAS1      |
-40 | AO | PARAM_DESIRED_FLUX_GAS2      |
-41 | AP | PARAM_DESIRED_FLUX_GAS3      |
-42 | AQ | PARAM_DESIRED_FLUX_GAS4      |
-43 | AR | PARAM_ANEMO_OFFSET1          | anemometer calibration: offset of the digital value (digital value when no gas is flowing)
-44 | AS | PARAM_ANEMO_OFFSET2          |
-45 | AT | PARAM_ANEMO_OFFSET3          |
-46 | AU | PARAM_ANEMO_OFFSET4          |
-47 | AV | PARAM_ANEMO_FACTOR1          | anemometer calibration factor: conversion between gas flux (of air) and digital unit
-48 | AW | PARAM_ANEMO_FACTOR2          |
-49 | AX | PARAM_ANEMO_FACTOR3          |
-50 | AY | PARAM_ANEMO_FACTOR4          |
+
 51 | AZ | PARAM_ENABLED                | enabled service (set by user)
+
+
+Other planned parameters
+-------------------------
+
+id | p  | name                          | description
+---|----|-------------------------------|---------------------------------------------------------------------------------
+   |    | PARAM_PH                      | current pH
+   |    | PARAM_PH_STATE                | 0: Pause 1 : normal acquisition, 2 : purge of pipes,  4: calibration pH=4, 7: calibration pH=7, 10: calibration pH=10
+   |    | PARAM_FLUX_GAS1               |
+   |    | PARAM_FLUX_GAS2               |
+   |    | PARAM_FLUX_GAS3               |
+   |    | PARAM_FLUX_GAS4               |
+   |    | PARAM_CONDUCTIVITY            |
+35 | AJ | PARAM_TARGET_PH               | desired pH
+36 | AK | PARAM_PH_FACTOR_A             |
+37 | AL | PARAM_PH_FACTOR_B             |
+39 | AN | PARAM_DESIRED_FLUX_GAS1       |
+40 | AO | PARAM_DESIRED_FLUX_GAS2       |
+41 | AP | PARAM_DESIRED_FLUX_GAS3       |
+42 | AQ | PARAM_DESIRED_FLUX_GAS4       |
+43 | AR | PARAM_ANEMO_OFFSET1           | anemometer calibration: offset of the digital value (digital value when no gas is flowing)
+44 | AS | PARAM_ANEMO_OFFSET2           |
+45 | AT | PARAM_ANEMO_OFFSET3           |
+46 | AU | PARAM_ANEMO_OFFSET4           |
+47 | AV | PARAM_ANEMO_FACTOR1           | anemometer calibration factor: conversion between gas flux (of air) and digital unit
+48 | AW | PARAM_ANEMO_FACTOR2           |
+49 | AX | PARAM_ANEMO_FACTOR3           |
+50 | AY | PARAM_ANEMO_FACTOR4           |
+
+
 
 
 State machine
@@ -80,6 +94,7 @@ Bit  | PARAM_STATUS         | Comment
 7    | FLAG_SEDIMENTATION   | enable/disable sedimentation (one of the phase of food control)
 8    | FLAG_RELAY_FILLING   | enable/disable filling pump (one of the phase of food control)
 9    | FLAG_RELAY_EMPTYING  | enable/disable emptying pump (one of the phase of food control)
+
 11   | FLAG_PH_CALIBRATE    | enable/disable pH calibration
 12   | FLAG_RELAY_ACID      | enable/disable add acid
 13   | FLAG_RELAY_BASE      | enable/disable add base

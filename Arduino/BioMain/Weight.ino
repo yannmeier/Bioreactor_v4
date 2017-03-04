@@ -31,6 +31,7 @@ NIL_THREAD(ThreadWeight, arg) {
     int sinceLastEvent = (int)((millis() - timeLastEvent) / 60000);
     weight = getWeight(); //sensor read, better to have a higher value if the weight increase
     setParameter(PARAM_WEIGHT, weight);
+    setParameter(PARAM_WEIGHT_G, convertWeightToG(weight));
 
     if (! isRunning(FLAG_FOOD_CONTROL) || // Foold control is currently disabled
         ! isEnabled(FLAG_FOOD_CONTROL)) { // Food control is disabled
