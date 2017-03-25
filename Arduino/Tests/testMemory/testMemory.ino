@@ -34,15 +34,12 @@ void setup()
       sst.flashSectorErase(i / SECTOR_SIZE);
     }
 
-
     if (false) { // do we want to write and read the flash ?
       if (i % LINE_SIZE == 0) printLine(i);
       if (i % LINE_SIZE == 0) writeLine(i);
       if (i % LINE_SIZE == 0) printLine(i);
     }
-
   }
-
 }
 
 // ======================================================================================= //
