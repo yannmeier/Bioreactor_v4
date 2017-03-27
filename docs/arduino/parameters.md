@@ -117,5 +117,3 @@ Bit  | PARAM_ERROR                  | Comment
 4    | FLAG_TEMP_PCB_PROBE_ERROR    | target temperature is outside range
 5    | FLAG_WEIGHT_RANGE_ERROR      | the weight is outside range
 
-
-
