@@ -168,8 +168,9 @@ void printResult(char* data, Print* output) {
         setTime(atol(paramValue));
         output->println("");
       }
-      else
+      else {
         output->println(now());
+      }
       break;
     case 'f':
       printFreeMemory(output);
@@ -255,22 +256,31 @@ void printResult(char* data, Print* output) {
     case 't':
       output->print(F("Status: "));
       output->println(getParameter(PARAM_STATUS));
-      for (byte i = 0; i < 16; i++) {
+      for (byte i = 0; i < 10; i++) {
         output->print(i);
         output->print(": ");
         output->println(getParameterBit(PARAM_STATUS, i));
       }
+      output->print(F("Enabled: "));
+      output->println(getParameter(PARAM_ENABLED));
+      for (byte i = 0; i < 3; i++) {
+        output->print(i);
+        output->print(": ");
+        output->println(getParameterBit(PARAM_ENABLED, i));
+      }
       output->print(F("Error: "));
       output->println(getParameter(PARAM_ERROR));
-      for (byte i = 0; i < 16; i++) {
+      for (byte i = 0; i < 6; i++) {
         output->print(i);
         output->print(": ");
         output->println(getParameterBit(PARAM_ERROR, i));
       }
       break;
+#ifdef FOOD_CTRL
     case 'w':
       processWeightCommand(data[1], paramValue, output);
       break;
+#endif
     case 'z':
       getStatusEEPROM(output);
       break;
@@ -296,7 +306,9 @@ void printHelp(Print* output) {
   output->println(F("(r)eset"));
   output->println(F("(s)ettings"));
   output->println(F("s(t)atus"));
+#ifdef FOOD_CTRL
   output->println(F("(w)eight"));
+#endif
   output->println(F("(z) eeprom"));
 }
 
