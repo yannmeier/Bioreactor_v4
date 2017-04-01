@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="8.0.1">
+<eagle version="7.7.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
@@ -13928,7 +13928,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="LDSLAVE" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="LCD"/>
 <part name="RK16" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="RXLD" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="RX"/>
-<part name="RK19" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
+<part name="RK19" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="LDMEM" library="adafruit" deviceset="LED" device="CHIP-LED0805" value="Flash"/>
 <part name="C5" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
 <part name="P+7" library="SparkFun" deviceset="3.3V" device=""/>
