@@ -205,10 +205,10 @@ void oneWireInfo(Print* output) { // TODO
       output->print(' ');
       output->print(oneWireAddress[i], HEX);
     }
-    unprotectThread();
     output->println("");
     nilThdSleepMilliseconds(250);
   }
+  unprotectThread();
 #endif
 #ifdef TEMP_PCB
   protectThread();
@@ -218,10 +218,10 @@ void oneWireInfo(Print* output) { // TODO
       output->print(' ');
       output->print(oneWireAddress[i], HEX);
     }
-    unprotectThread();
     output->println("");
     nilThdSleepMilliseconds(250);
   }
+  unprotectThread();
 #endif
 }
 
