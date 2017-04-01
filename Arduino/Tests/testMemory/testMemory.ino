@@ -23,9 +23,16 @@ void setup()
   // waiting 10s before starting the FORMATTING
   delay(10000);
   Serial.begin(9600);
+  setupMemory(sst);
+  delay(50);
+  Serial.print("FlashID: ");
+  sst.printFlashID(&Serial);
+
   Serial.println('Starting formatting');
 
-  setupMemory(sst);
+
+
+
 
   for (long i = 0; i < ADDRESS_MAX; i++) {
     if (i % SECTOR_SIZE == 0) { // should erase the sector
@@ -34,7 +41,7 @@ void setup()
       sst.flashSectorErase(i / SECTOR_SIZE);
     }
 
-    if (false) { // do we want to write and read the flash ?
+    if (true) { // do we want to write and read the flash ?
       if (i % LINE_SIZE == 0) printLine(i);
       if (i % LINE_SIZE == 0) writeLine(i);
       if (i % LINE_SIZE == 0) printLine(i);
@@ -87,8 +94,7 @@ void writeLine(long address) {
 
 void setupMemory(SST sst) {
   SPI.begin();
-  SPI.setDataMode(SPI_MODE0);
-  SPI.setBitOrder(MSBFIRST);
+  
   sst.init();
 }
 
