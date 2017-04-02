@@ -401,31 +401,42 @@ void readFlash(Print* output, long firstRecord) {
    We will check when we have a change to FF at the ID
 */
 void debugFlash(Print* output) {
+  wdt_disable();
   protectThread();
+  output->print(F("Debug changes"));
   byte isFF = 2;
-  for (int i = 0; i < ADDRESS_MAX / SECTOR_SIZE; i++) {
+  for (long i = 0; i < MAX_NB_ENTRIES; i++) {
     long address = findAddressOfEntryN(i);
     sst.flashReadInit(address);
     long index = sst.flashReadNextInt32();
     if (index == 0xFFFFFFFF) {
       if (isFF != 1) {
         isFF = 1;
+        output->println(F(""));
         output->print(i);
         output->print(F(" "));
-        output->println(index, HEX);
+        toHex(output, index);
+        
       }
     } else {
       if (isFF != 0) {
         isFF = 0;
+        output->println(F(""));
         output->print(i);
         output->print(F(" "));
-        output->println(index, HEX);
+        toHex(output, index);
       }
     }
     sst.flashReadFinish();
+    if (i % 1024 == 0) {
+      output->print(F("."));
+    }
   }
+  output->println(F(""));
   output->println(F("Done"));
   unprotectThread();
+  wdt_enable(WDTO_8S);
+  wdt_reset();
 }
 
 
