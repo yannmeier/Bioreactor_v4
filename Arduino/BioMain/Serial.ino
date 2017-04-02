@@ -38,7 +38,7 @@ NIL_THREAD(ThreadSerial, arg) {
 
 #endif
 
-#define MAX_MULTI_LOG 10
+
 
 void printGeneralParameters(Print* output) {
   output->print(F("EPOCH:"));
@@ -153,11 +153,6 @@ void printResult(char* data, Print* output) {
       else
         printCompactParameters(output);
       break;
-#ifdef THR_LINEAR_LOGS
-    case 'd':
-    processLoggerCommand(data[1], paramValue, output);
-      break;
-#endif
     case 'e':
       if (paramValuePosition > 0) {
         setTime(atol(paramValue));
@@ -180,41 +175,13 @@ void printResult(char* data, Print* output) {
       noThread(output);
 #endif
       break;
+#ifdef THR_LINEAR_LOGS
     case 'l':
-#ifdef THR_LINEAR_LOGS
-      if (paramValuePosition > 0)
-        printLogN(output, atol(paramValue));
-      else
-        printLastLog(output);
-#else
+      processLoggerCommand(data[1], paramValue, output);
+      break;
+#else  //not elsif !!
       noThread(output);
 #endif
-      break;
-    case 'm':
-#ifdef THR_LINEAR_LOGS
-      if (paramValuePosition > 0) {
-        long currentValueLong = atol(paramValue);
-        if (( currentValueLong - nextEntryID ) < 0) {
-          printLogN(output, currentValueLong);
-        }
-        else {
-          byte endValue = MAX_MULTI_LOG;
-          if (currentValueLong > nextEntryID)
-            endValue = 0;
-          else if (( nextEntryID - currentValueLong ) < MAX_MULTI_LOG)
-            endValue = nextEntryID - currentValueLong;
-          for (byte i = 0; i < endValue; i++) {
-            currentValueLong = printLogN(output, currentValueLong) + 1;
-            nilThdSleepMilliseconds(25);
-          }
-        }
-      }
-      else
-        output->println(nextEntryID - 1); // we will get the first and the last log ID
-#else
-      noThread(output);
-#endif
-      break;
     case 'o':
 #if defined(TEMP_LIQ) || defined(TEMP_PCB)
       oneWireInfo(output);
@@ -286,15 +253,13 @@ void printResult(char* data, Print* output) {
 void printHelp(Print* output) {
   //return the menu
   output->println(F("(c)ompact settings"));
-#ifdef THR_LINEAR_LOGS
-  output->println(F("(d)elete flash"));
-#endif
   output->println(F("(e)poch"));
   output->println(F("(f)ree"));
   output->println(F("(h)elp"));
   output->println(F("(i)2c"));
+#ifdef THR_LINEAR_LOGS
   output->println(F("(l)og"));
-  output->println(F("(m)ultiple log"));
+#endif
   output->println(F("(o)ne-wire"));
   output->println(F("(p)aram"));
   output->println(F("(q)ualifier"));

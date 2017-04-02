@@ -40,7 +40,7 @@
 #define ADDRESS_SIZE  (ADDRESS_MAX  - ADDRESS_BEG)
 // The number of entires by types of logs (seconds, minutes, hours, commands/events)
 #define MAX_NB_ENTRIES    (ADDRESS_SIZE  / ENTRY_SIZE_LINEAR_LOGS)
-
+#define MAX_MULTI_LOG 10
 
 
 
@@ -337,8 +337,12 @@ void formatFlash(Print* output) {
   unprotectThread();
 }
 
-void readFlash(Print* output) {
+
+void testFlash(Print* output) {
+  output->println('Not implemented');
+  return;
   wdt_disable();
+  protectThread();
   output->println(F("Write / read / validate"));
   for (int i = 0; i < ADDRESS_MAX / SECTOR_SIZE; i++) {
     for (byte j = 0; j < SECTOR_SIZE / 64; j++) {
@@ -357,10 +361,10 @@ void readFlash(Print* output) {
       sst.flashReadFinish();
       if (result == 0) {
         if (j == 0 && i % 16 == 0) {
-          output->print(".");
+          output->print(F("."));
         }
         if (j == 0 && i % 1024 == 1023) {
-          output->println("");
+          output->println(F(""));
         }
       }
       else {
@@ -368,19 +372,60 @@ void readFlash(Print* output) {
       }
     }
   }
+  unprotectThread();
   wdt_enable(WDTO_8S);
   wdt_reset();
 }
 
-//need revision !!!
-void validateFlash(Print* output) {
-  logActive = false;
-  formatFlash(output);
-  readFlash(output);
-  formatFlash(output);
-  nextEntryID = 0;
-  wdt_enable(WDTO_8S);
-  wdt_reset();
+void readFlash(Print* output, long firstRecord) {
+  protectThread();
+  output->println(F("Index / Address / ID / Epoch"));
+  for (int i = firstRecord; i < ADDRESS_MAX / SECTOR_SIZE; i++) {
+    if (i == (firstRecord + 256)) break;
+    long address = findAddressOfEntryN(i);
+    sst.flashReadInit(address);
+    output->print(i);
+    output->print(" ");
+    output->print(address, HEX);
+    output->print(" ");
+    output->print(sst.flashReadNextInt32(), HEX);
+    output->print(" ");
+    output->print(sst.flashReadNextInt32(), HEX);
+    output->println("");
+    sst.flashReadFinish();
+  }
+  unprotectThread();
+}
+
+/*
+   We will check when we have a change to FF at the ID
+*/
+void debugFlash(Print* output) {
+  protectThread();
+  byte isFF = 2;
+  for (int i = 0; i < ADDRESS_MAX / SECTOR_SIZE; i++) {
+    long address = findAddressOfEntryN(i);
+    sst.flashReadInit(address);
+    long index = sst.flashReadNextInt32();
+    if (index == 0xFFFFFFFF) {
+      if (isFF != 1) {
+        isFF = 1;
+        output->print(i);
+        output->print(F(" "));
+        output->println(index, HEX);
+      }
+    } else {
+      if (isFF != 0) {
+        isFF = 0;
+        output->print(i);
+        output->print(F(" "));
+        output->println(index, HEX);
+      }
+    }
+    sst.flashReadFinish();
+  }
+  output->println(F("Done"));
+  unprotectThread();
 }
 
 
@@ -408,14 +453,58 @@ NIL_THREAD(ThreadLogger, arg) {
 
 void processLoggerCommand(char command, char* data, Print* output) {
   switch (command) {
+    case 'd':
+      debugFlash(output);
+      break;
     case 'f':
       if (data[0] == '\0' || atoi(data) != 1234) {
-        output->println(F("To format flash enter d1234"));
+        output->println(F("To format flash enter df1234"));
       } else {
         formatFlash(output);
       }
       break;
-
+    case 'l':
+      if (data[0] != '\0')
+        printLogN(output, atol(data));
+      else
+        printLastLog(output);
+      break;
+    case 'm':
+      if (data[0] != '\0') {
+        long currentValueLong = atol(data);
+        if (( currentValueLong - nextEntryID ) < 0) {
+          printLogN(output, currentValueLong);
+        }
+        else {
+          byte endValue = MAX_MULTI_LOG;
+          if (currentValueLong > nextEntryID)
+            endValue = 0;
+          else if (( nextEntryID - currentValueLong ) < MAX_MULTI_LOG)
+            endValue = nextEntryID - currentValueLong;
+          for (byte i = 0; i < endValue; i++) {
+            currentValueLong = printLogN(output, currentValueLong) + 1;
+            nilThdSleepMilliseconds(25);
+          }
+        }
+      }
+      else {
+        output->println(nextEntryID - 1);
+      }
+      break;
+    case 'r':
+      if (data[0] == '\0') {
+        readFlash(output, 0);
+      } else {
+        readFlash(output, atol(data));
+      }
+      break;
+    case 't':
+      if (data[0] == '\0' || atoi(data) != 1234) {
+        output->println(F("YOU LOOSE ALL DATA! Use dt1234"));
+      } else {
+        testFlash(output);
+      }
+      break;
     default:
       printLoggerHelp(output);
   }
@@ -426,7 +515,12 @@ void processLoggerCommand(char command, char* data, Print* output) {
 
 void printLoggerHelp(Print* output) {
   output->println(F("Logger help"));
-  output->println(F("(df) Format"));
+  output->println(F("(ld) Debug"));
+  output->println(F("(lf) Format"));
+  output->println(F("(ll) Current log"));
+  output->println(F("(lm) Multiple log"));
+  output->println(F("(lr) Read (start record)"));
+  output->println(F("(lt) Test"));
 }
 
 

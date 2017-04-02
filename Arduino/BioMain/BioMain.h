@@ -118,7 +118,7 @@
 #else
 #define FLASH_SELECT A3 //Flash SS_SPI
 #endif
-#define LOG_INTERVAL 10  //Interval in (s) between logs
+#define LOG_INTERVAL 1  //Interval in (s) between logs
 #endif
 
 
@@ -251,4 +251,6 @@ void setupMemory();
 void recoverLastEntryN();
 uint8_t loadLastEntryToParameters();
 uint16_t findSectorOfN( );
-
+uint8_t toHex(Print* output, byte value);
+uint8_t toHex(Print* output, int value);
+uint8_t toHex(Print* output, long value);
