@@ -155,12 +155,7 @@ void printResult(char* data, Print* output) {
       break;
 #ifdef THR_LINEAR_LOGS
     case 'd':
-      if (paramValuePosition > 0) {
-        if (atol(paramValue) == 1234)
-          formatFlash(output);
-      }
-      else
-        output->println(F("To format flash enter d1234"));
+    processLoggerCommand(data[1], paramValue, output);
       break;
 #endif
     case 'e':

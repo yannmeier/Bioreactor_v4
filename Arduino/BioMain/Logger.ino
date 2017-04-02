@@ -406,15 +406,27 @@ NIL_THREAD(ThreadLogger, arg) {
 #endif
 
 
-void printLoraHelp(Print* output) {
-  output->println(F("LoRa help"));
-  output->println(F("(ai) Info"));
-  output->println(F("(ar) Reset"));
-  output->println(F("(as) Send message"));
-  output->println(F("(ap) Send parameters"));
-  output->println(F("(aa) set appskey"));
-  output->println(F("(an) set nwkskey"));
-  output->println(F("(ad) set devaddr"));
+void processLoggerCommand(char command, char* data, Print* output) {
+  switch (command) {
+    case 'f':
+      if (data[0] == '\0' || atoi(data) != 1234) {
+        output->println(F("To format flash enter d1234"));
+      } else {
+        formatFlash(output);
+      }
+      break;
+
+    default:
+      printLoggerHelp(output);
+  }
+
+}
+
+
+
+void printLoggerHelp(Print* output) {
+  output->println(F("Logger help"));
+  output->println(F("(df) Format"));
 }
 
 
