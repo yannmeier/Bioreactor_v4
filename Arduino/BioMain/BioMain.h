@@ -18,13 +18,9 @@
 //#define BEFORE_43  1
 //#define VERSION_43 1
 
-/******************************************
-   DEFINE FLASH VERSION (default is SST64)
- *****************************************/
-//support SST25VF064C, SST26VF064B (64Mbits) or similar from Cypress
-#define SST64 1
-//support SST25VF032C, SST26VF032B (32Mbits) or similar from Cypress
-//#define SST32 1
+
+
+
 
 /******************
    OPERATION MODE
