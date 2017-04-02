@@ -35,6 +35,7 @@ OneWire oneWire2(TEMP_PCB);
 #endif
 
 void getTemperature(OneWire &ow, int parameter, byte errorFlag);
+void oneWireInfoSS(OneWire &ow, Print* output) ;
 
 #ifdef DEBUG_ONEWIRE
 NIL_WORKING_AREA(waThreadTemp, 240);  // should be 50 without Serial.println
@@ -196,24 +197,20 @@ void getTemperature(OneWire &ow, int parameter, byte errorFlag) {
 
 //bus info function
 void oneWireInfo(Print* output) { // TODO
-  output->println(F("One wire device list"));
 #ifdef TEMP_LIQ
-  protectThread();
-  oneWire1.reset_search();
-  while (oneWire1.search(oneWireAddress)) {
-    for (byte i = 0; i < 8; i++) {
-      output->print(' ');
-      output->print(oneWireAddress[i], HEX);
-    }
-    output->println("");
-    nilThdSleepMilliseconds(250);
-  }
-  unprotectThread();
+ output->println(F("One wire liquid device list"));
+  oneWireInfoSS(oneWire1, output);
 #endif
 #ifdef TEMP_PCB
+output->println(F("One wire PCB device list"));
+  oneWireInfoSS(oneWire2, output);
+#endif
+}
+
+void oneWireInfoSS(OneWire &ow, Print* output) { // TODO
   protectThread();
-  oneWire2.reset_search();
-  while (oneWire2.search(oneWireAddress)) {
+  ow.reset_search();
+  while (ow.search(oneWireAddress)) {
     for (byte i = 0; i < 8; i++) {
       output->print(' ');
       output->print(oneWireAddress[i], HEX);
@@ -222,7 +219,6 @@ void oneWireInfo(Print* output) { // TODO
     nilThdSleepMilliseconds(250);
   }
   unprotectThread();
-#endif
 }
 
 #endif
