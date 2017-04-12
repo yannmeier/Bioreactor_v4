@@ -13814,7 +13814,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="RUSB2" library="resistor" deviceset="R-EU_" device="M0805" value="22"/>
 <part name="RUSB1" library="resistor" deviceset="R-EU_" device="M0805" value="22"/>
 <part name="CU9" library="rcl" deviceset="C-EU" device="C0805" value="10uF"/>
-<part name="U$1" library="BertaLib" deviceset="SST25VF064C" device=""/>
+<part name="U$1" library="BertaLib" deviceset="SST25VF064C" device="" value="SST26VF064B"/>
 <part name="RK2" library="resistor" deviceset="R-EU_" device="M0805" value="10K"/>
 <part name="RK1" library="resistor" deviceset="R-EU_" device="M0805" value="10K"/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
@@ -13940,8 +13940,6 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="SJ4" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NC_BY_TRACE" device="" value=""/>
 <part name="SJ5" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NC_BY_TRACE" device="" value=""/>
 <part name="GND16" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="SJ6" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NC_BY_TRACE" device="" value=""/>
-<part name="GND22" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="100K" library="rcl" deviceset="R-EU_" device="R0805" value="100k"/>
 <part name="GND" library="Headerlibrary" deviceset="PINHD-1X1" device="" value="GND"/>
 <part name="12V" library="Headerlibrary" deviceset="PINHD-1X1" device="" value="12V"/>
@@ -16289,8 +16287,6 @@ Increases noise per read</text>
 <instance part="SJ4" gate="G$1" x="254" y="261.62" rot="R180"/>
 <instance part="SJ5" gate="G$1" x="254" y="264.16" rot="R180"/>
 <instance part="GND16" gate="1" x="261.62" y="264.16" rot="R90"/>
-<instance part="SJ6" gate="G$1" x="254" y="259.08" rot="R180"/>
-<instance part="GND22" gate="1" x="261.62" y="259.08" rot="R90"/>
 <instance part="100K" gate="G$1" x="231.14" y="284.48" rot="R180"/>
 <instance part="GND" gate="G$1" x="459.74" y="88.9"/>
 <instance part="12V" gate="G$1" x="482.6" y="78.74"/>
@@ -16731,10 +16727,6 @@ Increases noise per read</text>
 <segment>
 <pinref part="SJ5" gate="G$1" pin="1"/>
 <pinref part="GND16" gate="1" pin="GND"/>
-</segment>
-<segment>
-<pinref part="SJ6" gate="G$1" pin="1"/>
-<pinref part="GND22" gate="1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="GND" gate="G$1" pin="1"/>
@@ -17967,10 +17959,9 @@ Increases noise per read</text>
 <wire x1="248.92" y1="264.16" x2="248.92" y2="261.62" width="0.1524" layer="91"/>
 <pinref part="U100" gate="G$1" pin="P$26"/>
 <wire x1="248.92" y1="261.62" x2="243.84" y2="261.62" width="0.1524" layer="91"/>
-<wire x1="248.92" y1="261.62" x2="248.92" y2="259.08" width="0.1524" layer="91"/>
 <junction x="248.92" y="261.62"/>
 <pinref part="U100" gate="G$1" pin="P$24"/>
-<wire x1="248.92" y1="259.08" x2="248.92" y2="256.54" width="0.1524" layer="91"/>
+<wire x1="248.92" y1="261.62" x2="248.92" y2="256.54" width="0.1524" layer="91"/>
 <wire x1="248.92" y1="256.54" x2="243.84" y2="256.54" width="0.1524" layer="91"/>
 <wire x1="248.92" y1="256.54" x2="248.92" y2="251.46" width="0.1524" layer="91"/>
 <junction x="248.92" y="256.54"/>
@@ -17984,8 +17975,6 @@ Increases noise per read</text>
 <pinref part="SJ4" gate="G$1" pin="2"/>
 <pinref part="SJ5" gate="G$1" pin="2"/>
 <junction x="248.92" y="264.16"/>
-<pinref part="SJ6" gate="G$1" pin="2"/>
-<junction x="248.92" y="259.08"/>
 <pinref part="868MHZ" gate="G$1" pin="GND4"/>
 <pinref part="868MHZ" gate="G$1" pin="GND3"/>
 <wire x1="281.94" y1="246.38" x2="276.86" y2="246.38" width="0.1524" layer="91"/>
