@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.7.0">
+<eagle version="7.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
@@ -14040,7 +14040,6 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="P+62" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="JP3" library="jumper" deviceset="JP4E" device=""/>
 <part name="R4" library="rcl" deviceset="R-EU_" device="R0805" value="100"/>
-<part name="R8" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
 </parts>
 <sheets>
 <sheet>
@@ -16491,7 +16490,6 @@ Increases noise per read</text>
 <instance part="P+62" gate="G$1" x="370.84" y="132.08"/>
 <instance part="JP3" gate="G$1" x="350.52" y="127" rot="R270"/>
 <instance part="R4" gate="G$1" x="279.4" y="53.34" rot="MR90"/>
-<instance part="R8" gate="G$1" x="330.2" y="20.32" rot="R90"/>
 </instances>
 <busses>
 </busses>
@@ -16991,6 +16989,11 @@ Increases noise per read</text>
 <wire x1="401.32" y1="254" x2="396.24" y2="254" width="0.1524" layer="91"/>
 <label x="396.24" y="254" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="LDMEM" gate="G$1" pin="C"/>
+<wire x1="436.88" y1="22.86" x2="436.88" y2="12.7" width="0.1524" layer="91"/>
+<label x="436.88" y="12.7" size="1.778" layer="95" rot="R90"/>
+</segment>
 </net>
 <net name="A4" class="0">
 <segment>
@@ -17062,16 +17065,12 @@ Increases noise per read</text>
 </segment>
 <segment>
 <pinref part="HX1" gate="G$1" pin="G"/>
-<wire x1="325.12" y1="27.94" x2="330.2" y2="27.94" width="0.1524" layer="91"/>
-<wire x1="330.2" y1="27.94" x2="337.82" y2="27.94" width="0.1524" layer="91"/>
+<wire x1="325.12" y1="27.94" x2="337.82" y2="27.94" width="0.1524" layer="91"/>
 <wire x1="337.82" y1="27.94" x2="337.82" y2="25.4" width="0.1524" layer="91"/>
 <junction x="337.82" y="27.94"/>
 <pinref part="RK14" gate="G$1" pin="2"/>
 <wire x1="355.6" y1="27.94" x2="337.82" y2="27.94" width="0.1524" layer="91"/>
 <label x="325.12" y="27.94" size="1.778" layer="95"/>
-<pinref part="R8" gate="G$1" pin="2"/>
-<wire x1="330.2" y1="25.4" x2="330.2" y2="27.94" width="0.1524" layer="91"/>
-<junction x="330.2" y="27.94"/>
 </segment>
 </net>
 <net name="D10*" class="0">
@@ -17915,9 +17914,6 @@ Increases noise per read</text>
 <pinref part="RK14" gate="G$1" pin="1"/>
 <wire x1="353.06" y1="15.24" x2="337.82" y2="15.24" width="0.1524" layer="91"/>
 <pinref part="LDPID" gate="G$1" pin="A"/>
-<pinref part="R8" gate="G$1" pin="1"/>
-<wire x1="330.2" y1="15.24" x2="337.82" y2="15.24" width="0.1524" layer="91"/>
-<junction x="337.82" y="15.24"/>
 </segment>
 </net>
 <net name="N$27" class="0">
@@ -18071,11 +18067,6 @@ Increases noise per read</text>
 </segment>
 </net>
 <net name="MEM_SEL" class="0">
-<segment>
-<pinref part="LDMEM" gate="G$1" pin="C"/>
-<wire x1="436.88" y1="22.86" x2="436.88" y2="12.7" width="0.1524" layer="91"/>
-<label x="436.88" y="12.7" size="1.778" layer="95" rot="R90"/>
-</segment>
 <segment>
 <wire x1="421.64" y1="251.46" x2="414.02" y2="251.46" width="0.1524" layer="91"/>
 <wire x1="414.02" y1="251.46" x2="414.02" y2="254" width="0.1524" layer="91"/>
