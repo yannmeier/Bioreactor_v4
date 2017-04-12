@@ -58,6 +58,7 @@ NIL_THREAD(ThreadTemp, arg) {
 #ifdef TEMP_PCB
     getTemperature(oneWire2, PARAM_TEMP_PCB, FLAG_TEMP_PCB_PROBE_ERROR);
 #endif
+    nilThdSleepMilliseconds(200);
   }
 }
 
@@ -198,11 +199,11 @@ void getTemperature(OneWire &ow, int parameter, byte errorFlag) {
 //bus info function
 void oneWireInfo(Print* output) { // TODO
 #ifdef TEMP_LIQ
- output->println(F("One wire liquid device list"));
+  output->println(F("One wire liquid device list"));
   oneWireInfoSS(oneWire1, output);
 #endif
 #ifdef TEMP_PCB
-output->println(F("One wire PCB device list"));
+  output->println(F("One wire PCB device list"));
   oneWireInfoSS(oneWire2, output);
 #endif
 }
