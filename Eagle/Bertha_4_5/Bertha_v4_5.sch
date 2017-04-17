@@ -13930,7 +13930,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="P+41" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="P+42" library="SparkFun" deviceset="3.3V" device=""/>
 <part name="P+43" library="supply1" deviceset="+12V" device=""/>
-<part name="868MHZ" library="sma_end_launch" deviceset="SMACONNECTOR" device="_EDGE"/>
+<part name="868MHZ" library="sma_end_launch" deviceset="SMACONNECTOR" device="_EDGE_UFL"/>
 <part name="D1" library="lpatiny" deviceset="1N581*" device="D1206" value="1N581D1206"/>
 <part name="SUPPLY1" library="supply2" deviceset="VDD" device=""/>
 <part name="SUPPLY2" library="supply2" deviceset="VDD" device=""/>
