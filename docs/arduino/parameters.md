@@ -129,6 +129,6 @@ Bit  | PARAM_ERROR                  | Comment
 1    | FLAG_TEMP_LIQ_PROBE_ERROR    | liquid probe failed (one wire not answering)
 2    | FLAG_TEMP_PCB_RANGE_ERROR    | temperature of pcb is outside range
 3    | FLAG_TEMP_LIQ_RANGE_ERROR    | temperature of liquid is outside range
-4    | FLAG_TEMP_PCB_PROBE_ERROR    | target temperature is outside range
+4    | FLAG_TEMP_TARGET_RANGE_ERROR | target temperature is outside range
 5    | FLAG_WEIGHT_RANGE_ERROR      | the weight is outside range
 
