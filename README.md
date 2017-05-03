@@ -2,7 +2,7 @@
 
 This repository is dedicated to the version 4 of the Bioreactor.
 
-##Electronics
+## Electronics
 
 The architecture for v4 is articulated around one central board powered by 
 an ATmega32u4 MCU relying on nilRTOS and external boards for interfacing
@@ -43,7 +43,7 @@ Bioreactor V4.3:
 Bioreactor V4.4:
 - D6<>D12 exchanged to provide PWM PID control of the heater
 
-##Mechanics
+## Mechanics
 
 (Documentation coming soon)
 
