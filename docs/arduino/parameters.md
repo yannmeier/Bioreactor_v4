@@ -18,18 +18,15 @@ id | p  | name                          | description
 6  | G  | PARAM_WEIGHT_SINCE_LAST_EVENT |
 7  | H  | PARAM_WEIGHT_MIN              | weight value for low level
 8  | I  | PARAM_WEIGHT_MAX              | weight value for high level
-
 24 | Y  | PARAM_ERROR                   |
 25 | Z  | PARAM_STATUS                  | currently active service
-
-26 | AA | PARAM_STEPPER_SPEED          | motor speed
-27 | AB | PARAM_STEPPER_STEPS          | number of steps before changing the direction of the motor
-31 | AF | PARAM_SEDIMENTATION_TIME     | number of minutes to wait without rotation before emptying
-32 | AG | PARAM_FILLED_TIME            | number of mintues to stay in the filled state
-33 | AH | PARAM_WEIGHT_FACTOR          | weight calibration: conversion factor digital -> gr
-34 | AI | PARAM_WEIGHT_OFFSET          | weight calibration: digital offset value when bioreactor is empty
-
-51 | AZ | PARAM_ENABLED                | enabled service (set by user)
+26 | AA | PARAM_STEPPER_SPEED           | motor speed
+27 | AB | PARAM_STEPPER_STEPS           | number of steps before changing the direction of the motor
+31 | AF | PARAM_SEDIMENTATION_TIME      | number of minutes to wait without rotation before emptying
+32 | AG | PARAM_FILLED_TIME             | number of mintues to stay in the filled state
+33 | AH | PARAM_WEIGHT_FACTOR           | weight calibration: conversion factor digital -> gr
+34 | AI | PARAM_WEIGHT_OFFSET           | weight calibration: digital offset value when bioreactor is empty
+51 | AZ | PARAM_ENABLED                 | enabled service (set by user)
 
 
 Other planned parameters
