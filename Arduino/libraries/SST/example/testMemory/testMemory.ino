@@ -5,8 +5,9 @@
 //SS on pin 4
 #define FLASH_SSn 10 // 4 = PORTD(4)
 boolean wr;
-SST sst(FLASH_SSn);
-
+// SST sst(FLASH_SSn);
+SST sst = SST('F', 4); // A3 is F4  //$$$$$$
+//SST sst = SST('B', 6); //D10 is B6  //$$$$$$
 
 
 #define ADDRESS_BEG   0x000000
@@ -22,17 +23,21 @@ SST sst(FLASH_SSn);
 void setup()
 { 
   Serial.begin(9600);
-  sst = SST(FLASH_SSn);
-  setupMemory(sst);
+  
+  while(!Serial);  // Forces program to wait until Serial stream is open: Allows reading of information on setup function
+  
+//  sst = SST(FLASH_SSn);
+  sst = SST('F', 4); // A3 is F4  //$$$$$$
+    setupMemory(sst);
+ // sst.printFlashID(&Serial);       //$$$$$$
 
   for (long i=0; i<ADDRESS_MAX; i++) {
     if (i%SECTOR_SIZE==0) { // should erase the sector
       Serial.print("Formatting sector: ");
-      Serial.println(i/SECTOR_SIZE);
+      Serial.println(i/SECTOR_SIZE); 
       sst.flashSectorErase(i/SECTOR_SIZE);
     }
-
-
+  
     if (false) { // do we want to write and read the falst ?
       if (i%LINE_SIZE==0) printLine(i);
       if (i%LINE_SIZE==0) writeLine(i);
@@ -49,7 +54,7 @@ void setup()
 
 void loop() 
 {
-
+  
 }
 
 
