@@ -10,7 +10,7 @@ bioreactor reboot.
 id | p  | name                          | description
 ---|----|-------------------------------|---------------------------------------------------------------------------------
 0  | A  | PARAM_TEMP_LIQ                | temperature of the solution
-1  | B  | PARAM_TEMP_PCB                | temperature of the heating plate
+1  | B  | PARAM_TEMP_PCB                | temperature of the PCB
 2  | C  | PARAM_TEMP_PID                | current heating power
 3  | D  | PARAM_TEMP_TARGET             | target temperature of the liquid
 4  | E  | PARAM_WEIGHT                  | in unit of the balance
