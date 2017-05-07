@@ -12,7 +12,7 @@ In our case we will power the plate in 12v and we will connect them in parallel.
 <img src="connection.jpg" width="500">
 
 It is also important to put 2 leds (just to be sure one of them turn on even if you power the plate in the opposite way)
-and a resistor of 10kΩ.
+and a resistor of 1kΩ (10kΩ would give a much less bright light).
 This will allow to see when the plate is turned on. Nice to debug !
 
 <img src="leds.jpg" width="500">
