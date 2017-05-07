@@ -4,7 +4,7 @@
   The time synchronization works through the NTP protocol and our server
 ******************************************************************************************/
 
-#if defined ( THR_LINEAR_LOGS )
+#ifdef THR_LINEAR_LOGS
 
 #include <SST.h>
 

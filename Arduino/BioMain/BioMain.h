@@ -134,8 +134,8 @@
 #ifdef TEMPERATURE_CTRL
 #define PARAM_TEMP_LIQ      0   // temperature of the solution
 #define PARAM_TEMP_PCB      1   // temperature of the heating plate
-#define PARAM_TEMP_PID      2   // temperature of the heating plate
-#define PARAM_TEMP_TARGET   3  // target temperature of the liquid
+#define PARAM_TEMP_PID      2   // heating amount of energy
+#define PARAM_TEMP_TARGET   3   // target temperature of the liquid
 #endif
 
 /*************************************/
