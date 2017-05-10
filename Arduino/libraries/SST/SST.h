@@ -64,6 +64,7 @@ class SST
 	
 		volatile uint8_t *memPort;
 		int _ssPin;
+		int flashVersion;
 	
 	// PRIVATE METHODS -------------------------------------------------
 	

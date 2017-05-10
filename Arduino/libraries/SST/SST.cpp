@@ -2,6 +2,29 @@
 #include "SST.h"
 #include "SPI.h"
 
+/**********************************************************************************
+ * This library is an updated library from the SST library compatible with    	  *
+ * he SST25VF chip. It has been designed to be compatible with an SST26VF     	  *
+ * chip. A new attribute has been added which expresses whether the chip is   	  *
+ * SST25 or SST26. Implementation is then conditionnal depending on its type. 	  *
+ * 									      	  *
+ * HOW TO USE								      	  *
+ * ==========								      	  *
+ * 										  *
+ * Object SST has to be initialized with port name and pin number.		  *
+ * 										  *
+ * When launching READ sequence, first use the flashReadInit function, then use	  *
+ * the corresponding method (depending on the desired type). When done reading,	  *
+ * enter flashReadFinish.							  *
+ * 										  *
+ * When launching WRITE sequence, first use the flashWriteInit function, then use *
+ * the corresponding method (depending on the desired type). When done reading,	  *
+ * enter flashWriteFinish.							  *
+ * 										  *
+ * Two methods are available for erasing. The Sector Erase and the total erase.   *
+ * printFlashID method allows to print the flash ID on output and displays	  *
+ * 	CONSTRUCTOR ID | DEVICE TYPE (25 or 26) | DEVICE ID			  *
+ **********************************************************************************/
 
 //PUBLIC METHODS----------------------------------------------------
 
@@ -44,11 +67,59 @@ SST::SST(char port, int pin)
 			break; //exception handling not supported
 	}
 	_ssPin = pin;
+	
+	(void) SPI.transfer(0x9F);
+	int temp;
+	// Constructor ID
+	temp = SPI.transfer(0);
+	// Device Type (25 if SST25 or 26 if SST26)
+	flashVersion = SPI.transfer(0);
+	// Device ID
+	temp = SPI.transfer(0);
+	nop();
 }
 
-void SST::init(){
-	flashInit();
-	//printFlashID();
+void SST::init()
+{
+  /******************************
+   * Initialisation of SST chip *
+   * Writing of both status and *
+   *   configuration register.  *
+   ******************************/
+
+  flashEnable();
+  *memPort &=~(_BV(_ssPin));
+  
+  switch(flashVersion)
+  {
+    case 25:
+      SPI.transfer(0x06);// EWSR : Enable Write Status Register, must be issued prior to WRSR
+      break;
+    // default is SST26
+    default:
+      SPI.transfer(0x06); // WREN : Write-enable instruction, must be issued prior to WRSR
+      break;
+    }
+      
+  
+  *memPort |= _BV(_ssPin);
+  delay(50);
+  *memPort &=~(_BV(_ssPin));
+  
+  SPI.transfer(0x01); //write the status register instruction
+  
+  // If SST25VF: Only consider the Status register command, bytes sent must be xx0000xx to remove all block protection
+  // If SST26VF: Status register is read only, bytes sent don't matter. Status register must be followed by configuration register
+  // Bytes for configuration register must be x1xxxxx0
+  
+  // Status register
+  SPI.transfer(0x00);
+  // Configuration register
+  if(flashVersion != 25)
+      SPI.transfer(0x50); // ONLY FOR SST26VF
+  *memPort |= _BV(_ssPin);
+  delay(50);
+  flashDisable();
 }
 
 //check OF NON EMPTY sectors
@@ -79,9 +150,13 @@ void SST::printFlashID(Print* output)
   uint8_t id, mtype, dev;
   flashEnable();
   *memPort &=~(_BV(_ssPin));
-  (void) SPI.transfer(0x9F); // Read ID command
+  // Read ID command
+  (void) SPI.transfer(0x9F);
+  // Constructor ID
   id = SPI.transfer(0);
+  // Device Type (25 if SST25 or 26 if SST26)
   mtype = SPI.transfer(0);
+  // Device ID
   dev = SPI.transfer(0);
   char buf[16] = {0};
   sprintf(buf, "%02X %02X %02X", id, mtype, dev);
@@ -144,7 +219,9 @@ void SST::flashReadFinish()
 void SST::flashWriteInit(uint32_t address){
 	flashEnable();
 	*memPort &=~(_BV(_ssPin));
-	SPI.transfer(0x06);//write enable instruction
+	// In SST26, WREN has already been issued at initialisation
+	if(flashVersion == 25)
+	    SPI.transfer(0x06);//write enable instruction
 	*memPort |= _BV(_ssPin);
 	nop();
 	*memPort &=~(_BV(_ssPin));
@@ -191,12 +268,13 @@ Erase 4KB sectors - time needed : 18ms
 	64 KByte Block-Erase of memory array SPI : 1101 1000b (D8H) 3 0 0
 */
 
-// COMMANDS WILL PROBABLY HAVE TO BE MODIFIED
 void SST::flashSectorErase(uint16_t sectorAddress)
 {
   flashEnable();
   *memPort &=~(_BV(_ssPin));
-  SPI.transfer(0x06);//write enable instruction
+  // In SST26, WREN has already been issued at initialisation
+  if(flashVersion == 25)
+      SPI.transfer(0x06);//write enable instruction
   *memPort |= _BV(_ssPin);
   nop();
   *memPort &=~(_BV(_ssPin));
@@ -211,11 +289,16 @@ void SST::flashTotalErase()
 {
   flashEnable();
   *memPort &=~(_BV(_ssPin));
-  SPI.transfer(0x06);//write enable instruction
+  // In SST26, WREN has already been issued at initialisation
+  if(flashVersion == 25)
+      SPI.transfer(0x06);//write enable instruction
   *memPort |= _BV(_ssPin);
   nop();
   *memPort &=~(_BV(_ssPin));
-  (void) SPI.transfer(0x60); // Erase Chip //
+  if(flashVersion == 25)
+      (void) SPI.transfer(0x60); // Erase Chip //
+  else 	// 0x60 operation not supported by SST26
+      (void) SPI.transfer(0x7C); // Erase Chip //
   *memPort |= _BV(_ssPin);
   flashWaitUntilDone();
   flashDisable();
@@ -230,37 +313,7 @@ void SST::flashTotalErase()
 inline void volatile SST::nop(void) { asm __volatile__ ("nop"); }
 
 void SST::flashEnable()    { SPI.setBitOrder(MSBFIRST); nop(); }
-void SST::flashDisable()   { /*SPI.setBitOrder(LSBFIRST);*/ nop(); }
-
-void SST::flashInit()
-{
-
-  flashEnable();
-  // ???
-  *memPort &=~(_BV(_ssPin));
-  
- // SPI.transfer(0x50); //enable write status register instruction Invalid for SST26VF
-  SPI.transfer(0x06);	// WREN : Write-enable instruction, must be issued prior to WRSR
-  
-  // ???
-  *memPort |= _BV(_ssPin);
-  delay(50);
-  *memPort &=~(_BV(_ssPin));
-  
-  SPI.transfer(0x01); //write the status register instruction
-  
-  // If SST25VF: Only consider the Status register command, bytes sent must be xx0000xx to remove all block protection
-  // If SST25VF: Status register is read only, bytes sent don't matter. Status register must be followed by configuration register
-  // Bytes for configuration register must be x1xxxxx0 <-- TO BE VERIFIED
-  
-  // Status register
-  SPI.transfer(0x00); //value to write to register - xx0000xx will remove all block protection
-  // Configuration register
-  SPI.transfer(0x50); // ONLY FOR SST26VF
-  *memPort |= _BV(_ssPin);
-  delay(50);
-  flashDisable();	// Why?
-}
+void SST::flashDisable()   { SPI.setBitOrder(LSBFIRST); nop(); }
 
 void SST::flashWaitUntilDone()
 {
@@ -268,7 +321,7 @@ void SST::flashWaitUntilDone()
   while (1)
   {
     *memPort &= ~(_BV(_ssPin));
-    (void) SPI.transfer(0x05);	// RDSR
+    (void) SPI.transfer(0x05);
     data = SPI.transfer(0);
     *memPort |= _BV(_ssPin);
     if (!bitRead(data,0)) break;
@@ -282,6 +335,7 @@ void SST::flashSetAddress(uint32_t addr)
   (void) SPI.transfer(addr >> 8);
   (void) SPI.transfer(addr);
 }
+
 
 
 
