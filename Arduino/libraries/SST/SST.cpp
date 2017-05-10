@@ -68,6 +68,8 @@ SST::SST(char port, int pin)
 	}
 	_ssPin = pin;
 	
+	flashEnable();
+	
 	(void) SPI.transfer(0x9F);
 	int temp;
 	// Constructor ID
@@ -77,6 +79,8 @@ SST::SST(char port, int pin)
 	// Device ID
 	temp = SPI.transfer(0);
 	nop();
+	
+	flashDisable();
 }
 
 void SST::init()
@@ -93,7 +97,7 @@ void SST::init()
   switch(flashVersion)
   {
     case 25:
-      SPI.transfer(0x06);// EWSR : Enable Write Status Register, must be issued prior to WRSR
+      SPI.transfer(0x50);// EWSR : Enable Write Status Register, must be issued prior to WRSR
       break;
     // default is SST26
     default:
@@ -116,7 +120,7 @@ void SST::init()
   SPI.transfer(0x00);
   // Configuration register
   if(flashVersion != 25)
-      SPI.transfer(0x50); // ONLY FOR SST26VF
+      {SPI.transfer(0x50);} // ONLY FOR SST26VF
   *memPort |= _BV(_ssPin);
   delay(50);
   flashDisable();
@@ -221,7 +225,7 @@ void SST::flashWriteInit(uint32_t address){
 	*memPort &=~(_BV(_ssPin));
 	// In SST26, WREN has already been issued at initialisation
 	if(flashVersion == 25)
-	    SPI.transfer(0x06);//write enable instruction
+	    {SPI.transfer(0x06);}//write enable instruction
 	*memPort |= _BV(_ssPin);
 	nop();
 	*memPort &=~(_BV(_ssPin));
@@ -274,7 +278,7 @@ void SST::flashSectorErase(uint16_t sectorAddress)
   *memPort &=~(_BV(_ssPin));
   // In SST26, WREN has already been issued at initialisation
   if(flashVersion == 25)
-      SPI.transfer(0x06);//write enable instruction
+      {SPI.transfer(0x06);}//write enable instruction
   *memPort |= _BV(_ssPin);
   nop();
   *memPort &=~(_BV(_ssPin));
@@ -291,14 +295,14 @@ void SST::flashTotalErase()
   *memPort &=~(_BV(_ssPin));
   // In SST26, WREN has already been issued at initialisation
   if(flashVersion == 25)
-      SPI.transfer(0x06);//write enable instruction
+      {SPI.transfer(0x06);}//write enable instruction
   *memPort |= _BV(_ssPin);
   nop();
   *memPort &=~(_BV(_ssPin));
   if(flashVersion == 25)
-      (void) SPI.transfer(0x60); // Erase Chip //
+      {(void) SPI.transfer(0x60);} // Erase Chip //
   else 	// 0x60 operation not supported by SST26
-      (void) SPI.transfer(0x7C); // Erase Chip //
+      {(void) SPI.transfer(0x7C);} // Erase Chip //
   *memPort |= _BV(_ssPin);
   flashWaitUntilDone();
   flashDisable();
