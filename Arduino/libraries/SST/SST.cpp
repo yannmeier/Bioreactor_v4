@@ -28,6 +28,8 @@
 
 //PUBLIC METHODS----------------------------------------------------
 
+// Still need to verify if retrocompatibility works
+
 SST::SST(char port, int pin)
 {
 	pinMode(pin, OUTPUT);
@@ -68,8 +70,13 @@ SST::SST(char port, int pin)
 	}
 	_ssPin = pin;
 	
+	/*
+	 * Initialization of flashVersion attribute
+	 * This should be verified as it may not work
+	 */
 	flashEnable();
 	
+	//read ID command
 	(void) SPI.transfer(0x9F);
 	int temp;
 	// Constructor ID
@@ -78,7 +85,7 @@ SST::SST(char port, int pin)
 	flashVersion = SPI.transfer(0);
 	// Device ID
 	temp = SPI.transfer(0);
-	nop();
+	//nop();
 	
 	flashDisable();
 }
@@ -96,7 +103,7 @@ void SST::init()
   
   switch(flashVersion)
   {
-    case 25:
+    case 0x25:
       SPI.transfer(0x50);// EWSR : Enable Write Status Register, must be issued prior to WRSR
       break;
     // default is SST26
@@ -119,7 +126,7 @@ void SST::init()
   // Status register
   SPI.transfer(0x00);
   // Configuration register
-  if(flashVersion != 25)
+  if(flashVersion != 0x25)
       {SPI.transfer(0x50);} // ONLY FOR SST26VF
   *memPort |= _BV(_ssPin);
   delay(50);
@@ -127,7 +134,7 @@ void SST::init()
 }
 
 //check OF NON EMPTY sectors
-void SST::printNonEmptySector(){
+void SST::printNonEmptySector(Print* output){
 	//The memory contains 2048 sectors of 4096 bytes
 	for (long x = 0; x < 2048; x++)
 	  {
@@ -141,9 +148,9 @@ void SST::printNonEmptySector(){
 
 		if (!sectorEmpty)
 		{
-		  Serial.print("Sector: ");
-		  if ((x+1) < 10) Serial.print("00"); else if ((x+1) < 100) Serial.print("0");
-		  Serial.println(x+1, DEC);
+		  output->print("Sector: ");
+		  if ((x+1) < 10) output->print("00"); else if ((x+1) < 100) output->print("0");
+		  output->println(x+1, DEC);
 		}
 		flashReadFinish();
 	}
@@ -224,7 +231,7 @@ void SST::flashWriteInit(uint32_t address){
 	flashEnable();
 	*memPort &=~(_BV(_ssPin));
 	// In SST26, WREN has already been issued at initialisation
-	if(flashVersion == 25)
+	if(flashVersion == 0x25)
 	    {SPI.transfer(0x06);}//write enable instruction
 	*memPort |= _BV(_ssPin);
 	nop();
@@ -277,7 +284,7 @@ void SST::flashSectorErase(uint16_t sectorAddress)
   flashEnable();
   *memPort &=~(_BV(_ssPin));
   // In SST26, WREN has already been issued at initialisation
-  if(flashVersion == 25)
+  if(flashVersion == 0x25)
       {SPI.transfer(0x06);}//write enable instruction
   *memPort |= _BV(_ssPin);
   nop();
@@ -294,12 +301,13 @@ void SST::flashTotalErase()
   flashEnable();
   *memPort &=~(_BV(_ssPin));
   // In SST26, WREN has already been issued at initialisation
-  if(flashVersion == 25)
+  // Must verify if needed again but it should work like that
+  if(flashVersion == 0x25)
       {SPI.transfer(0x06);}//write enable instruction
   *memPort |= _BV(_ssPin);
   nop();
   *memPort &=~(_BV(_ssPin));
-  if(flashVersion == 25)
+  if(flashVersion == 0x25)
       {(void) SPI.transfer(0x60);} // Erase Chip //
   else 	// 0x60 operation not supported by SST26
       {(void) SPI.transfer(0x7C);} // Erase Chip //
@@ -317,7 +325,7 @@ void SST::flashTotalErase()
 inline void volatile SST::nop(void) { asm __volatile__ ("nop"); }
 
 void SST::flashEnable()    { SPI.setBitOrder(MSBFIRST); nop(); }
-void SST::flashDisable()   { SPI.setBitOrder(LSBFIRST); nop(); }
+void SST::flashDisable()   { SPI.setBitOrder(LSBFIRST); nop(); }	// Do we need the setBitOrder?
 
 void SST::flashWaitUntilDone()
 {

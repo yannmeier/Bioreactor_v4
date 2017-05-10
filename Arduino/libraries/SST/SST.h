@@ -24,7 +24,7 @@ class SST
 	
 		SST(char port, int pin);
 		void init();
-		void printNonEmptySector();	//this function could be used to get the position in the memory after a reboot
+		void printNonEmptySector(Print* output);	//this function could be used to get the position in the memory after a reboot
 		void printFlashID(Print*);
 			
 		/********
@@ -64,7 +64,7 @@ class SST
 	
 		volatile uint8_t *memPort;
 		int _ssPin;
-		int flashVersion;
+		uint8_t flashVersion;
 	
 	// PRIVATE METHODS -------------------------------------------------
 	
