@@ -9,7 +9,9 @@
 
 #define LINE_SIZE 64 // should be a divider of the SECTOR_SIZE
 
-void setupMemory(SST sst);
+void setupMemory(SST& sst);
+void printLine(long address, SST& sst);
+void writeLine(long address, SST& sst);
 
 // ======================================================================================= //
 
@@ -18,9 +20,10 @@ void setup()
   Serial.begin(9600);
   
   SST sst = SST('F', 4); // A3 is F4
-  
   while(!Serial);  // Forces program to wait until Serial stream is open: Allows reading of information on setup function
+                   // Maybe issue is here?
   setupMemory(sst);
+  // Does not work in example. Why??
   sst.printFlashID(&Serial);
 
   for (long i=0; i<ADDRESS_MAX; i++) {
@@ -30,11 +33,9 @@ void setup()
       sst.flashSectorErase(i/SECTOR_SIZE);
     }
   
-    if (false) { // do we want to write and read the falst ?
-      if (i%LINE_SIZE==0) printLine(i);
-      if (i%LINE_SIZE==0) writeLine(i);
-      if (i%LINE_SIZE==0) printLine(i);
-    }
+   if (i%LINE_SIZE==0) printLine(i,sst);
+   if (i%LINE_SIZE==0) writeLine(i,sst);
+   if (i%LINE_SIZE==0) printLine(i,sst);
 
   }
 
@@ -49,42 +50,42 @@ void loop()
   
 }
 
-//
-//void printLine(long address) {
-//
-//  Serial.print("Read Address: ");
-//  Serial.print(address);
-//  Serial.print(" : ");
-//  sst.flashReadInit(address);
-//  for (byte j=0; j<LINE_SIZE; j++) {
-//    byte oneByte=sst.flashReadNextInt8();
-//    Serial.print(oneByte, HEX);
-//    Serial.print(" ");
-//    address++;
-//  }
-//  sst.flashReadFinish();
-//  Serial.println("");
-//}
-//
-//void writeLine(long address) {
-//
-//  Serial.print("Write Address: ");
-//  Serial.print(address);
-//  Serial.print(" : ");
-//  sst.flashWriteInit(address);
-//  for (byte j=0; j<LINE_SIZE; j++) {
-//    sst.flashWriteNextInt8(j);
-//    Serial.print(j, HEX);
-//    Serial.print(" ");
-//    address++;
-//  }
-//  sst.flashReadFinish();
-//  Serial.println("");
-//}
-//
-//
 
-void setupMemory(SST sst){
+void printLine(long address, SST& sst) {
+
+  Serial.print("Read Address: ");
+  Serial.print(address);
+  Serial.print(" : ");
+  sst.flashReadInit(address);
+  for (byte j=0; j<LINE_SIZE; j++) {
+    byte oneByte=sst.flashReadNextInt8();
+    Serial.print(oneByte, HEX);
+    Serial.print(" ");
+    address++;
+  }
+  sst.flashReadFinish();
+  Serial.println("");
+}
+
+void writeLine(long address, SST& sst) {
+
+  Serial.print("Write Address: ");
+  Serial.print(address);
+  Serial.print(" : ");
+  sst.flashWriteInit(address);
+  for (byte j=0; j<LINE_SIZE; j++) {
+    sst.flashWriteNextInt8(j);
+    Serial.print(j, HEX);
+    Serial.print(" ");
+    address++;
+  }
+  sst.flashReadFinish();
+  Serial.println("");
+}
+
+
+
+void setupMemory(SST& sst){
   SPI.begin();
   SPI.setDataMode(SPI_MODE0);
   SPI.setBitOrder(MSBFIRST);
