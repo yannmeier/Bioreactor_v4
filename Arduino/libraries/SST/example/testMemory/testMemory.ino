@@ -19,25 +19,25 @@ void setup()
 { 
   Serial.begin(9600);
   
-  SST sst = SST('F', 4); // A3 is F4
+  SST sst = SST('F', A3); // A3 is F4 
   while(!Serial);  // Forces program to wait until Serial stream is open: Allows reading of information on setup function
                    // Maybe issue is here?
   setupMemory(sst);
   // Does not work in example. Why??
   sst.printFlashID(&Serial);
-
-  for (long i=0; i<ADDRESS_MAX; i++) {
-    if (i%SECTOR_SIZE==0) { // should erase the sector
-      Serial.print("Formatting sector: ");
-      Serial.println(i/SECTOR_SIZE); 
-      sst.flashSectorErase(i/SECTOR_SIZE);
-    }
-  
-   if (i%LINE_SIZE==0) printLine(i,sst);
-   if (i%LINE_SIZE==0) writeLine(i,sst);
-   if (i%LINE_SIZE==0) printLine(i,sst);
-
-  }
+//
+//  for (long i=0; i<ADDRESS_MAX; i++) {
+//    if (i%SECTOR_SIZE==0) { // should erase the sector
+//      Serial.print("Formatting sector: ");
+//      Serial.println(i/SECTOR_SIZE); 
+//      sst.flashSectorErase(i/SECTOR_SIZE);
+//    }
+//  
+//   if (i%LINE_SIZE==0) printLine(i,sst);
+//   if (i%LINE_SIZE==0) writeLine(i,sst);
+//   if (i%LINE_SIZE==0) printLine(i,sst);
+//
+//  }
 
 }
 

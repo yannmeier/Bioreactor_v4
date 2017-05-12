@@ -13,6 +13,9 @@
  * 										  *
  * Object SST has to be initialized with port name and pin number.		  *
  * 										  *
+ * Before unsing (after construction), the init function has to be run, in order  *
+ * to write the status and configuration registers.				  *
+ * 										  *
  * When launching READ sequence, first use the flashReadInit function, then use	  *
  * the corresponding method (depending on the desired type). When done reading,	  *
  * enter flashReadFinish.							  *
@@ -74,24 +77,40 @@ SST::SST(char port, int pin)
 	 * Initialization of flashVersion attribute
 	 * This should be verified as it may not work
 	 */
-	flashEnable();
-	
-	//read ID command
-	(void) SPI.transfer(0x9F);
-	int temp;
-	// Constructor ID
-	temp = SPI.transfer(0);
-	// Device Type (25 if SST25 or 26 if SST26)
-	flashVersion = SPI.transfer(0);
-	// Device ID
-	temp = SPI.transfer(0);
-	//nop();
-	
-	flashDisable();
+	 
+	 /* 
+	  * As default, we will consider SST26VF as the default chip and
+	  * these settings will be used.
+	  * flashVersion is defined in init function 
+	  */
+	 
+	 flashVersion = 0;
+	 
 }
 
 void SST::init()
 {
+  /********************************************
+   * Initialisation of flashVersion attribute *
+   * This can't be done in constructor as SPI *
+   *   protocol is not defined at that time.  *
+   ********************************************/
+      
+      flashEnable();
+      
+      //read ID command
+      (void) SPI.transfer(0x9F);
+      int temp;
+      // Constructor ID
+      temp = SPI.transfer(0);
+      // Device Type (25H if SST25 or 26H if SST26)
+      flashVersion = SPI.transfer(0);
+      // Device ID
+      temp = SPI.transfer(0);
+      //nop();
+      
+      flashDisable();
+
   /******************************
    * Initialisation of SST chip *
    * Writing of both status and *
@@ -104,7 +123,7 @@ void SST::init()
   switch(flashVersion)
   {
     case 0x25:
-      SPI.transfer(0x50);// EWSR : Enable Write Status Register, must be issued prior to WRSR
+      SPI.transfer(0x50); // EWSR : Enable Write Status Register, must be issued prior to WRSR
       break;
     // default is SST26
     default:
@@ -114,7 +133,7 @@ void SST::init()
       
   
   *memPort |= _BV(_ssPin);
-  delay(50);
+  delay(50);	// TO BE VERIFIED
   *memPort &=~(_BV(_ssPin));
   
   SPI.transfer(0x01); //write the status register instruction
@@ -126,10 +145,10 @@ void SST::init()
   // Status register
   SPI.transfer(0x00);
   // Configuration register
-  if(flashVersion != 0x25)
-      {SPI.transfer(0x50);} // ONLY FOR SST26VF
+  //~ if(flashVersion != 0x25) //$$$$$$
+      SPI.transfer(0x50); // ONLY FOR SST26VF
   *memPort |= _BV(_ssPin);
-  delay(50);
+  delay(50);	// TO BE VERIFIED
   flashDisable();
 }
 
@@ -160,6 +179,7 @@ void SST::printFlashID(Print* output)
 {
   uint8_t id, mtype, dev;
   flashEnable();
+  flashWaitUntilDone();
   *memPort &=~(_BV(_ssPin));
   // Read ID command
   (void) SPI.transfer(0x9F);
@@ -232,7 +252,7 @@ void SST::flashWriteInit(uint32_t address){
 	*memPort &=~(_BV(_ssPin));
 	// In SST26, WREN has already been issued at initialisation
 	if(flashVersion == 0x25)
-	    {SPI.transfer(0x06);}//write enable instruction
+	    SPI.transfer(0x06);//write enable instruction
 	*memPort |= _BV(_ssPin);
 	nop();
 	*memPort &=~(_BV(_ssPin));
@@ -284,8 +304,8 @@ void SST::flashSectorErase(uint16_t sectorAddress)
   flashEnable();
   *memPort &=~(_BV(_ssPin));
   // In SST26, WREN has already been issued at initialisation
-  if(flashVersion == 0x25)
-      {SPI.transfer(0x06);}//write enable instruction
+ if(flashVersion == 0x25)
+      SPI.transfer(0x06);//write enable instruction
   *memPort |= _BV(_ssPin);
   nop();
   *memPort &=~(_BV(_ssPin));
@@ -302,15 +322,15 @@ void SST::flashTotalErase()
   *memPort &=~(_BV(_ssPin));
   // In SST26, WREN has already been issued at initialisation
   // Must verify if needed again but it should work like that
-  if(flashVersion == 0x25)
-      {SPI.transfer(0x06);}//write enable instruction
+ // if(flashVersion == 0x25)	//$$$$
+      SPI.transfer(0x06);//write enable instruction
   *memPort |= _BV(_ssPin);
   nop();
   *memPort &=~(_BV(_ssPin));
   if(flashVersion == 0x25)
-      {(void) SPI.transfer(0x60);} // Erase Chip //
+      (void) SPI.transfer(0x60); // Erase Chip //
   else 	// 0x60 operation not supported by SST26
-      {(void) SPI.transfer(0x7C);} // Erase Chip //
+      (void) SPI.transfer(0x7C); // Erase Chip //
   *memPort |= _BV(_ssPin);
   flashWaitUntilDone();
   flashDisable();
