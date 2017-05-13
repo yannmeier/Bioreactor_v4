@@ -26,6 +26,8 @@ class SST
 		void init();
 		void printNonEmptySector(Print* output);	//this function could be used to get the position in the memory after a reboot
 		void printFlashID(Print*);
+		void printStatusRegister(Print* output);	// DEBUGGING PURPOSE ONLY: Only accepts Serial as output
+		void printConfigRegister(Print* output);	// DEBUGGING PURPOSE ONLY: Only accepts Serial as output
 			
 		/********
 		 * READ *
@@ -70,6 +72,8 @@ class SST
 	
 		// "No operation" function: Specifies to the controller to wait for 1 clock round
 		inline void volatile nop(void);
+		void flashSelect();
+		void flashDeselect();
 		
 		void flashEnable();
 		void flashDisable();
