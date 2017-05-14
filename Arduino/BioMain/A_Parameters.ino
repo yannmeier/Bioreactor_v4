@@ -18,10 +18,6 @@
 #include "BioMain.h"
 
 
-#define EEPROM_MIN_ADDR            0
-#define EEPROM_MAX_ADDR          511
-#include <EEPROM.h> // should be removed and based only on avr/eeprom
-
 
 #define MAX_PARAM 52   // If the MAX_PARAM change you need to change the pointer in the EEPROM
 #define NB_PARAMETERS_LINEAR_LOGS  26
@@ -62,11 +58,6 @@
 #define EVENT_PARAMETER_SET          256
 
 
-#define EE_START_PARAM           0 // We save the parameter from byte 0 of EEPROM
-#define EE_LAST_PARAM            (MAX_PARAM*2-1) // The last parameter is stored at byte 50-51
-
-//#define EEPROM_MIN_ADDR            0
-//#define EEPROM_MAX_ADDR          511
 
 
 #define EE_LORA_DEVADDR          150  // 8 bytes
@@ -75,15 +66,17 @@
 #define EE_QUALIFIER             222
 
 
+#define EE_START_PARAM           0 // We save the parameter from byte 0 of EEPROM
+#define EE_LAST_PARAM            (MAX_PARAM*2-1) // The last parameter is stored at byte 50-51
+
+#define EEPROM_MIN_ADDR            0
+#define EEPROM_MAX_ADDR          511
+
 // value that should not be taken into account
 // in case of error the parameter is set to this value
 #define ERROR_VALUE  -32768
 
 int parameters[MAX_PARAM];
-
-
-
-
 
 void setupParameters() {
   //We copy all the value in the parameters table
@@ -156,8 +149,6 @@ void printParameters(Print* output) {
   }
 }
 
-
-
 // code from http://www.arduino.cc/playground/Code/EepromUtil
 void getStatusEEPROM(Print* output) {
   int bytesPerRow = 16;
@@ -177,7 +168,7 @@ void getStatusEEPROM(Print* output) {
     }
 
     // read current byte from eeprom
-    b = EEPROM.read(i);
+    b = eeprom_read_byte(i);
     sprintf(buf, "%02X ", b);
     j++;
     if (j == bytesPerRow) {

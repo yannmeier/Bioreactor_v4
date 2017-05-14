@@ -103,7 +103,7 @@
 /******************************
   SERIAL, LOGGER AND DEBUGGERS
 *******************************/
-#define THR_SERIAL         1
+
 #define THR_LINEAR_LOGS    1
 
 //#define DEBUG_LOGS         1
@@ -243,7 +243,7 @@
 #define FLAG_RELAY_ACID          12
 #define FLAG_RELAY_BASE          13
 
-#define SERIAL_MAX_PARAM_VALUE_LENGTH  32
+
 
 void writeLog(uint16_t event_number, int parameter_value);
 boolean clearParameterBit(byte number, byte bitToClear);

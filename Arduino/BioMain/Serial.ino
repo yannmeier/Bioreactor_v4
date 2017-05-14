@@ -1,7 +1,9 @@
+#define THR_SERIAL         1
+
 #ifdef THR_SERIAL
-#include "WString.h"
 
 #define SERIAL_BUFFER_LENGTH 32
+#define SERIAL_MAX_PARAM_VALUE_LENGTH  32
 char serialBuffer[SERIAL_BUFFER_LENGTH];
 byte serialBufferPosition = 0;
 
@@ -39,29 +41,6 @@ NIL_THREAD(ThreadSerial, arg) {
 #endif
 
 
-
-void printGeneralParameters(Print* output) {
-  output->print(F("EPOCH:"));
-  output->println(now());
-  output->print(F("millis:"));
-  output->println(millis());
-#ifdef I2C_RELAY_FOOD
-  output->print(F("I2C relay food:"));
-  output->println(I2C_RELAY_FOOD);
-#endif
-#ifdef FLUX
-  output->print(F("I2C Flux:"));
-  output->println(I2C_FLUX);
-#endif
-#ifdef THR_LINEAR_LOGS
-  output->print(F("Next log index:"));
-  output->println(nextEntryID);
-#endif
-#ifdef THR_LINEAR_LOGS
-  output->print(F("FlashID:"));
-  sst.printFlashID(output);
-#endif
-}
 
 /* SerialEvent occurs whenever a new data comes in the
   hardware serial RX.  This routine is run between each
@@ -141,142 +120,40 @@ void printResult(char* data, Print* output) {
   // we will process the commands, it means it starts with lowercase
   switch (data[0]) {
 
-#ifdef THR_LORA
-    case 'a':
-      processLoraCommand(data[1], paramValue, output);
-      break;
-#endif
-
+    /* ========================================
+       GENERAL AND REQUIRED PARAMETERS
+      ========================================*/
     case 'c':
       if (paramValuePosition > 0)
         printCompactParameters(output, atoi(paramValue));
       else
         printCompactParameters(output);
       break;
-    case 'e':
-      if (paramValuePosition > 0) {
-        setTime(atol(paramValue));
-        output->println("");
-      }
-      else {
-        output->println(now());
-      }
-      break;
-    case 'f':
-      printFreeMemory(output);
-      break;
     case 'h':
       printHelp(output);
-      break;
-    case 'i':
-#if defined(GAS_CTRL) || defined(PH_CTRL)
-      wireInfo(output);
-#else  //not elsif !!
-      noThread(output);
-#endif
-      break;
-#ifdef THR_LINEAR_LOGS
-    case 'l':
-      processLoggerCommand(data[1], paramValue, output);
-      break;
-#else  //not elsif !!
-      noThread(output);
-#endif
-    case 'o':
-#if defined(TEMP_LIQ) || defined(TEMP_PCB)
-      oneWireInfo(output);
-#else
-      noThread(output);
-#endif
-      break;
-    case 'p':
-      printGeneralParameters(output);
-      break;
-    case 'q':
-      if (paramValuePosition > 0) {
-        setQualifier(atoi(paramValue));
-      }
-      else {
-        uint16_t a = getQualifier();
-        output->println(a);
-      }
-      break;
-    case 'r':
-      if (paramValuePosition > 0) {
-        if (atol(paramValue) == 1234) {
-          resetParameters();
-          output->println(F("Reset done"));
-        }
-      }
-      else {
-        output->println(F("To reset enter r1234"));
-      }
       break;
     case 's':
       printParameters(output);
       break;
-    case 't':
-      output->print(F("Status: "));
-      output->println(getParameter(PARAM_STATUS));
-      for (byte i = 0; i < 10; i++) {
-        output->print(i);
-        output->print(": ");
-        output->println(getParameterBit(PARAM_STATUS, i));
-      }
-      output->print(F("Enabled: "));
-      output->println(getParameter(PARAM_ENABLED));
-      for (byte i = 0; i < 3; i++) {
-        output->print(i);
-        output->print(": ");
-        output->println(getParameterBit(PARAM_ENABLED, i));
-      }
-      output->print(F("Error: "));
-      output->println(getParameter(PARAM_ERROR));
-      for (byte i = 0; i < 6; i++) {
-        output->print(i);
-        output->print(": ");
-        output->println(getParameterBit(PARAM_ERROR, i));
-      }
+    case 'u':
+      processUtilitiesCommand(data[1], paramValue, output);
       break;
-#ifdef FOOD_CTRL
-    case 'w':
-      processWeightCommand(data[1], paramValue, output);
-      break;
-#endif
-    case 'z':
-      getStatusEEPROM(output);
-      break;
+    default:
+      processSpecificCommand(data, paramValue, output);
   }
   output->println("");
 }
 
 void printHelp(Print* output) {
-  //return the menu
-  output->println(F("(c)ompact settings"));
-  output->println(F("(e)poch"));
-  output->println(F("(f)ree"));
   output->println(F("(h)elp"));
-  output->println(F("(i)2c"));
-#ifdef THR_LINEAR_LOGS
-  output->println(F("(l)og"));
-#endif
-  output->println(F("(o)ne-wire"));
-  output->println(F("(p)aram"));
-  output->println(F("(q)ualifier"));
-  output->println(F("(r)eset"));
   output->println(F("(s)ettings"));
-  output->println(F("s(t)atus"));
-#ifdef FOOD_CTRL
-  output->println(F("(w)eight"));
-#endif
-  output->println(F("(z) eeprom"));
+  output->println(F("(u)tilities"));
+
+
+  printSpecificHelp(output);
 }
 
 
-static void printFreeMemory(Print* output)
-{
-  nilPrintUnusedStack(output);
-}
 
 
 void noThread(Print* output) {
@@ -305,6 +182,7 @@ uint8_t toHex(Print* output, long value) {
   checkDigit ^= toHex(output, (int)(value >> 0 & 65535));
   return checkDigit;
 }
+
 
 
 

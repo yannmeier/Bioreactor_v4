@@ -2,7 +2,7 @@
 
 #define LORA_RESET_PIN 9
 #ifdef THR_LORA
-void processLoraCommand(char command, char* data, Print* output) {
+void processLoraCommand(char command, char* paramValue, Print* output) {
   switch (command) {
   case 'i':
     infoLora(output);
@@ -12,33 +12,33 @@ void processLoraCommand(char command, char* data, Print* output) {
     initLora(output);
     break;
   case 's':
-    sendLoraMessage(data, output);
+    sendLoraMessage(paramValue, output);
     break;
   case 'p':
-    if (data[0]=='\0') {
+    if (paramValue[0]=='\0') {
       sendLoraCompactParameters(output, MAX_PARAM);
     } 
     else {
-      sendLoraCompactParameters(output, atoi(data));
+      sendLoraCompactParameters(output, atoi(paramValue));
     }
     break;
   case 'a':
-    if (data[0]!='\0') {
-      writeEEPROM(EE_LORA_APPSKEY, data, 32);
+    if (paramValue[0]!='\0') {
+      writeEEPROM(EE_LORA_APPSKEY, paramValue, 32);
     } 
     printAppsKey(output);
     output->println("");
     break;
   case 'n':
-    if (data[0]!='\0') {
-      writeEEPROM(EE_LORA_NWKSKEY, data, 32);
+    if (paramValue[0]!='\0') {
+      writeEEPROM(EE_LORA_NWKSKEY, paramValue, 32);
     } 
     printNwksKey(output);
     output->println("");
     break;
   case 'd':
-    if (data[0]!='\0') {
-      writeEEPROM(EE_LORA_DEVADDR, data, 8);
+    if (paramValue[0]!='\0') {
+      writeEEPROM(EE_LORA_DEVADDR, paramValue, 8);
     } 
     printDevAddr(output);
     output->println("");
