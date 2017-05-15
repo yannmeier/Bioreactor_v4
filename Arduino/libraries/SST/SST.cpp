@@ -93,17 +93,17 @@ void SST::init()
     * This can't be done in constructor as SPI *
     * protocol is not started at that time.  *
     ********************************************/
-    
+
     flashEnable();
     flashSelect();
     SPI.transfer(0x9F);    // read ID command
     SPI.transfer(0);     // Manufacturer ID
     flashVersion = SPI.transfer(0); // Device Type (25H if SST25 or 26H if SST26)
     SPI.transfer(0);     // Unique Device ID
-    
-    flashDeselect();    
+
+    flashDeselect();
     nop();
-        
+
   /******************************
    * Initialisation of SST chip *
    * Writing of both status and *
@@ -122,12 +122,12 @@ void SST::init()
         default:
             return; // change function to return -1 when error ?
     }
-    
-    
+
+
     flashDeselect();
     delay(30);  // Write protection Enable bit has a maximal time latency of 25ms
     flashSelect();
-    SPI.transfer(0x01); // Instruction: write the status register 
+    SPI.transfer(0x01); // Instruction: write the status register
 
     /**********************************************************************
      *  If SST25VF: Only consider the Status register command, bytes sent *
@@ -141,7 +141,7 @@ void SST::init()
     SPI.transfer(0x00); // Status register write for SST25, does nothing for SST26
     if (flashVersion == 0x26)
         SPI.transfer(0x02); //disable hold and write protect (config register)
-    flashDeselect(); 
+    flashDeselect();
 }
 
 /**********************************************************************/
@@ -212,7 +212,7 @@ void SST::printStatusRegister(Print* output)
 /**********************************************************************/
 void SST::printConfigRegister(Print* output)
 {
-       uint8_t data = 0; 
+       uint8_t data = 0;
     if(flashVersion != 0x26) return; //only available on sst26 version
     flashEnable();
     flashSelect();
@@ -234,7 +234,7 @@ void SST::flashReadInit(uint32_t addr)
 {
     flashEnable();
     flashSelect();
-    
+
     (void)SPI.transfer(0x03); // Read Memory - 25/33 Mhz //
     flashSetAddress(addr);
 }
@@ -288,10 +288,9 @@ void SST::flashWriteInit(uint32_t address)
     flashSelect();
     SPI.transfer(0x06); // write enable instruction
     flashDeselect();
-    delay(30);
+    delay(30); //max delay after write init sequence cf. datasheet
     flashSelect();
     (void)SPI.transfer(0x02); // Instruction : Page program (order to start writing bytes)
-    delay(2);
     flashSetAddress(address);
 }
 
@@ -322,6 +321,7 @@ void SST::flashWriteNextInt32(uint32_t data)
 void SST::flashWriteFinish()
 {
     flashDeselect();
+    delay(2); //1.6ms max delay for page write
     flashWaitUntilDone();
 }
 
@@ -345,11 +345,10 @@ void SST::flashSectorErase(uint16_t sectorAddress)
     flashSelect();
     (void)SPI.transfer(0x20); // Erase 4KB Sector //
     flashSetAddress(4096UL * long(sectorAddress));
-    delay(30);
-    
     flashDeselect();
+    delay(30); //max delay for sector erase cf. datasheet
     flashWaitUntilDone();
-    
+
 }
 
 void SST::flashTotalErase()
@@ -361,9 +360,8 @@ void SST::flashTotalErase()
     nop();
     flashSelect();
     (void)SPI.transfer(0xC7); // Instruction : Chip-Erase
-    delay(50);
-    
     flashDeselect();
+    delay(50); //max delay for chip erase cf. datasheet
     flashWaitUntilDone();
 }
 
