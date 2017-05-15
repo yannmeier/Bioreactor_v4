@@ -329,17 +329,17 @@ void SST::flashReadBPR(Print* output) // read block protection register
     uint8_t BPR[18];
     flashSelect();
     SPI.transfer(0X72);
-    for(uint8_t=0; i<18;i++){
+    for(uint8_t i=0; i<18;i++){
       BPR[i]=SPI.transfer(0X00);
     }
     flashDeselect();
     delay(2); //1.6ms max delay for page write
     output->println("BPR registers");
-    for(uint8_t=0; i<18;i++){
+    for(uint8_t i=0; i<18;i++){
       output->print("byte ");
       output->print(i);
       output->print(":");
-      output->printf("%x", BPR[i] & 0xff);
+      output->print(BPR[i] & 0xff,HEX);
       output->print("\n");
     }
 }
@@ -352,7 +352,7 @@ void SST::flashWriteBPR(uint8_t* BPR) // configure block protection register
     flashWREN();
     flashSelect();
     SPI.transfer(0X42); //read BPR instruction
-    for(uint8_t=0; i<18;i++){
+    for(uint8_t i=0; i<18;i++){
       SPI.transfer(BPR[i]);
     }
     flashDeselect();
@@ -387,7 +387,7 @@ void SST::flashLockAllLockDownBPR(uint8_t* BPR){ //prevent BPR config until rebo
   flashWREN();
   flashSelect();
   SPI.transfer(0X8D); //Global Unlock BPR
-  for(uint8_t=0; i<18;i++){
+  for(uint8_t i=0; i<18;i++){
     SPI.transfer(BPR[i]);
   }
   flashDeselect();
