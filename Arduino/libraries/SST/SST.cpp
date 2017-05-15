@@ -274,8 +274,8 @@ uint32_t SST::flashReadNextInt32()
 /**********************************************************************/
 void SST::flashReadFinish()
 {
-      
     flashDeselect();
+    flashWaitUntilDone();
 }
 
 /**********************************************************************
@@ -290,7 +290,8 @@ void SST::flashWriteInit(uint32_t address)
     flashDeselect();
     delay(30);
     flashSelect();
-    (void)SPI.transfer(0x02); // Write Byte //
+    (void)SPI.transfer(0x02); // Instruction : Page program (order to start writing bytes)
+    delay(2);
     flashSetAddress(address);
 }
 
@@ -298,7 +299,7 @@ void SST::flashWriteInit(uint32_t address)
 // Write up to 256 byte in the memory
 void SST::flashWriteNextInt8(uint8_t data)
 {
-    (void)SPI.transfer(data); // Write Byte //
+    (void)SPI.transfer(data); // Write Byte
 }
 
 /**********************************************************************/
@@ -320,8 +321,8 @@ void SST::flashWriteNextInt32(uint32_t data)
 /**********************************************************************/
 void SST::flashWriteFinish()
 {
-    
     flashDeselect();
+    flashWaitUntilDone();
 }
 
 /**********************************************************************
@@ -345,8 +346,9 @@ void SST::flashSectorErase(uint16_t sectorAddress)
     (void)SPI.transfer(0x20); // Erase 4KB Sector //
     flashSetAddress(4096UL * long(sectorAddress));
     delay(30);
-     
+    
     flashDeselect();
+    flashWaitUntilDone();
     
 }
 
@@ -358,10 +360,11 @@ void SST::flashTotalErase()
     flashDeselect();
     nop();
     flashSelect();
-    (void)SPI.transfer(0xC7); // Erase Chip //
+    (void)SPI.transfer(0xC7); // Instruction : Chip-Erase
     delay(50);
+    
     flashDeselect();
-
+    flashWaitUntilDone();
 }
 
 /**********************************************************************
@@ -371,7 +374,7 @@ void SST::flashTotalErase()
 // magic function
 // No operation : Processor will ignore the instruction. Increments counter
 inline void volatile SST::nop(void){ asm __volatile__("nop"); }
-void SST::flashDeselect(){ /*flashWaitUntilDone();*/ *memPort |= _BV(_ssPin);  nop();  nop(); }
+void SST::flashDeselect(){ *memPort |= _BV(_ssPin);  nop();  nop(); }
 void SST::flashSelect(){ *memPort &= ~(_BV(_ssPin));}
 
 void SST::flashEnable()
@@ -383,6 +386,8 @@ void SST::flashEnable()
 void SST::flashWaitUntilDone()
 {
     uint8_t data = 0;
+    flashSelect();
+    flashEnable();
     while (1)
     {
         (void)SPI.transfer(0x05); //read status register
@@ -390,6 +395,7 @@ void SST::flashWaitUntilDone()
         if (!bitRead(data, 0))
             break;
     }
+    flashDeselect();
 }
 
 void SST::flashSetAddress(uint32_t addr)

@@ -25,16 +25,18 @@ void setup()
   SST sst = SST('F', 4); // A3 is F4
   setupMemory(sst);
   delay(100);
- 
-   for(int i=0; i<10;i++){sst.printConfigRegister(&Serial); delay(100);}
-//  sst.flashTotalErase();
-//  sst.printNonEmptySector(&Serial);
+  sst.printConfigRegister(&Serial);
+  sst.printStatusRegister(&Serial);
+  
   Serial.println("the end");
   for (long i=0; i<64*2; i++) {
    if (i%LINE_SIZE==0) Serial.print("---------------------------\n");
-   if (i%LINE_SIZE==0) printLine(i,sst);
-   if (i%LINE_SIZE==0) writeLine(i,sst);
-   if (i%LINE_SIZE==0) printLine(i,sst);
+   if (i%LINE_SIZE==0)
+   {
+     printLine(i,sst); delay(50);
+     writeLine(i,sst); delay(50);
+     printLine(i,sst); delay(50);
+   }
    if (i%LINE_SIZE==0) Serial.print("---------------------------\n");
   }
 
@@ -56,8 +58,8 @@ void printLine(long address, SST& sst) {
   Serial.print(address);
   Serial.print(" : ");
   sst.flashReadInit(address);
-  for (byte j = 0; j < LINE_SIZE; j++) {
-    byte oneByte = sst.flashReadNextInt8();
+  for (uint8_t j = 0; j < LINE_SIZE; j++) {
+    uint8_t oneByte = sst.flashReadNextInt8();
     Serial.print(oneByte, HEX);
     Serial.print(" ");
     address++;
@@ -72,7 +74,8 @@ void writeLine(long address, SST& sst) {
   Serial.print(address);
   Serial.print(" : ");
   sst.flashWriteInit(address);
-  for (byte j = 0; j < LINE_SIZE; j++) {
+  delay(100);
+  for (uint8_t j = 0; j < LINE_SIZE; j++) {
     sst.flashWriteNextInt8(j);
     Serial.print(j, HEX);
     Serial.print(" ");
