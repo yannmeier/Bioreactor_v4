@@ -93,7 +93,6 @@ void SST::init()
     * This can't be done in constructor as SPI *
     * protocol is not started at that time.  *
     ********************************************/
-
     flashEnable();
     flashSelect();
     SPI.transfer(0x9F);    // read ID command
@@ -103,32 +102,30 @@ void SST::init()
 
     flashDeselect();
     nop();
-
   /******************************
    * Initialisation of SST chip *
    * Writing of both status and *
    * configuration register.  *
    ******************************/
-    flashSelect();
+
     switch (flashVersion)
     {
         case 0x25:
+            flashSelect();
             SPI.transfer(0x50); // EWSR : Enable Write Status Register, must be issued prior to WRSR
+            flashDeselect();
+            delay(30);
             break;
-        // default is SST26
-        case 0x26:
-            SPI.transfer(0x06); // WREN : Write-enable instruction, must be issued prior to WRSR
+        case 0x26:         // default is SST26
+            flashWREN();
             break;
         default:
             return; // change function to return -1 when error ?
     }
 
-
-    flashDeselect();
-    delay(30);  // Write protection Enable bit has a maximal time latency of 25ms
+     // Write protection Enable bit has a maximal time latency of 25ms
     flashSelect();
     SPI.transfer(0x01); // Instruction: write the status register
-
     /**********************************************************************
      *  If SST25VF: Only consider the Status register command, bytes sent *
      * must be xx0000xx to remove all block protection                    *
@@ -137,10 +134,10 @@ void SST::init()
      * Status register must be followed by configuration register.        *
      * Bytes for configuration register must be x1xxxxx0                  *
      **********************************************************************/
-
     SPI.transfer(0x00); // Status register write for SST25, does nothing for SST26
-    if (flashVersion == 0x26)
-        SPI.transfer(0x02); //disable hold and write protect (config register)
+    if (flashVersion == 0x26){
+      SPI.transfer(0x02); //disable hold and write protect (config register)
+    }
     flashDeselect();
 
     if(flashVersion == 0x26) flashClearBPR(); //unlock  all block access rights
@@ -286,11 +283,7 @@ void SST::flashReadFinish()
 
 void SST::flashWriteInit(uint32_t address)
 {
-    flashEnable();
-    flashSelect();
-    SPI.transfer(0x06); // write enable instruction
-    flashDeselect();
-    delay(30); //max delay after write init sequence cf. datasheet
+    flashWREN();
     flashSelect();
     (void)SPI.transfer(0x02); // Instruction : Page program (order to start writing bytes)
     flashSetAddress(address);
@@ -356,13 +349,7 @@ void SST::flashWriteBPR(uint8_t* BPR) // configure block protection register
 {
     if(flashVersion != 0x26) return;
     if(sizeof(BPR)!=18) return; //to be checked
-
-    flashEnable();
-    flashSelect();
-    SPI.transfer(0x06); // write enable instruction
-    flashDeselect();
-    delay(30); //max delay after write init sequence cf. datasheet
-
+    flashWREN();
     flashSelect();
     SPI.transfer(0X42); //read BPR instruction
     for(uint8_t=0; i<18;i++){
@@ -376,13 +363,7 @@ void SST::flashWriteBPR(uint8_t* BPR) // configure block protection register
 /**********************************************************************/
 void SST::flashClearBPR(){ //unlock all blocks read write accesses
   if(flashVersion != 0x26) return;
-
-  flashEnable();
-  flashSelect();
-  SPI.transfer(0x06); // write enable instruction
-  flashDeselect();
-  delay(30); //max delay after write init sequence cf. datasheet
-
+  flashWREN();
   flashSelect();
   SPI.transfer(0X98); //Global Unlock BPR
   flashDeselect();
@@ -392,13 +373,7 @@ void SST::flashClearBPR(){ //unlock all blocks read write accesses
 /**********************************************************************/
 void SST::flashLockDownBPR(){ //Lock R/W access and BPR config
   if(flashVersion != 0x26) return;
-
-  flashEnable();
-  flashSelect();
-  SPI.transfer(0x06); // write enable instruction
-  flashDeselect();
-  delay(30); //max delay after write init sequence cf. datasheet
-
+  flashWREN();
   flashSelect();
   SPI.transfer(0XE8); //Global Unlock BPR
   flashDeselect();
@@ -409,11 +384,7 @@ void SST::flashLockDownBPR(){ //Lock R/W access and BPR config
 void SST::flashLockAllLockDownBPR(uint8_t* BPR){ //prevent BPR config until reboot
   if(flashVersion != 0x26) return;
   if(sizeof(BPR)!=18) return; //to be checked
-  flashEnable();
-  flashSelect();
-  SPI.transfer(0x06); // write enable instruction
-  flashDeselect();
-  delay(30); //max delay after write init sequence cf. datasheet
+  flashWREN();
   flashSelect();
   SPI.transfer(0X8D); //Global Unlock BPR
   for(uint8_t=0; i<18;i++){
@@ -435,11 +406,7 @@ It is possible to erase larger area according to the datasheet :
 */
 void SST::flashSectorErase(uint16_t sectorAddress)
 {
-    flashEnable();
-    flashSelect();
-    SPI.transfer(0x06); // write enable instruction
-    flashDeselect();
-    nop();
+    flashWREN();
     flashSelect();
     (void)SPI.transfer(0x20); // Erase 4KB Sector //
     flashSetAddress(4096UL * long(sectorAddress));
@@ -451,11 +418,7 @@ void SST::flashSectorErase(uint16_t sectorAddress)
 
 void SST::flashTotalErase()
 {
-    flashEnable();
-    flashSelect();
-    SPI.transfer(0x06); // write enable instruction
-    flashDeselect();
-    nop();
+    flashWREN();
     flashSelect();
     (void)SPI.transfer(0xC7); // Instruction : Chip-Erase
     flashDeselect();
@@ -499,4 +462,12 @@ void SST::flashSetAddress(uint32_t addr)
     (void)SPI.transfer((uint8_t)(addr >> 16));
     (void)SPI.transfer((uint8_t)(addr >> 8));
     (void)SPI.transfer((uint8_t)addr);
+}
+
+void SST::flashWREN(){
+  flashEnable();
+  flashSelect();
+  SPI.transfer(0x06); // write enable instruction
+  flashDeselect();
+  delay(30); //max delay after write init sequence cf. datasheet
 }

@@ -87,6 +87,7 @@ class SST
 		void flashEnable();
 		void flashDisable();
 		void flashInit();
+		void flashWREN(); //Write enable 
 
 		void flashWaitUntilDone();
 		void flashSetAddress(uint32_t);
