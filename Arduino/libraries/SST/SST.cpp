@@ -142,6 +142,8 @@ void SST::init()
     if (flashVersion == 0x26)
         SPI.transfer(0x02); //disable hold and write protect (config register)
     flashDeselect();
+
+    if(flashVersion == 0x26) flashClearBPR(); //unlock  all block access rights
 }
 
 /**********************************************************************/
@@ -323,6 +325,102 @@ void SST::flashWriteFinish()
     flashDeselect();
     delay(2); //1.6ms max delay for page write
     flashWaitUntilDone();
+}
+
+/**********************************************************************
+                    BLOCK UN/LOCK UTILITIES
+***********************************************************************/
+void SST::flashReadBPR(Print* output) // read block protection register
+{
+    if(flashVersion != 0x26) return;
+    uint8_t BPR[18];
+    flashSelect();
+    SPI.transfer(0X72);
+    for(uint8_t=0; i<18;i++){
+      BPR[i]=SPI.transfer(0X00);
+    }
+    flashDeselect();
+    delay(2); //1.6ms max delay for page write
+    output->println("BPR registers");
+    for(uint8_t=0; i<18;i++){
+      output->print("byte ");
+      output->print(i);
+      output->print(":");
+      output->printf("%x", BPR[i] & 0xff);
+      output->print("\n");
+    }
+}
+
+/**********************************************************************/
+void SST::flashWriteBPR(uint8_t* BPR) // configure block protection register
+{
+    if(flashVersion != 0x26) return;
+    if(sizeof(BPR)!=18) return; //to be checked
+
+    flashEnable();
+    flashSelect();
+    SPI.transfer(0x06); // write enable instruction
+    flashDeselect();
+    delay(30); //max delay after write init sequence cf. datasheet
+
+    flashSelect();
+    SPI.transfer(0X42); //read BPR instruction
+    for(uint8_t=0; i<18;i++){
+      SPI.transfer(BPR[i]);
+    }
+    flashDeselect();
+    delay(2); //1.6ms max delay for page write check if the same for BPR
+    flashWaitUntilDone();
+}
+
+/**********************************************************************/
+void SST::flashClearBPR(){ //unlock all blocks read write accesses
+  if(flashVersion != 0x26) return;
+
+  flashEnable();
+  flashSelect();
+  SPI.transfer(0x06); // write enable instruction
+  flashDeselect();
+  delay(30); //max delay after write init sequence cf. datasheet
+
+  flashSelect();
+  SPI.transfer(0X98); //Global Unlock BPR
+  flashDeselect();
+  delay(2);
+}
+
+/**********************************************************************/
+void SST::flashLockDownBPR(){ //Lock R/W access and BPR config
+  if(flashVersion != 0x26) return;
+
+  flashEnable();
+  flashSelect();
+  SPI.transfer(0x06); // write enable instruction
+  flashDeselect();
+  delay(30); //max delay after write init sequence cf. datasheet
+
+  flashSelect();
+  SPI.transfer(0XE8); //Global Unlock BPR
+  flashDeselect();
+  delay(2);
+}
+
+/**********************************************************************/
+void SST::flashLockAllLockDownBPR(uint8_t* BPR){ //prevent BPR config until reboot
+  if(flashVersion != 0x26) return;
+  if(sizeof(BPR)!=18) return; //to be checked
+  flashEnable();
+  flashSelect();
+  SPI.transfer(0x06); // write enable instruction
+  flashDeselect();
+  delay(30); //max delay after write init sequence cf. datasheet
+  flashSelect();
+  SPI.transfer(0X8D); //Global Unlock BPR
+  for(uint8_t=0; i<18;i++){
+    SPI.transfer(BPR[i]);
+  }
+  flashDeselect();
+  delay(2);
 }
 
 /**********************************************************************
