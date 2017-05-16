@@ -1,8 +1,8 @@
 /*
-	flashSST.h - Library for controlling the chip SST25VF064
-	Created by Gael Grosch, July 18, 2013
-	With the help of the www.beat707.com code
-	Released in the public domain
+	SST.h - Library for controlling the chip SST26VF064
+	Compatible with SST25VF064 chip.
+	
+	Based on library by Gael Grosch, July 18, 2013
 
 	SST chip has a size of 64Mb
 	Reading and writing is byte per byte
@@ -64,7 +64,7 @@ class SST
 		 * Block Protection *
 		 ********************/
 		void flashReadBPR(Print* output); //print block protection regs
-		void flashWriteBPR(uint8_t* BPR); //write desired config (18*bytes) to BPR
+		void flashWriteBPR(uint8_t* BPR,int size); //write desired config (18*bytes) to BPR
 		void flashClearBPR(); //unlock all block rights (default at startup)
 		void flashLockDownBPR(); //lock down BPR config until restart
 		void flashLockAllLockDownBPR(uint8_t* BPR); //lock down BPR while writing config (18*bytes)

@@ -13,7 +13,7 @@
  * 							                                        			  *
  * Object SST has to be initialized with port name and pin number.	        	  *
  * 								                                        		  *
- * Before unsing (after construction), the init function has to be run, in order  *
+ * Before using (after construction), the init function has to be run, in order   *
  * to write the status and configuration registers.				                  *
  * 									                                        	  *
  * When launching READ sequence, first use the flashReadInit function, then use	  *
@@ -25,8 +25,14 @@
  * enter flashWriteFinish.				                            			  *
  * 									                                        	  *
  * Two methods are available for erasing. The Sector Erase and the total erase.   *
+ *                                                                                *
  * printFlashID method allows to print the flash ID on output and displays  	  *
- * 	CONSTRUCTOR ID | DEVICE TYPE (25 or 26) | DEVICE ID		                	  *
+ * 	MANUFACTURER ID | DEVICE TYPE (25 or 26) | DEVICE ID                          *
+ * printStatusRegister and printConfigRegister both allow to check the status and *
+ * configuration register of the chip respectively.                               *
+ *                                                                                *
+ * Added methods allowing to controll Block-protection. On initialization, all    *
+ * block-protection is removed.                                                   *
  **********************************************************************************/
 
 // PUBLIC METHODS----------------------------------------------------
@@ -126,6 +132,7 @@ void SST::init()
      // Write protection Enable bit has a maximal time latency of 25ms
     flashSelect();
     SPI.transfer(0x01); // Instruction: write the status register
+    
     /**********************************************************************
      *  If SST25VF: Only consider the Status register command, bytes sent *
      * must be xx0000xx to remove all block protection                    *
@@ -147,6 +154,7 @@ void SST::init()
 // check OF NON EMPTY sectors
 void SST::printNonEmptySector(Print* output)
 {
+    boolean memoryEmpty = true;
     // The memory contains 2048 sectors of 4096 bytes
     for (long x = 0; x < 2048; x++)
     {
@@ -157,6 +165,7 @@ void SST::printNonEmptySector(Print* output)
             if (flashReadNextInt8() != 0xFF)
             {
                 sectorEmpty = false;
+                memoryEmpty = false;
                 break;
             }
         }
@@ -172,6 +181,7 @@ void SST::printNonEmptySector(Print* output)
         }
         flashReadFinish();
     }
+    if(memoryEmpty) output->println("No non-empty sectors");
 }
 
 /**********************************************************************/
@@ -345,10 +355,10 @@ void SST::flashReadBPR(Print* output) // read block protection register
 }
 
 /**********************************************************************/
-void SST::flashWriteBPR(uint8_t* BPR) // configure block protection register
-{
+void SST::flashWriteBPR(uint8_t* BPR, int size) // configure block protection register
+{                                               // size has to be initialized as sizeof(Tab)
     if(flashVersion != 0x26) return;
-    if(sizeof(BPR)!=18) return; //to be checked
+    if(size!=18) return;
     flashWREN();
     flashSelect();
     SPI.transfer(0X42); //read BPR instruction
