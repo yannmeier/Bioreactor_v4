@@ -57,7 +57,7 @@ void setup()
   Serial.println("------------------------------------------------------------");
   Serial.println("TESTING CONFIGURATION AND STATUS REGISTER");
   Serial.println("------------------------------------------------------------\n");
-  
+
   Serial.print("CONFIG REGISTER : ");
   sst.printConfigRegister(&Serial); // Expected 00001010
   Serial.print("STATUS REGISTER : ");
@@ -140,7 +140,7 @@ void setup()
    * 3/ Block protection is disabled again. Writing should be enabled again.                                      *
    ****************************************************************************************************************/
 
-  /*
+  
   Serial.println("------------------------------------------------------------");
   Serial.println("TESTING BLOCK PROTECTION SETTINGS");
   Serial.println("------------------------------------------------------------\n");
@@ -152,7 +152,7 @@ void setup()
   printLine(0,sst); delay(50);
   writeLine(0,sst); delay(50);
   printLine(0,sst); delay(50);
-  sst.flashEraseSector(0);
+  sst.flashSectorErase(0);
 
   // CHANGING PROTECTION
   uint8_t BPR[18];
@@ -167,7 +167,7 @@ void setup()
   printLine(0,sst); delay(50);
   writeLine(0,sst); delay(50);
   printLine(0,sst); delay(50);
-  sst.flashEraseSector(0);
+  sst.flashSectorErase(0);
 
   // REMOVING PROTECTION
   Serial.println("REMOVING BLOCK PROTECTION");
@@ -178,8 +178,12 @@ void setup()
   printLine(0,sst); delay(50);
   writeLine(0,sst); delay(50);
   printLine(0,sst); delay(50);
-  sst.flashEraseSector(0); 
-  */ 
+  sst.flashSectorErase(0);
+
+  Serial.println("\n------------------------------------------------------------");
+  Serial.println("TEST DONE");
+  Serial.println("------------------------------------------------------------\n");
+   
 }
 
 // ======================================================================================= //
