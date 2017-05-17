@@ -1,4 +1,4 @@
-SST25VF064
+SST25VF064C , SST26VF064A-B
 ==========
 
-Library for the SST25VF064 chip for Arduino
+Library for the SST flash memory chips for ATMEL family
