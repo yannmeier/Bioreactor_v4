@@ -120,7 +120,7 @@ void SST::init()
             flashSelect();
             SPI.transfer(0x50); // EWSR : Enable Write Status Register, must be issued prior to WRSR
             flashDeselect();
-            delay(30);
+            delay(25);
             break;
         case 0x26:         // default is SST26
             flashWREN();
@@ -132,7 +132,7 @@ void SST::init()
      // Write protection Enable bit has a maximal time latency of 25ms
     flashSelect();
     SPI.transfer(0x01); // Instruction: write the status register
-    
+
     /**********************************************************************
      *  If SST25VF: Only consider the Status register command, bytes sent *
      * must be xx0000xx to remove all block protection                    *
@@ -421,7 +421,7 @@ void SST::flashSectorErase(uint16_t sectorAddress)
     (void)SPI.transfer(0x20); // Erase 4KB Sector //
     flashSetAddress(4096UL * long(sectorAddress));
     flashDeselect();
-    delay(30); //max delay for sector erase cf. datasheet
+    delay(25); //max delay for sector erase cf. datasheet
     flashWaitUntilDone();
 
 }
@@ -479,5 +479,5 @@ void SST::flashWREN(){
   flashSelect();
   SPI.transfer(0x06); // write enable instruction
   flashDeselect();
-  delay(30); //max delay after write init sequence cf. datasheet
+  delay(25); //max delay after write init sequence cf. datasheet
 }
