@@ -3,7 +3,8 @@ The open source Bioreactor
 
 # Making the bioreactor
 
-* [BOM](making/bom)
+* [Bill of material](making/bom)
+* [Assembling your bioreactor](making/assembling)
 * [Temperature probe](making/onewire)
 * [Heating plate and PID](making/pid)
 * [pin mapping](making/pinMapping.md)
