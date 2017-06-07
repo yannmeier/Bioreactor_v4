@@ -140,12 +140,13 @@ void setup()
    * 3/ Block protection is disabled again. Writing should be enabled again.                                      *
    ****************************************************************************************************************/
 
-  
+  /*
   Serial.println("------------------------------------------------------------");
   Serial.println("TESTING BLOCK PROTECTION SETTINGS");
   Serial.println("------------------------------------------------------------\n");
 
   // UNPROTECTED MEMORY
+  Serial.println("UNPROTECTED MEMORY\n");
   Serial.println("READING BPR");
   sst.flashReadBPR(&Serial);
   Serial.println("WRITING LINE");
@@ -159,7 +160,7 @@ void setup()
   BPR[0] = 0x55;  // First 2 bytes have Read-lock. Only write lock to be enabled
   BPR[1] = 0x55;  
   for(uint8_t i=2; i<18; i++) BPR[i] = 0xFF ;
-  Serial.println("CHANGING BLOCK PROTECTION"); 
+  Serial.println("\nCHANGING BLOCK PROTECTION\n"); 
   sst.flashWriteBPR(BPR,sizeof(BPR));
   Serial.println("READING BPR");
   sst.flashReadBPR(&Serial);
@@ -167,10 +168,10 @@ void setup()
   printLine(0,sst); delay(50);
   writeLine(0,sst); delay(50);
   printLine(0,sst); delay(50);
-  sst.flashSectorErase(0);
+  sst.flashSectorErase(0); 
 
   // REMOVING PROTECTION
-  Serial.println("REMOVING BLOCK PROTECTION");
+  Serial.println("\nREMOVING BLOCK PROTECTION\n");
   sst.flashClearBPR();
   Serial.println("READING BPR");
   sst.flashReadBPR(&Serial);
@@ -183,7 +184,7 @@ void setup()
   Serial.println("\n------------------------------------------------------------");
   Serial.println("TEST DONE");
   Serial.println("------------------------------------------------------------\n");
-   
+  */
 }
 
 // ======================================================================================= //
