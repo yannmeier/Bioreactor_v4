@@ -1,7 +1,10 @@
-[Current stock](https://docs.google.com/spreadsheets/d/1mCMbyp-5vMcfMzT4ovZjpsKi10JSWpNIOFcre1nF27s/edit?usp=sharing)
-
 # Bill Of Material (BOM)
 
+[Previous section](../intro/what.md)
+
+---
+
+[Current stock](https://docs.google.com/spreadsheets/d/1mCMbyp-5vMcfMzT4ovZjpsKi10JSWpNIOFcre1nF27s/edit?usp=sharing)
 
 | Denomination                  | Qty | Unit Price | Supplier        | Image | Remarks |
 |-------------------------------|-----|-------|-----------------|-------| ------- |
@@ -147,3 +150,4 @@
 | LCD 20x4 HD44780 5v           | 1   | 4          | [ebay](http://www.ebay.com/itm/2004-204-20x4-Character-LCD-Display-Module-HD44780-Controller-Blue-Blacklight-/381374605432?hash=item58cbb2a878:g:urwAAOSwj0NUjt4w) |
 | Flat cable 8-pin 1mm 20cm     | 1   | 0.3        | |
 
+[Next section](../making/pinMapping.md)

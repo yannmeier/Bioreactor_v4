@@ -1,4 +1,11 @@
-# Connecting the plate
+# Preparing the heating plate
+
+[Back to index](../../index.md)
+[Previous section](../weight)
+
+---
+
+## The heating plate
 
 The heating plate is a standard MK3 plate used in 3D printers. It is a square of 214mm of side.
 
@@ -7,9 +14,7 @@ It is composed on 2 resistors of 2.4Ω and there are 2 ways to connect them:
 * in serie : you have a resistor of 4.8Ω and this will be used to power in 24v
 * in parallel : you have a resistor of 1.2Ω and this will be used when powerred in 12v
 
-In our case we will power the plate in 12v and we will connect them in parallel. See the picture for more information.
-
-<img src="connection.jpg" width="500">
+In our case we will power the plate in 12v and we will connect them in parallel.
 
 It is also important to put 2 leds (just to be sure one of them turn on even if you power the plate in the opposite way)
 and a resistor of 1kΩ (10kΩ would give a much less bright light).
@@ -26,8 +31,47 @@ operating 3v3 voltage. Good matches are provided [here on Mouser](http://www.mou
 
 We have chosen the BUK965R8-100E for its steady Rds at low Vgs (down to 2V) even for high currents (up to 50A).
 
+## Preparing a built-in heating plate on the bioreactor
 
-# Limit values
+As explained in the section concerning the [base](../base), a complete bioreactor contains a built-in heating plate.
+
+The first step for assembling this is to assemble the casing that will contain the plate. It consists of four plastic parts on the sides and the heating plate placed horizontally between them.
+
+Tape the *parts for the sides* together and glue them with *dichloromethane*. I advise to try inserting the heating plate between the pieces to test the fit before glueing. See picture for the result:
+
+<img src="pid1.jpg" width="500">
+
+Once the casing is dry, place the *heating plate* (metallic side facing up) in the casing so that it's about 2.5 cm high and laying flat. Make sure that the large rounded sides are properly sitting on the front and on the back. Use a stable support and fixate the plate with *silicone*.
+
+<img src="pid2.jpg" width="500">
+
+It is now time to connect the heating plate to the base.
+
+First, bare two cables and solder them to the heating plate in the following manner:
+
+<img src="pid3.jpg" width="500">
+
+Then, take your *DC 5.5x2.5 cable* as well as *two pieces of wire* (2mm in diameter) and connect then in the following way:
+
+<img src="pid4.jpg" width="500">
+
+Take your base and glue the *metallic contact part* to the lid of the base, on the side opposing the central loading cell (there are two holes on the lid, they correspond to the one on the contact part), pass your cables threw the holes and solder them to the contact plate.
+
+<img src="pid5.jpg" width="500">
+
+Finally, place your heating plate on the base and verify that there is indeed a contact.
+
+<img src="pid6.jpg" width="500">
+
+## Preparing a stand-alone heating plate for testing purposes
+
+You can connect a heating plate directly to a *DC 5.5x2.5 cable* so that you can test your boards heating functions without needing a whole bioreactor. The connection should look like that:
+
+<img src="connection.jpg" width="500">
+
+## Notable informations about the heating plate
+
+### Limit values
 
 In order to be able to heat the following conditions have to be met:
 
@@ -44,7 +88,7 @@ The following parameters are define in PID.ino
 * SAFETY_MIN_LIQ_TEMP 1000
 * PID_OUTPUT_LIMIT    200 
 
-# Enabling heating
+### Enabling heating
 
 In order to turn on the heating you should check the following parameters:
 
@@ -56,7 +100,7 @@ In order to turn on the heating you should check the following parameters:
 The heating will also depend of the status of the weight.
 
 
-# Disabling heating
+### Disabling heating
 
 Here are the important parameters:
 
@@ -67,6 +111,4 @@ Here are the important parameters:
 In order to disable heating just put at target temperature for the board of 0.
 `AA0`
 
-
-
-
+[Next section](../onewire)
