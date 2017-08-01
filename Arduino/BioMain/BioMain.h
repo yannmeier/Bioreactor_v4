@@ -17,6 +17,7 @@
  ******************************************/
 //#define BEFORE_43  1
 //#define VERSION_43 1
+//#define BEFORE_45 1
 
 
 
@@ -57,9 +58,12 @@
 #ifdef TYPE_MAIN
 #ifdef BEFORE_43
 #define STEPPER {D18,D19}
-#else
+#elif defined(BEFORE_45)
 //pins 4-5 of port B and 6-7 of port F --> change for _BV (easier to manipulate)
 #define STEPPER {0b00010000,0b00100000,0b01000000,0b10000000}
+#else
+//pins 4-5 of port B (corresponds to digital pins 8 and 9). 8 = Direction pin, 9 = Stepper pin
+#define STEPPER {_BV(4),_BV(5)}
 #endif
 #define FOOD_CTRL          1
 #if defined(VERSION_43) || defined(BEFORE_43)

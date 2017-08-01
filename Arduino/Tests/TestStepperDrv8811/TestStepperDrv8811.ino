@@ -16,17 +16,61 @@
   // For each cycle, pin #9 must either be turned on or off. Controls which cycle we're on
   bool even(true);
   // Desired velocity (in RPM)
-  uint16_t velocity(30);
+  uint16_t velocity(15);
 
+//----------- PARAMETERS DEPENDING ON PAD SHORTAGES -----------//
+
+// NO PAD SHORTED
+/*
   // The stepper motor recquires 3200 steps in order to do a full rotation
   // (this means 3200 delays)
   uint16_t stepsPerRotation = 3200;
   uint16_t numberSteps(stepsPerRotation);
-
+  
   // Ratio to convert the amount of rotations per minute into the interval between each step
   // = 6e7 [us/min] / 3200 [step/rotation] --> divided by RPM --> [us/step]
   uint16_t RPMToStep = 18750;
   uint16_t delayPerStep = RPMToStep/velocity;
+*/
+
+// PAD 1 (CLOSEST TO DRIVER) SHORTED
+/*
+  // The stepper motor recquires 1600 steps in order to do a full rotation
+  // (this means 1600 delays)
+  uint16_t stepsPerRotation = 1600;
+  uint16_t numberSteps(stepsPerRotation);
+  
+  // Ratio to convert the amount of rotations per minute into the interval between each step
+  // = 6e7 [us/min] / 1600 [step/rotation] --> divided by RPM --> [us/step]
+  uint16_t RPMToStep = 37500;
+  uint16_t delayPerStep = RPMToStep/velocity;
+*/
+
+// PAD 2 (FURTHEST TO DRIVER) SHORTED
+/*
+  // The stepper motor recquires 800 steps in order to do a full rotation
+  // (this means 800 delays)
+  uint16_t stepsPerRotation = 800;
+  uint16_t numberSteps(stepsPerRotation);
+  
+  // Ratio to convert the amount of rotations per minute into the interval between each step
+  // = 6e7 [us/min] / 800 [step/rotation] --> divided by RPM --> [us/step]
+  uint32_t RPMToStep = 75000;                 // uint16_t is not enough anymore
+  uint32_t delayPerStep = RPMToStep/velocity;
+*/
+
+// PADS 1 AND 2 SHORTED
+
+  // The stepper motor recquires 400 steps in order to do a full rotation
+  // (this means 400 delays)
+  uint16_t stepsPerRotation = 400;
+  uint16_t numberSteps(stepsPerRotation);
+  
+  // Ratio to convert the amount of rotations per minute into the interval between each step
+  // = 6e7 [us/min] / 400 [step/rotation] --> divided by RPM --> [us/step]
+  uint32_t RPMToStep = 150000;                 // uint16_t is not enough anymore
+  uint32_t delayPerStep = RPMToStep/velocity;
+
 
 //----------- METHOD WITH DIRECT PORT MANIPULATION -----------//
 

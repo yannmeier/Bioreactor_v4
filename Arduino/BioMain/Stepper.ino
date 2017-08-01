@@ -4,6 +4,16 @@
     This is the thread controlling the motor. It should have a high priority
     as it is called very often and is short. It controls the sequence with the pin PWM and IO
     of the port.
+    The functionning of the stepper is different wether in version 4.5 or in previous versions.
+    -----------
+    VERSION 4.5
+    -----------
+    Stepper works with a stepper driver (DRV8811). Each call to function executestep will turn stepper by a bit.
+    You should verify which pads are soldered on your board as the frequency of the stepper will vary according to that.
+    By default, we will consider both pads to be soldered.
+    -----------
+    VERSION 4.4
+    -----------    
     The sequence for turning the motor turn is :
     RED-GREEN-BLUE-BLACK => win turn clockwise (top view) where :
     RED = {PWM=LOW, IO=LOW}
@@ -16,11 +26,22 @@
 //#define NB_STEP_CALL  10000 // Maximum 65535 !!!!
 byte STEPPER_TAB[] = STEPPER;
 
+//------------------------------------------------------------------------------------------------------------------//
+
+//--------------- STOP STEPPER ---------------//
 
 void stopStepper() {
+#ifdef BEFORE_45
   PORTB &= ~(STEPPER_TAB[0] | STEPPER_TAB[1]);
   PORTF &= ~(STEPPER_TAB[2] | STEPPER_TAB[3]);
+#else
+  PORTB &= ~(STEPPER_TAB[0] | STEPPER_TAB[1]);
+#endif
 }
+
+//------------------------------------------------------------------------------------------------------------------//
+
+//--------------- EXECUTE STEP ---------------//
 
 #ifdef BEFORE_43
 
@@ -61,7 +82,7 @@ void executeStep(uint16_t numberSteps, boolean forward, byte port1, byte port2) 
     } else  nilThdSleepMilliseconds(100);
   }
 }
-#else
+#elif defined(BEFORE_45) 
 void executeStep(uint16_t numberSteps, boolean forward) {
   DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;
   DDRF |= (STEPPER_TAB[2] | STEPPER_TAB[3]) ;
@@ -97,7 +118,45 @@ void executeStep(uint16_t numberSteps, boolean forward) {
     } else  nilThdSleepMilliseconds(100);
   }
 }
+#else
+void executeStep(uint16_t numberSteps, boolean forward) {
+  DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;  // Set pins 8 and 9 as output
+  
+  while(numberSteps > 0){
+
+    // Stepper direction
+    if(forward) PORTB &= ~STEPPER_TAB[0]; // Turns pin 8 as LOW
+    else PORTB |= STEPPER_TAB[0]; // Turns pin 8 as HIGH
+  
+    // Calculate delay
+    
+    // The stepper motor recquires 400 steps in order to do a full rotation
+    // Ratio to convert the amount of rotations per minute into the interval between each step
+    // = 6e4 [ms/min] / 400 [step/rotation] --> divided by RPM --> [ms/step]
+  
+    uint16_t RPMToStep = 150; // This value is valid only if both pads on the board have been short-circuited
+                              // If the pads have not both been short-ciruicted, see file TestStepperDRV8811.ino for values
+                              
+    // PARAM_STEPPER_SPEED must now be given in RPM
+    uint16_t delayPerStep = RPMToStep/getParameter(PARAM_STEPPER_SPEED); // delay to apply between each step
+      
+    if (isStepperStopped()) return;
+
+    // Execute step
+    numberSteps--;
+    if(PARAM_STEPPER_SPEED >= 0){
+      PORTB ^= STEPPER_TAB[1];
+      nilThdSleepMilliseconds(delayPerStep);
+  
+      stopStepper();
+    }else nilThdSleepMilliseconds(100);    
+  }
+}
 #endif
+
+//------------------------------------------------------------------------------------------------------------------//
+
+//--------------- IS STEPPER STOPPED ---------------//
 
 boolean isStepperStopped() {
   if (! isRunning(FLAG_STEPPER_CONTROL) || ! isEnabled(FLAG_STEPPER_CONTROL)) { // PID is disabled
@@ -117,7 +176,7 @@ boolean isStepperStopped() {
   return false;
 }
 
-
+//--------------- STEPPER THREAD ---------------//
 
 NIL_WORKING_AREA(waThreadStepper, 16);
 NIL_THREAD(ThreadStepper, arg) {
@@ -130,12 +189,14 @@ NIL_THREAD(ThreadStepper, arg) {
   for (byte i = 0; i < sizeof(STEPPER_TAB); i++) {
     pinMode(STEPPER_TAB[i], OUTPUT);
   }
-#else
+#elif defined(BEFORE_45)
   stopStepper();
   DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;
   DDRF |= (STEPPER_TAB[2] | STEPPER_TAB[3]) ;
+#else
+  stopStepper();
+  DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;
 #endif
-
 
 
 
