@@ -35,7 +35,7 @@ void processUtilitiesCommand(char command, char* paramValue, Print* output) {
         }
       }
       else {
-        output->println(F("To reset enter r1234"));
+        output->println(F("To reset enter ur1234"));
       }
       break;
     case 'z':

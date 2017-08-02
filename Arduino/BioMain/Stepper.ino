@@ -11,6 +11,9 @@
     Stepper works with a stepper driver (DRV8811). Each call to function executestep will turn stepper by a bit.
     You should verify which pads are soldered on your board as the frequency of the stepper will vary according to that.
     By default, we will consider both pads to be soldered.
+    If both pads are soldered on your board, the stepper will execute 400 steps per rotation (one step corresponds to one toggle of the stepper pin)
+    From this knowledge, we can calculate the ratio between our delay between two toggles and our desired speed in RPM
+    delay = 6e7 [us/min]/(#[steps/rot] * RPM [rot/min]) = (150000/RPM)[us/step]
     -----------
     VERSION 4.4
     -----------    
@@ -24,6 +27,15 @@
 
 //We define here the number of step executed during every call to the thread
 //#define NB_STEP_CALL  10000 // Maximum 65535 !!!!
+
+//We define a maximal and a minimal speed (in RPM) for safety and stability reasons
+#ifndef BEFORE_45
+#define MIN_STEPPER_SPEED 5   // RPM
+#define MAX_STEPPER_SPEED 200 // RPM
+#define RPM_TO_STEP 150000    // This value is valid only if both pads on the board have been short-circuited
+                              // If the pads have not both been short-ciruicted, see file TestStepperDRV8811.ino for values
+#endif
+
 byte STEPPER_TAB[] = STEPPER;
 
 //------------------------------------------------------------------------------------------------------------------//
@@ -43,6 +55,12 @@ void stopStepper() {
 
 //--------------- EXECUTE STEP ---------------//
 
+// Current version: V4.5, see lower
+
+/*
+ * Before V4.3
+ */
+ 
 #ifdef BEFORE_43
 
 void executeStep(uint16_t numberSteps, boolean forward, byte port1, byte port2) {
@@ -82,6 +100,11 @@ void executeStep(uint16_t numberSteps, boolean forward, byte port1, byte port2) 
     } else  nilThdSleepMilliseconds(100);
   }
 }
+
+/*
+ * Before V4.5
+ */
+ 
 #elif defined(BEFORE_45) 
 void executeStep(uint16_t numberSteps, boolean forward) {
   DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;
@@ -118,6 +141,11 @@ void executeStep(uint16_t numberSteps, boolean forward) {
     } else  nilThdSleepMilliseconds(100);
   }
 }
+
+/*
+ * Version 4.5
+ */
+ 
 #else
 void executeStep(uint16_t numberSteps, boolean forward) {
   DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;  // Set pins 8 and 9 as output
@@ -127,27 +155,27 @@ void executeStep(uint16_t numberSteps, boolean forward) {
     // Stepper direction
     if(forward) PORTB &= ~STEPPER_TAB[0]; // Turns pin 8 as LOW
     else PORTB |= STEPPER_TAB[0]; // Turns pin 8 as HIGH
-  
+
+    if (isStepperStopped()) return;
+    
     // Calculate delay
     
     // The stepper motor recquires 400 steps in order to do a full rotation
     // Ratio to convert the amount of rotations per minute into the interval between each step
     // = 6e4 [ms/min] / 400 [step/rotation] --> divided by RPM --> [ms/step]
-  
-    uint16_t RPMToStep = 150; // This value is valid only if both pads on the board have been short-circuited
-                              // If the pads have not both been short-ciruicted, see file TestStepperDRV8811.ino for values
                               
     // PARAM_STEPPER_SPEED must now be given in RPM
-    uint16_t delayPerStep = RPMToStep/getParameter(PARAM_STEPPER_SPEED); // delay to apply between each step
-      
-    if (isStepperStopped()) return;
+    if(getParameter(PARAM_STEPPER_SPEED) > MAX_STEPPER_SPEED){setParameter(PARAM_STEPPER_SPEED, MAX_STEPPER_SPEED);}                          // If the given stepper speed is higher than the maximum, the stepper will run at max authorized speed
+    if(getParameter(PARAM_STEPPER_SPEED) < MIN_STEPPER_SPEED && getParameter(PARAM_STEPPER_SPEED) > 0){setParameter(PARAM_STEPPER_SPEED, 0);} // If the given stepper speed is lower than the minimum, the stepper will stop
+    
+    uint32_t delayPerStep = RPM_TO_STEP/getParameter(PARAM_STEPPER_SPEED); // delay to apply between each step
 
     // Execute step
     numberSteps--;
-    if(PARAM_STEPPER_SPEED >= 0){
+    if(getParameter(PARAM_STEPPER_SPEED) >= MIN_STEPPER_SPEED){
       PORTB ^= STEPPER_TAB[1];
-      nilThdSleepMilliseconds(delayPerStep);
-  
+      nilThdSleepMicroseconds(delayPerStep);
+      
       stopStepper();
     }else nilThdSleepMilliseconds(100);    
   }

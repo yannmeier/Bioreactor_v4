@@ -131,8 +131,8 @@
    CARD DEFINITION (HARD CODED)
  *******************************/
 #ifdef STEPPER
-#define PARAM_STEPPER_SPEED       26   // AA - motor speed, parameter S (!!!!!TO BE REPROGRAMMED IN RPM!!!!!!!)
-#define PARAM_STEPPER_STEPS       27   // AB
+#define PARAM_STEPPER_SPEED       26   // AA - motor speed, parameter S, IN RPM (v4.5)
+#define PARAM_STEPPER_STEPS       27   // AB  // 200 steps per full rotation (see Stepper.ino)
 #endif
 
 #ifdef TEMPERATURE_CTRL
