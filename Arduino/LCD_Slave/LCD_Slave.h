@@ -21,7 +21,7 @@ const int LCDRS = 10;
 #define PARAM_WEIGHT               2   // in gr
 #define PARAM_WEIGHT_FACTOR        15  // Weight calibration: conversion factor digital -> gr (weight=FACTOR*dig_unit)
 #define PARAM_WEIGHT_OFFSET        16  // Weight calibration: digital offset value when bioreactor is empty
-#define PARAM_STEPPER_SPEED        18  // motor speed, parameter S (!!!!!TO BE REPROGRAMMED IN RPM!!!!!!!)
+#define PARAM_STEPPER_SPEED        18  // motor speed, parameter S in RPM
 #define PARAM_WEIGHT_STATUS        23  // current STATUS // BBBAAAAA AAAAAAAA : A = wait time in minutes, B = status
 #define PARAM_STATUS               25  
 #define PARAM_TEMP_TARGET          26  // target temperature of the liquid

@@ -6,7 +6,7 @@ LiquidCrystal lcd(LCDRS,LCDE,LCDD4,LCDD5,LCDD6,LCDD7);
 /************************************************
           Encoder position variables
 *************************************************/
-volatile unsigned int encoderMenuSelect  = MENU_SENSOR;  // a counter for the menu slection dial
+volatile unsigned int encoderMenuSelect  = MENU_SELECTOR;  // a counter for the menu selection dial
 volatile unsigned int encoderTempValue   = 0;  // a counter to store a temporary value before to set it
 volatile unsigned int encoderLastValue   = 0;  // a counter to store a previous temporary value 
 /************************************************
@@ -59,7 +59,7 @@ void addParam(int pos, char * id, int idLength, int number){
          Arduino SPI Slave Functions
 *************************************************/
 byte outBuf [OUT_BUF_SIZE];     // output SPI buffer
-boolean writeToMaster=false;   // flag indicating if their is something to send 
+boolean writeToMaster=false;   // flag indicating if there is something to send 
 boolean isStart=false;         // flag indicating if beginning of the COM 
 byte buf [2*MAX_PARAM+1];      // buffer for input from motherboard : maxparams + XOR
 volatile byte pos;            // position of incoming byte in SPI buffer
@@ -284,7 +284,6 @@ void displayMenuCalibr() //all is to be implemented
     lcd.print(F("4)Calibration Proc"));  
     lcd.setCursor(0,3);
     lcd.print(F("gr:"));
-    lcd.setCursor(10*((encoderTempValue%5)%2),(encoderTempValue%5)/2);
 }
 
 
@@ -312,13 +311,41 @@ void configSetValue()
 }
 
 /**************************************************
+                    Cursor blink
+ **************************************************/
+
+void cursorBlink()
+{
+  switch(encoderMenuSelect)
+  {
+    case MENU_SELECTOR:
+      lcd.setCursor(0,encoderTempValue%3+1);
+      break;
+    case MENU_SENSOR:
+      break;
+    case MENU_CONFIG:
+      lcd.setCursor(10*((encoderTempValue%8)%2),(encoderTempValue%8)/2);
+      break;
+    case MENU_CALIBRATION:
+      lcd.setCursor(10*((encoderTempValue%5)%2),(encoderTempValue%5)/2);      
+      break;
+    case MENU_SET_VALUE:
+      break;
+    default:
+      break; 
+  }
+  lcd.blink();
+   
+}
+
+/**************************************************
                 Setup and Main Loop
 ***************************************************/
 void setup() {  
   pinMode(ENCODER_CLOCKWISE, INPUT); 
   pinMode(ENCODER_ANTI_CLOCKWISE, INPUT); 
   pinMode(ENCODER_BUTTON, INPUT);
-  // turn on iinternal pullup resistors
+  // turn on internal pullup resistors
   digitalWrite(ENCODER_CLOCKWISE, HIGH);
   digitalWrite(ENCODER_ANTI_CLOCKWISE, HIGH);
   digitalWrite(ENCODER_BUTTON, HIGH);
@@ -337,8 +364,8 @@ void setup() {
   addParam(2, "T+", 2, PARAM_TEMP_MAX);
   addParam(3, "W+", 2, PARAM_WEIGHT_MAX);
   addParam(4, "W-", 2, PARAM_WEIGHT_MIN);
-  addParam(5, "Sd", 2, PARAM_SEDIMENTATION_TIME);
-  addParam(6, "Md", 2, PARAM_STEPPER_SPEED);                          // unknown parameter number !!??
+  addParam(5, "ST", 2, PARAM_SEDIMENTATION_TIME);
+  addParam(6, "FT", 2, PARAM_FILLED_TIME);
   
 }
 
@@ -354,9 +381,10 @@ void loop() {
       pos = 0;
       processIt = false;
     }    
-  lcd.blink();  
+  cursorBlink(); 
   delay(20);
   rotating = true; 
+  Serial.println(encoderTempValue);
 }
 
 /***************************************************************
