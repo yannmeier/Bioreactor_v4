@@ -3,7 +3,6 @@
 // THE METHODS ARE ALL FUNCTIONNAL
 // ONLY ONE METHOD SHOULD BE UNCOMMENTED AT ONE TIME
 
-
   /***********************************************************
    * When using the DRV8811, we move the motor using steps.  *
    * If we define a step as either turning the motor pin on  *
@@ -13,10 +12,8 @@
    * from the desired RPM (chosen by user)                   *
    ***********************************************************/
 
-  // For each cycle, pin #9 must either be turned on or off. Controls which cycle we're on
-  bool even(true);
   // Desired velocity (in RPM)
-  uint16_t velocity(15);
+  uint16_t velocity(60);
 
 //----------- PARAMETERS DEPENDING ON PAD SHORTAGES -----------//
 
@@ -77,7 +74,6 @@
 // Allows perfect control of the stepper speed
 // Requires delays of several microseconds only
 
-
 void setup() {
   // Turns pins 8 and 9 as output. Pins 8 and 9 are Port B 4 and 5
   DDRB |= 48;  // 48 = B00110000
@@ -85,19 +81,16 @@ void setup() {
 }
 
 void loop() {
-  
-    while(numberSteps > 0){
-      numberSteps--;
-    
-    if(even){ PORTB |= (_BV(5));} // Turns pin 9 as HIGH
-    else {PORTB &= ~(_BV(5));}    // Turns pin 9 as LOW
-    even = !even;
+  while(numberSteps > 0){
+    numberSteps--;
+      
+    PORTB ^= (_BV(5));    // Toggle value of pin 9
     delayMicroseconds(delayPerStep);
   }
-  delay(1500);  // Pause between each full rotation of the motor
+  
+  //delay(1500);  // Pause between each full rotation of the motor
   numberSteps = stepsPerRotation;
-  PORTB ^= (_BV(4));  // Inverts value of pin 8: Flips direction of the motor
-    
+  //PORTB ^= (_BV(4));  // Inverts value of pin 8: Flips direction of the motor    
 }
 
 
