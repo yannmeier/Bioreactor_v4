@@ -40,7 +40,7 @@
 #define ADDRESS_SIZE  (ADDRESS_MAX  - ADDRESS_BEG)
 // The number of entires by types of logs (seconds, minutes, hours, commands/events)
 #define MAX_NB_ENTRIES    (ADDRESS_SIZE  / ENTRY_SIZE_LINEAR_LOGS)
-#define MAX_MULTI_LOG 10
+#define MAX_MULTI_LOG 64
 
 
 
