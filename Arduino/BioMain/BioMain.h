@@ -122,7 +122,7 @@
 #else
 #define FLASH_SELECT A3 //Flash SS_SPI
 #endif
-#define LOG_INTERVAL 1  //Interval in (s) between logs
+#define LOG_INTERVAL 10  //Interval in (s) between logs logger
 #endif
 
 
