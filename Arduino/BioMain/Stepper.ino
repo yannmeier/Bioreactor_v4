@@ -16,7 +16,7 @@
     delay = 6e7 [us/min]/(#[steps/rot] * RPM [rot/min]) = (150000/RPM)[us/step]
     -----------
     VERSION 4.4
-    -----------    
+    -----------
     The sequence for turning the motor turn is :
     RED-GREEN-BLUE-BLACK => win turn clockwise (top view) where :
     RED = {PWM=LOW, IO=LOW}
@@ -33,7 +33,7 @@
 #define MIN_STEPPER_SPEED 5   // RPM
 #define MAX_STEPPER_SPEED 200 // RPM
 #define RPM_TO_STEP 150000    // This value is valid only if both pads on the board have been short-circuited
-                              // If the pads have not both been short-ciruicted, see file TestStepperDRV8811.ino for values
+// If the pads have not both been short-ciruicted, see file TestStepperDRV8811.ino for values
 #endif
 
 byte STEPPER_TAB[] = STEPPER;
@@ -58,9 +58,9 @@ void stopStepper() {
 // Current version: V4.5, see lower
 
 /*
- * Before V4.3
- */
- 
+   Before V4.3
+*/
+
 #ifdef BEFORE_43
 
 void executeStep(uint16_t numberSteps, boolean forward, byte port1, byte port2) {
@@ -102,10 +102,10 @@ void executeStep(uint16_t numberSteps, boolean forward, byte port1, byte port2) 
 }
 
 /*
- * Before V4.5
- */
- 
-#elif defined(BEFORE_45) 
+   Before V4.5
+*/
+
+#elif defined(BEFORE_45)
 void executeStep(uint16_t numberSteps, boolean forward) {
   DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;
   DDRF |= (STEPPER_TAB[2] | STEPPER_TAB[3]) ;
@@ -143,41 +143,48 @@ void executeStep(uint16_t numberSteps, boolean forward) {
 }
 
 /*
- * Version 4.5
- */
- 
+   Version 4.5
+*/
+
 #else
 void executeStep(uint16_t numberSteps, boolean forward) {
   DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;  // Set pins 8 and 9 as output
-  
-  while(numberSteps > 0){
 
+  while (numberSteps > 0) {
+    if (isStepperStopped()) ret
+    urn;
     // Stepper direction
-    if(forward) PORTB &= ~STEPPER_TAB[0]; // Turns pin 8 as LOW
-    else PORTB |= STEPPER_TAB[0]; // Turns pin 8 as HIGH
+    if (forward) {
+      PORTB &= ~STEPPER_TAB[0]; // Turns pin 8 as LOW
+    } else {
+      PORTB |= STEPPER_TAB[0]; // Turns pin 8 as HIGH
+    }
 
-    if (isStepperStopped()) return;
-    
     // Calculate delay
-    
+
     // The stepper motor recquires 400 steps in order to do a full rotation
     // Ratio to convert the amount of rotations per minute into the interval between each step
     // = 6e4 [ms/min] / 400 [step/rotation] --> divided by RPM --> [ms/step]
-                              
+
     // PARAM_STEPPER_SPEED must now be given in RPM
-    if(getParameter(PARAM_STEPPER_SPEED) > MAX_STEPPER_SPEED){setParameter(PARAM_STEPPER_SPEED, MAX_STEPPER_SPEED);}                          // If the given stepper speed is higher than the maximum, the stepper will run at max authorized speed
-    if(getParameter(PARAM_STEPPER_SPEED) < MIN_STEPPER_SPEED && getParameter(PARAM_STEPPER_SPEED) > 0){setParameter(PARAM_STEPPER_SPEED, 0);} // If the given stepper speed is lower than the minimum, the stepper will stop
-    
-    uint32_t delayPerStep = RPM_TO_STEP/getParameter(PARAM_STEPPER_SPEED); // delay to apply between each step
+    if (getParameter(PARAM_STEPPER_SPEED) > MAX_STEPPER_SPEED) {
+      setParameter(PARAM_STEPPER_SPEED, MAX_STEPPER_SPEED); // If the given stepper speed is higher than the maximum, the stepper will run at max authorized speed
+    }
+    if (getParameter(PARAM_STEPPER_SPEED) < MIN_STEPPER_SPEED && getParameter(PARAM_STEPPER_SPEED) > 0) {
+      setParameter(PARAM_STEPPER_SPEED, 0); // If the given stepper speed is lower than the minimum, the stepper will stop
+    }
+
+    uint32_t delayPerStep = RPM_TO_STEP / getParameter(PARAM_STEPPER_SPEED); // delay to apply between each step
 
     // Execute step
     numberSteps--;
-    if(getParameter(PARAM_STEPPER_SPEED) >= MIN_STEPPER_SPEED){
+    if (getParameter(PARAM_STEPPER_SPEED) >= MIN_STEPPER_SPEED) {
       PORTB ^= STEPPER_TAB[1];
       nilThdSleepMicroseconds(delayPerStep);
-      
       stopStepper();
-    }else nilThdSleepMilliseconds(100);    
+    } else {
+      nilThdSleepMilliseconds(100);
+    }
   }
 }
 #endif
