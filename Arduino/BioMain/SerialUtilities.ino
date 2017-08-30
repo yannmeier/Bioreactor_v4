@@ -9,7 +9,7 @@ void processUtilitiesCommand(char command, char* paramValue, Print* output) {
       break;
     case 'e':
       if (paramValue[0] != '\0') {
-        setTime(atol(paramValue));
+        setTime(atol(paramValue));  // Get unix time here: https://www.epochconverter.com/
         output->println(now());
       } else {
         output->println(now());
