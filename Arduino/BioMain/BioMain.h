@@ -4,7 +4,7 @@
 #include <NilRTOS.h> //MultiThread
 #include <SPI.h>     //Flash SPI
 #include <avr/wdt.h> //Watchdog
-#include <TimeLib.h>
+
 /******************
    DEFINE CARD TYPE
  ******************/
@@ -17,7 +17,7 @@
  ******************************************/
 //#define BEFORE_43  1
 //#define VERSION_43 1
-#define BEFORE_45 1
+//#define BEFORE_45 1
 
 
 
@@ -122,7 +122,7 @@
 #else
 #define FLASH_SELECT A3 //Flash SS_SPI
 #endif
-#define LOG_INTERVAL 10  //Interval in (s) between logs logger
+#define LOG_INTERVAL 1  //Interval in (s) between logs logger
 #endif
 
 

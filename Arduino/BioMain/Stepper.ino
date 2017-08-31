@@ -151,8 +151,7 @@ void executeStep(uint16_t numberSteps, boolean forward) {
   DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;  // Set pins 8 and 9 as output
 
   while (numberSteps > 0) {
-    if (isStepperStopped()) ret
-    urn;
+    if (isStepperStopped()) return;
     // Stepper direction
     if (forward) {
       PORTB &= ~STEPPER_TAB[0]; // Turns pin 8 as LOW

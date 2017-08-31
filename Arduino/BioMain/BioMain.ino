@@ -3,7 +3,7 @@
  * SETUP
  *********/
 void setup() {
-  delay(1000);
+  delay(1000); 
   Serial.begin(9600);
   delay(1000);
   setupParameters(); 
@@ -22,9 +22,7 @@ void setup() {
   nilSysBegin();
 }
 
-void loop() {
-
-}
+void loop() {}
 
 
 //Global Thread Locking
@@ -39,5 +37,4 @@ void protectThread() {
 void unprotectThread() {
 	lockTimeCriticalZone=false;
 }
-
 

@@ -40,7 +40,7 @@
 #define ADDRESS_SIZE  (ADDRESS_MAX  - ADDRESS_BEG)
 // The number of entires by types of logs (seconds, minutes, hours, commands/events)
 #define MAX_NB_ENTRIES    (ADDRESS_SIZE  / ENTRY_SIZE_LINEAR_LOGS)
-#define MAX_MULTI_LOG 70000 // Allows to display long log on serial
+#define MAX_MULTI_LOG 64
 
 
 
@@ -119,6 +119,7 @@ void writeLog(uint16_t event_number, int parameter_value) {
   ******************************/
   sst.flashReadInit(findAddressOfEntryN(nextEntryID));
   long writtenID = sst.flashReadNextInt32();
+  sst.flashReadFinish();
 
 #ifdef DEBUG_LOGS
   Serial.println(F("nextEntryID "));
@@ -126,21 +127,21 @@ void writeLog(uint16_t event_number, int parameter_value) {
   Serial.println(F("writtenID "));
   Serial.println(writtenID);
 #endif
-  sst.flashReadFinish();
+
   if (writtenID == nextEntryID) {
     //Update the value of the next event log position in the memory
     nextEntryID++;
 #ifdef DEBUG_LOGS
     Serial.print(F("OK"));
 #endif
+  } else {
+    Serial.print(F("Logger fail"));
+    Serial.print(nextEntryID);
+    Serial.print(" ");
+    Serial.println(writtenID);
 
   }
 
-#ifdef DEBUG_LOGS
-  else {
-    Serial.print(F("Fail"));
-  }
-#endif
   /*****************************
          Out and Deselect
   ******************************/
@@ -327,7 +328,7 @@ void formatFlash(Print* output) {
       output->print(F("."));
     if (i % 1024 == 1023)
       output->println(F(""));
-    nilThdSleepMilliseconds(10);
+    // nilThdSleepMilliseconds(10); // this should not be required
   }
   wdt_enable(WDTO_8S);
   wdt_reset();
@@ -439,6 +440,35 @@ void debugFlash(Print* output) {
   wdt_reset();
 }
 
+/*
+   We will check when we have a change to FF at the ID
+*/
+void checkNextID(Print* output) {
+  wdt_disable();
+  protectThread();
+  output->println(F("Check next ID"));
+  // we assume that the ID should always grow linearly. Just
+  // after it is not linear, we set the lastEntryID
+  sst.flashReadInit(0);
+  uint32_t expectedID = sst.flashReadNextInt32();
+  sst.flashReadFinish();
+  for (uint32_t i = 1; i < MAX_NB_ENTRIES; i++) {
+    expectedID++;
+    uint32_t address = findAddressOfEntryN(i);
+    sst.flashReadInit(address);
+    uint32_t currentID = sst.flashReadNextInt32();
+    sst.flashReadFinish();
+    if (currentID != expectedID && currentID != 4294967295) {
+      output->print(expectedID);
+      output->print(" ");
+      output->println(currentID);
+    }
+  }
+  unprotectThread();
+  wdt_enable(WDTO_8S);
+  wdt_reset();
+  output->println(F("Done"));
+}
 
 #ifdef LOG_INTERVAL
 
@@ -464,6 +494,9 @@ NIL_THREAD(ThreadLogger, arg) {
 
 void processLoggerCommand(char command, char* data, Print* output) {
   switch (command) {
+    case 'c':
+      checkNextID(output);
+      break;
     case 'd':
       debugFlash(output);
       break;
@@ -511,7 +544,7 @@ void processLoggerCommand(char command, char* data, Print* output) {
       break;
     case 't':
       if (data[0] == '\0' || atoi(data) != 1234) {
-        output->println(F("YOU LOOSE ALL DATA! Use lt1234"));
+        output->println(F("YOU LOOSE ALL DATA! Use dt1234"));
       } else {
         testFlash(output);
       }
@@ -526,6 +559,7 @@ void processLoggerCommand(char command, char* data, Print* output) {
 
 void printLoggerHelp(Print* output) {
   output->println(F("Logger help"));
+  output->println(F("(lc) Check"));
   output->println(F("(ld) Debug"));
   output->println(F("(lf) Format"));
   output->println(F("(ll) Current log"));
