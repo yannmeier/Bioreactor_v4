@@ -17,7 +17,7 @@
  ******************************************/
 //#define BEFORE_43  1
 //#define VERSION_43 1
-//#define BEFORE_45 1
+#define BEFORE_45 1
 
 
 
@@ -125,6 +125,7 @@
 #define LOG_INTERVAL 1  //Interval in (s) between logs logger
 #endif
 
+// #define SHOW_MENU_HELP 1 // if we don't show the help we spare a lot of memory
 
 
 /*******************************

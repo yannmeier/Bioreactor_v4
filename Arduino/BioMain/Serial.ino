@@ -149,7 +149,6 @@ void printHelp(Print* output) {
   output->println(F("(s)ettings"));
   output->println(F("(u)tilities"));
 
-
   printSpecificHelp(output);
 }
 

@@ -10,7 +10,7 @@ boolean wr;
 
 
 #define ADDRESS_BEG   0x000000
-#define ADDRESS_MAX   0x80000  // http://www.sst.com/dotAsset/40498.pdf&usd=2&usg=ALhdy294tEkn4s_aKwurdSetYTt_vmXQhw
+#define ADDRESS_MAX   0x080000  // http://www.sst.com/dotAsset/40498.pdf&usd=2&usg=ALhdy294tEkn4s_aKwurdSetYTt_vmXQhw
 #define SECTOR_SIZE       4096 // anyway the size of the sector is also hardcoded in the library !!!!
 
 #define LINE_SIZE 64 // should be a divider of the SECTOR_SIZE

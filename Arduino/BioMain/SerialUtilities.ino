@@ -47,12 +47,14 @@ void processUtilitiesCommand(char command, char* paramValue, Print* output) {
 }
 
 void printUtilitiesHelp(Print* output) {
+#ifdef SHOW_MENU_HELP
   output->println(F("(uc) Compact settings"));
   output->println(F("(ue) Epoch"));
   output->println(F("(uf) Free"));
   output->println(F("(uq) Qualifier"));
   output->println(F("(ur) Reset"));
   output->println(F("(uz) eeprom"));
+#endif
 }
 
 

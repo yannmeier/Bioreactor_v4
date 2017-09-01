@@ -110,10 +110,10 @@ void executeStep(uint16_t numberSteps, boolean forward) {
   DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;
   DDRF |= (STEPPER_TAB[2] | STEPPER_TAB[3]) ;
   uint8_t counter = 0;
+  
   while (numberSteps > 0) {
 
     if (isStepperStopped()) return;
-
     numberSteps--;
     if (forward) counter++;
     else counter--;

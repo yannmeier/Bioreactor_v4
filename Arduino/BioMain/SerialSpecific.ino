@@ -62,6 +62,7 @@ void processSpecificCommand(char* data, char* paramValue, Print* output) {
 }
 
 void printSpecificHelp(Print* output) {
+#ifdef SHOW_MENU_HELP
   output->println(F("(i)2c"));
 #ifdef THR_LINEAR_LOGS
   output->println(F("(l)og"));
@@ -73,6 +74,7 @@ void printSpecificHelp(Print* output) {
   output->println(F("s(t)atus"));
 #ifdef FOOD_CTRL
   output->println(F("(w)eight"));
+#endif
 #endif
 }
 

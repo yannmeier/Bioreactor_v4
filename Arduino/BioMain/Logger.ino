@@ -1,3 +1,5 @@
+// #define DEBUG_MEMORY    // takes huge amount of memory should not be activated !!
+
 /*****************************************************************************************
   This thread takes care of the logs and manage the time and its synchronisation
   The thread write the logs at a definite fixed interval of time in the SST25VF064 chip
@@ -33,6 +35,9 @@
 #define ADDRESS_MAX   0X400000
 #endif
 
+// #define ADDRESS_MAX   0X001000 // if we don't want to use all memory !!!!
+
+
 #define ADDRESS_BEG   0x000000
 #define ADDRESS_LAST  (ADDRESS_MAX - ENTRY_SIZE_LINEAR_LOGS)
 #define SECTOR_SIZE       4096
@@ -42,9 +47,6 @@
 #define MAX_NB_ENTRIES    (ADDRESS_SIZE  / ENTRY_SIZE_LINEAR_LOGS)
 
 #define MAX_MULTI_LOG 64 // Allows to display long log on serial
-
-
-
 
 
 #if FLASH_SELECT == D10 //Flash SS_SPI
@@ -119,7 +121,9 @@ void writeLog(uint16_t event_number, int parameter_value) {
   /*****************************
           Check Sequence
   ******************************/
+  nilThdSleepMilliseconds(5);
   sst.flashReadInit(findAddressOfEntryN(nextEntryID));
+  nilThdSleepMilliseconds(5);
   long writtenID = sst.flashReadNextInt32();
   sst.flashReadFinish();
 
@@ -141,7 +145,10 @@ void writeLog(uint16_t event_number, int parameter_value) {
     Serial.print(nextEntryID);
     Serial.print(" ");
     Serial.println(writtenID);
-
+    // if logger fails it is better to go back and erase the full sector
+    // we can anyway not try to write if it was not erased !
+    // and if we don't do this ... we will destroy the memory !
+    nextEntryID -= nextEntryID % 64;
   }
 
   /*****************************
@@ -342,8 +349,6 @@ void formatFlash(Print* output) {
 
 
 void testFlash(Print* output) {
-  output->println('Not implemented');
-  return;
   wdt_disable();
   protectThread();
   output->println(F("Write / read / validate"));
@@ -369,8 +374,7 @@ void testFlash(Print* output) {
         if (j == 0 && i % 1024 == 1023) {
           output->println(F(""));
         }
-      }
-      else {
+      } else {
         output->println(address);
       }
     }
@@ -403,6 +407,7 @@ void readFlash(Print* output, long firstRecord) {
 /*
    We will check when we have a change to FF at the ID
 */
+
 void debugFlash(Print* output) {
   wdt_disable();
   protectThread();
@@ -496,17 +501,27 @@ NIL_THREAD(ThreadLogger, arg) {
 
 void processLoggerCommand(char command, char* data, Print* output) {
   switch (command) {
+#ifdef DEBUG_MEMORY
     case 'c':
       checkNextID(output);
       break;
     case 'd':
       debugFlash(output);
       break;
+#endif
     case 'f':
       if (data[0] == '\0' || atoi(data) != 1234) {
         output->println(F("To format flash enter lf1234"));
       } else {
         formatFlash(output);
+      }
+      break;
+    case 'i':
+      if (data[0] == '\0' || atoi(data) < NB_ENTRIES_PER_SECTOR || atoi(data) % NB_ENTRIES_PER_SECTOR) {
+        output->print(F("Must be a multiple of "));
+        output->println(NB_ENTRIES_PER_SECTOR);
+      } else {
+        nextEntryID = atoi(data);
       }
       break;
     case 'l':
@@ -546,7 +561,7 @@ void processLoggerCommand(char command, char* data, Print* output) {
       break;
     case 't':
       if (data[0] == '\0' || atoi(data) != 1234) {
-        output->println(F("YOU LOOSE ALL DATA! Use dt1234"));
+        output->println(F("YOU LOOSE ALL DATA! Use lt1234"));
       } else {
         testFlash(output);
       }
@@ -561,13 +576,17 @@ void processLoggerCommand(char command, char* data, Print* output) {
 
 void printLoggerHelp(Print* output) {
   output->println(F("Logger help"));
+#ifdef DEBUG_MEMORY
   output->println(F("(lc) Check"));
   output->println(F("(ld) Debug"));
+#endif
   output->println(F("(lf) Format"));
+  output->println(F("(li) Set nextID"));
   output->println(F("(ll) Current log"));
   output->println(F("(lm) Multiple log"));
   output->println(F("(lr) Read (start record)"));
   output->println(F("(lt) Test"));
+
 }
 
 
