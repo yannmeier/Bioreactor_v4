@@ -141,14 +141,14 @@ void writeLog(uint16_t event_number, int parameter_value) {
     Serial.print(F("OK"));
 #endif
   } else {
-    Serial.print(F("Logger fail"));
+    Serial.print(F("Log fail "));
     Serial.print(nextEntryID);
     Serial.print(" ");
     Serial.println(writtenID);
     // if logger fails it is better to go back and erase the full sector
     // we can anyway not try to write if it was not erased !
     // and if we don't do this ... we will destroy the memory !
-    nextEntryID -= nextEntryID % 64;
+    nextEntryID -= nextEntryID % NB_ENTRIES_PER_SECTOR;
   }
 
   /*****************************
