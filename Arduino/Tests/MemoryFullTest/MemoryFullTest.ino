@@ -5,7 +5,7 @@
 void setup() {
   delay(1000); 
   Serial.begin(9600);
-  delay(3000);
+  delay(11000);
   setupParameters(); 
 
   #ifdef FLASH_SELECT 

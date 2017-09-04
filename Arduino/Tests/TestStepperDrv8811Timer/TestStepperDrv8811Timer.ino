@@ -9,12 +9,9 @@ void setup(void)
 }
 
 void loop(void) {
-  for (int i = 3000; i < 6001; i = i + 1000) {
-    Timer1.setPeriod(4700); // 4700 is 1RPM
-    delay(1000);
-    Timer1.stop();
-    delay(4000);
-  }
+  byte rpm = 120;
+  Timer1.setPeriod((50 * 60 / rpm) * 100); // 5000 is 1 rotation per seconds
+delay(100000);
 }
 
 

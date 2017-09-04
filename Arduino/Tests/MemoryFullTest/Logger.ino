@@ -130,31 +130,10 @@ void writeLog(uint16_t event_number, int parameter_value) {
   ******************************/
   boolean isLogValid = true;
   sst.flashReadInit(findAddressOfEntryN(nextEntryID));
-  uint32_t savedID = sst.flashReadNextInt32();
-  if (savedID != nextEntryID) {
-    Serial.print("ID ");
-    Serial.print(savedID);
-    Serial.print(" ");
-    Serial.println(nextEntryID);
-    isLogValid = false;
-  }
-  uint32_t newTime = sst.flashReadNextInt32();
-  if (newTime != timenow) {
-    Serial.print("time ");
-    Serial.print(newTime);
-    Serial.print(" ");
-    Serial.println(timenow);
-    isLogValid = false;
-  }
+  if (sst.flashReadNextInt32() != nextEntryID) isLogValid = false;
+  if (sst.flashReadNextInt32() != timenow) isLogValid = false;
   for (byte i = 0; i < NB_PARAMETERS_LINEAR_LOGS; i++) {
-    uint16_t abcd = sst.flashReadNextInt16();
-    if (abcd != getParameter(i)) {
-      Serial.print("param ");
-      Serial.print(abcd);
-      Serial.print(" ");
-      Serial.println(getParameter(i));
-      isLogValid = false;
-    }
+    if (sst.flashReadNextInt16() != getParameter(i)) isLogValid = false;
   }
   if (sst.flashReadNextInt16() != event_number) isLogValid = false;
   if (sst.flashReadNextInt16() != parameter_value) isLogValid = false;
@@ -176,8 +155,6 @@ void writeLog(uint16_t event_number, int parameter_value) {
   } else {
     Serial.print(F("Log fail "));
     Serial.println(nextEntryID);
-    //  Serial.print(" ");
-    //  Serial.println(writtenID);
     // if logger fails it is better to go back and erase the full sector
     // we can anyway not try to write if it was not erased !
     // and if we don't do this ... we will destroy the memory !
@@ -332,7 +309,6 @@ void setupMemory() {
   SPI.setDataMode(SPI_MODE0);
   SPI.setBitOrder(MSBFIRST);
   sst.init();
-  sst.printFlashID(&Serial);
 }
 
 void printLastLog(Print* output) {

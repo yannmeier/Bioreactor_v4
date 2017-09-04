@@ -37,11 +37,12 @@
 
 // PUBLIC METHODS----------------------------------------------------
 
+ SPISettings spiSettings;
 
 
 
-SST::SST(char port, int pin)
-{
+
+SST::SST(char port, int pin) {
     switch (port)
     {
         #ifdef PORTA
@@ -92,7 +93,9 @@ SST::SST(char port, int pin)
     * flashVersion is checked in init function
     */
     flashVersion = 0x26;
+    spiSettings = SPISettings(8000000, MSBFIRST, SPI_MODE0);
 }
+
 
 /**********************************************************************/
 void SST::init()
@@ -103,6 +106,8 @@ void SST::init()
     * protocol is not started at that time.  *
     ********************************************/
 
+    // Whey we need to call this twice ?????
+    // otherwise only for some memory ... we don't have the right ID !
     flashSelect();
     flashDeselect();
 
@@ -114,8 +119,6 @@ void SST::init()
     SPI.transfer(0);     // Unique Device ID
     flashDeselect();
 
-Serial.println("Flash");
-Serial.println(flashVersion);
   /******************************
    * Initialisation of SST chip *
    * Writing of both status and *
@@ -452,13 +455,11 @@ void SST::flashTotalErase()
 inline void volatile SST::nop(void){ asm __volatile__("nop"); }
 void SST::flashDeselect() {
     *memPort |= _BV(_ssPin);
-    nop();
-    nop();
+    SPI.endTransaction();
 }
 void SST::flashSelect() {
     *memPort &= ~(_BV(_ssPin));
-    SPI.setBitOrder(MSBFIRST);
-    nop(); nop();
+    SPI.beginTransaction(spiSettings);
 }
 
 

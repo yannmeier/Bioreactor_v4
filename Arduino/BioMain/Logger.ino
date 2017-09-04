@@ -70,13 +70,9 @@ uint32_t findAddressOfEntryN(uint32_t entryN);
   corresponding command/event number. Should be found in the define list of
   commands/errors
 ************************************************************************************/
-void writeLog() {
-  writeLog(0, 0);
-}
 
-void writeLog(uint16_t event_number) {
-  writeLog(event_number, 0);
-}
+
+
 
 void writeLog(uint16_t event_number, int parameter_value) {
   /********************************
@@ -89,6 +85,9 @@ void writeLog(uint16_t event_number, int parameter_value) {
 
   protectThread();
 
+  uint16_t param = 0;
+  uint32_t timenow = now();
+  uint32_t startAddress = findAddressOfEntryN(nextEntryID);
 
   /************************************************************************************
       Test if it is the begining of one sector, erase the sector of 4096 bytes if needed  delay(2);
@@ -98,14 +97,19 @@ void writeLog(uint16_t event_number, int parameter_value) {
     Serial.print(F("ERASE sctr: "));
     Serial.println(findSectorOfN());
 #endif
-    sst.flashSectorErase(findSectorOfN());
+    long start = millis();
+    sst.flashSectorErase(startAddress);
+
+    /*
+      Serial.print("Result of erase ");
+      Serial.println(millis()-start);
+      dumpLoggerFlash(&Serial, startAddress, startAddress+512);
+    */
   }
   /*****************************
           Writing Sequence
   ******************************/
-  uint16_t param = 0;
-  uint32_t timenow = now();
-  uint32_t startAddress = findAddressOfEntryN(nextEntryID);
+
 
   sst.flashWriteInit(startAddress); // Initialize with the right address
   sst.flashWriteNextInt32(nextEntryID);      //4 bytes of the entry number
@@ -118,11 +122,21 @@ void writeLog(uint16_t event_number, int parameter_value) {
   sst.flashWriteNextInt16(parameter_value); //parameter value */
   sst.flashWriteFinish();                   // finish the writing process
 
+
   /*****************************
-          Check Sequence
+          Check saved information
+          We assume that the logger is high priority
+          And no other thread will change any of the values !!!!!!
   ******************************/
+  boolean isLogValid = true;
   sst.flashReadInit(findAddressOfEntryN(nextEntryID));
-  long writtenID = sst.flashReadNextInt32();
+  if (sst.flashReadNextInt32() != nextEntryID) isLogValid = false;
+  if (sst.flashReadNextInt32() != timenow) isLogValid = false;
+  for (byte i = 0; i < NB_PARAMETERS_LINEAR_LOGS; i++) {
+    if (sst.flashReadNextInt16() != getParameter(i)) isLogValid = false;
+  }
+  if (sst.flashReadNextInt16() != event_number) isLogValid = false;
+  if (sst.flashReadNextInt16() != parameter_value) isLogValid = false;
   sst.flashReadFinish();
 
 #ifdef DEBUG_LOGS
@@ -132,7 +146,7 @@ void writeLog(uint16_t event_number, int parameter_value) {
   Serial.println(writtenID);
 #endif
 
-  if (writtenID == nextEntryID) {
+  if (isLogValid) {
     //Update the value of the next event log position in the memory
     nextEntryID++;
 #ifdef DEBUG_LOGS
@@ -140,9 +154,7 @@ void writeLog(uint16_t event_number, int parameter_value) {
 #endif
   } else {
     Serial.print(F("Log fail "));
-    Serial.print(nextEntryID);
-    Serial.print(" ");
-    Serial.println(writtenID);
+    Serial.println(nextEntryID);
     // if logger fails it is better to go back and erase the full sector
     // we can anyway not try to write if it was not erased !
     // and if we don't do this ... we will destroy the memory !
@@ -212,20 +224,6 @@ uint8_t loadLastEntryToParameters() {
   sst.flashReadFinish();
 }
 
-
-/*************************************************************************************
-  The flash memory is implemented with sectors of a defined size.
-  The function returns the sector number where the log corresponding to the ID (entryNb)
-  is stored in the flash memory
-  entryNb:         The log ID
-  return:          The sector number
-**************************************************************************************/
-uint16_t findSectorOfN( ) {
-  uint16_t sectorNb = 0;
-  uint32_t address = findAddressOfEntryN(nextEntryID);
-  sectorNb = address / SECTOR_SIZE;
-  return sectorNb;
-}
 
 /******************************************************************************
   Returns the address corresponding to one log ID nilThdSleepMilliseconds(5); nilThdSleepMilliseconds(5);
@@ -319,28 +317,8 @@ void printLastLog(Print* output) {
 
 void formatFlash(Print* output) {
   protectThread();
-  setupMemory();
-#ifdef DEBUG_LOGS
-  output->println(F("Format flash"));
-  output->print(F("Sctr size:"));
-  output->println(SECTOR_SIZE);
-  output->print(F("Nb sctrs:"));
-  output->println(ADDRESS_MAX / SECTOR_SIZE);
-#endif
-  wdt_disable();
-
-  for (int i = 0; i < ADDRESS_MAX / SECTOR_SIZE; i++) {
-    sst.flashSectorErase(i);
-    if (i % 16 == 0)
-      output->print(F("."));
-    if (i % 1024 == 1023)
-      output->println(F(""));
-    // nilThdSleepMilliseconds(10); // this should not be required
-  }
-  wdt_enable(WDTO_8S);
-  wdt_reset();
+  sst.flashTotalErase();
   output->println(F("OK"));
-  setTime(0);
   nextEntryID = 0;
   unprotectThread();
 }
@@ -490,7 +468,8 @@ NIL_THREAD(ThreadLogger, arg) {
     //avoids logging during the second x+1, ensure x+LOG_INTERVAL
     //because epoch is only precise to the second so the logging is evenly spaced
     nilThdSleepMilliseconds(LOG_INTERVAL * 1000 - millis() % 1000 + 100);
-    writeLog();
+    //    nilThdSleepMilliseconds(50);
+    writeLog(0, 0);
   }
 }
 
@@ -514,16 +493,9 @@ void processLoggerCommand(char command, char* data, Print* output) {
         formatFlash(output);
       }
       break;
-#ifdef DEBUG_MEMORY
     case 'i':
-      if (data[0] == '\0' || atoi(data) < NB_ENTRIES_PER_SECTOR || atoi(data) % NB_ENTRIES_PER_SECTOR) {
-        output->print(F("Must be a multiple of "));
-        output->println(NB_ENTRIES_PER_SECTOR);
-      } else {
-        nextEntryID = atoi(data);
-      }
+      sst.printFlashID(output);
       break;
-#endif
     case 'l':
       if (data[0] != '\0')
         printLogN(output, atol(data));
@@ -552,6 +524,16 @@ void processLoggerCommand(char command, char* data, Print* output) {
         output->println(nextEntryID - 1);
       }
       break;
+#ifdef DEBUG_MEMORY
+    case 'n':
+      if (data[0] == '\0' || atoi(data) < NB_ENTRIES_PER_SECTOR || atoi(data) % NB_ENTRIES_PER_SECTOR) {
+        output->print(F("Must be a multiple of "));
+        output->println(NB_ENTRIES_PER_SECTOR);
+      } else {
+        nextEntryID = atoi(data);
+      }
+      break;
+#endif
     case 'r':
       if (data[0] == '\0') {
         readFlash(output, 0);
@@ -579,9 +561,10 @@ void printLoggerHelp(Print* output) {
 #ifdef DEBUG_MEMORY
   output->println(F("(lc) Check"));
   output->println(F("(ld) Debug"));
-  output->println(F("(li) Set nextID"));
+  output->println(F("(ln) Set nextID"));
 #endif
   output->println(F("(lf) Format"));
+  output->println(F("(li) Info"));
   output->println(F("(ll) Current log"));
   output->println(F("(lm) Multiple log"));
   output->println(F("(lr) Read (start record)"));
@@ -589,6 +572,31 @@ void printLoggerHelp(Print* output) {
 
 }
 
+void dumpLoggerFlash(Print* output, uint32_t fromAddress, uint32_t toAddress) {
+  int bytesPerRow = 16;
+  int j = 0;
+  char buf[4];
+  sst.flashReadInit(fromAddress);
+  // go from first to last eeprom address
+  for (uint32_t i = fromAddress; i <= toAddress; i++) {
+    if (j == 0) {
+      sprintf(buf, "%03X", i);
+      output->print(buf);
+      output->print(F(": "));
+    }
+    sprintf(buf, "%02X ", sst.flashReadNextInt8());
+    j++;
+    if (j == bytesPerRow) {
+      j = 0;
+      output->println(buf);
+      nilThdSleepMilliseconds(25);
+    }
+    else {
+      output->print(buf);
+    }
+  }
+  sst.flashReadFinish();
+}
 
 #endif
 #endif
