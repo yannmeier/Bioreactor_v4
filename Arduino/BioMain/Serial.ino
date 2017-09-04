@@ -145,11 +145,13 @@ void printResult(char* data, Print* output) {
 }
 
 void printHelp(Print* output) {
+  #ifdef SHOW_MENU_HELP
   output->println(F("(h)elp"));
   output->println(F("(s)ettings"));
   output->println(F("(u)tilities"));
 
   printSpecificHelp(output);
+  #endif
 }
 
 

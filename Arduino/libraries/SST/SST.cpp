@@ -37,6 +37,9 @@
 
 // PUBLIC METHODS----------------------------------------------------
 
+
+
+
 SST::SST(char port, int pin)
 {
     switch (port)
@@ -99,15 +102,20 @@ void SST::init()
     * This can't be done in constructor as SPI *
     * protocol is not started at that time.  *
     ********************************************/
-    flashEnable();
+
+    flashSelect();
+    flashDeselect();
+
+
     flashSelect();
     SPI.transfer(0x9F);    // read ID command
     SPI.transfer(0);     // Manufacturer ID
     flashVersion = SPI.transfer(0); // Device Type (25H if SST25 or 26H if SST26)
     SPI.transfer(0);     // Unique Device ID
-
     flashDeselect();
-    nop();
+
+Serial.println("Flash");
+Serial.println(flashVersion);
   /******************************
    * Initialisation of SST chip *
    * Writing of both status and *
@@ -120,7 +128,7 @@ void SST::init()
             flashSelect();
             SPI.transfer(0x50); // EWSR : Enable Write Status Register, must be issued prior to WRSR
             flashDeselect();
-            delay(25);
+            //delay(25);
             break;
         case 0x26:         // default is SST26
             flashWREN();
@@ -188,7 +196,6 @@ void SST::printNonEmptySector(Print* output)
 void SST::printFlashID(Print* output)
 {
     uint8_t manufacturer, mtype, uniqueId;
-    flashEnable();
     flashSelect();
     (void)SPI.transfer(0x9F); // Read ID command
     manufacturer = SPI.transfer(0);     // Manufacturer ID
@@ -205,7 +212,6 @@ void SST::printFlashID(Print* output)
 void SST::printStatusRegister(Print* output)
 {
     uint8_t data = 0;
-    flashEnable();
     flashSelect();
     SPI.transfer(0x05);
     data = SPI.transfer(0);
@@ -223,7 +229,6 @@ void SST::printConfigRegister(Print* output)
 {
        uint8_t data = 0;
     if(flashVersion != 0x26) return; //only available on sst26 version
-    flashEnable();
     flashSelect();
     SPI.transfer(0x35);
     data = SPI.transfer(0);
@@ -235,13 +240,13 @@ void SST::printConfigRegister(Print* output)
     }
     output->print("\n");
 }
+
 /**********************************************************************
                         READ UTILITIES
 ***********************************************************************/
 
 void SST::flashReadInit(uint32_t addr)
 {
-    flashEnable();
     flashSelect();
 
     (void)SPI.transfer(0x03); // Read Memory - 25/33 Mhz //
@@ -326,6 +331,8 @@ void SST::flashWriteNextInt32(uint32_t data)
 void SST::flashWriteFinish()
 {
     flashDeselect();
+    // we need to keep this delay because for an unknown reason
+    // the flashWaitUnitlDone does not work always
     delay(2); //1.6ms max delay for page write
     flashWaitUntilDone();
 }
@@ -366,7 +373,7 @@ void SST::flashWriteBPR(uint8_t* BPR, int size) // configure block protection re
       SPI.transfer(BPR[i]);
     }
     flashDeselect();
-    delay(2); //1.6ms max delay for page write check if the same for BPR
+//    delay(2); //1.6ms max delay for page write check if the same for BPR
     flashWaitUntilDone();
 }
 
@@ -414,14 +421,14 @@ Can only erase block of size 4096 byte => 2048 sectors on the chip
 It is possible to erase larger area according to the datasheet :
 64 KByte Block-Erase of memory array SPI : 1101 1000b (D8H) 3 0 0
 */
-void SST::flashSectorErase(uint16_t sectorAddress)
+void SST::flashSectorErase(uint32_t address)
 {
     flashWREN();
     flashSelect();
     (void)SPI.transfer(0x20); // Erase 4KB Sector //
-    flashSetAddress(4096UL * long(sectorAddress));
+    flashSetAddress(address);
     flashDeselect();
-    delay(25); //max delay for sector erase cf. datasheet
+//    delay(25); //max delay for sector erase cf. datasheet
     flashWaitUntilDone();
 
 }
@@ -432,7 +439,7 @@ void SST::flashTotalErase()
     flashSelect();
     (void)SPI.transfer(0xC7); // Instruction : Chip-Erase
     flashDeselect();
-    delay(50); //max delay for chip erase cf. datasheet
+//    delay(50); //max delay for chip erase cf. datasheet
     flashWaitUntilDone();
 }
 
@@ -443,26 +450,27 @@ void SST::flashTotalErase()
 // magic function
 // No operation : Processor will ignore the instruction. Increments counter
 inline void volatile SST::nop(void){ asm __volatile__("nop"); }
-void SST::flashDeselect(){ *memPort |= _BV(_ssPin);  nop();  nop(); }
-void SST::flashSelect(){ *memPort &= ~(_BV(_ssPin));}
-
-void SST::flashEnable()
-{
+void SST::flashDeselect() {
+    *memPort |= _BV(_ssPin);
+    nop();
+    nop();
+}
+void SST::flashSelect() {
+    *memPort &= ~(_BV(_ssPin));
     SPI.setBitOrder(MSBFIRST);
     nop(); nop();
 }
+
 
 void SST::flashWaitUntilDone()
 {
     uint8_t data = 0;
     flashSelect();
-    flashEnable();
+    SPI.transfer(0x05); //read status register
     while (1)
     {
-        (void)SPI.transfer(0x05); //read status register
         data = SPI.transfer(0);
-        if (!bitRead(data, 0))
-            break;
+        if (!bitRead(data, 0)) break;
     }
     flashDeselect();
 }
@@ -475,9 +483,8 @@ void SST::flashSetAddress(uint32_t addr)
 }
 
 void SST::flashWREN(){
-  flashEnable();
   flashSelect();
   SPI.transfer(0x06); // write enable instruction
   flashDeselect();
-  delay(25); //max delay after write init sequence cf. datasheet
+//  delay(25); //max delay after write init sequence cf. datasheet
 }

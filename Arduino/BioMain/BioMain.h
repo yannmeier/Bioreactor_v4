@@ -5,6 +5,10 @@
 #include <SPI.h>     //Flash SPI
 #include <avr/wdt.h> //Watchdog
 
+
+// #define SHOW_MENU_HELP 1 // if we don't show the help we spare a lot of memory
+
+
 /******************
    DEFINE CARD TYPE
  ******************/
@@ -122,10 +126,10 @@
 #else
 #define FLASH_SELECT A3 //Flash SS_SPI
 #endif
-#define LOG_INTERVAL 1  //Interval in (s) between logs logger
+#define LOG_INTERVAL 10  //Interval in (s) between logs logger
 #endif
 
-// #define SHOW_MENU_HELP 1 // if we don't show the help we spare a lot of memory
+
 
 
 /*******************************

@@ -121,9 +121,7 @@ void writeLog(uint16_t event_number, int parameter_value) {
   /*****************************
           Check Sequence
   ******************************/
-  nilThdSleepMilliseconds(5);
   sst.flashReadInit(findAddressOfEntryN(nextEntryID));
-  nilThdSleepMilliseconds(5);
   long writtenID = sst.flashReadNextInt32();
   sst.flashReadFinish();
 
@@ -516,6 +514,7 @@ void processLoggerCommand(char command, char* data, Print* output) {
         formatFlash(output);
       }
       break;
+#ifdef DEBUG_MEMORY
     case 'i':
       if (data[0] == '\0' || atoi(data) < NB_ENTRIES_PER_SECTOR || atoi(data) % NB_ENTRIES_PER_SECTOR) {
         output->print(F("Must be a multiple of "));
@@ -524,6 +523,7 @@ void processLoggerCommand(char command, char* data, Print* output) {
         nextEntryID = atoi(data);
       }
       break;
+#endif
     case 'l':
       if (data[0] != '\0')
         printLogN(output, atol(data));
@@ -579,9 +579,9 @@ void printLoggerHelp(Print* output) {
 #ifdef DEBUG_MEMORY
   output->println(F("(lc) Check"));
   output->println(F("(ld) Debug"));
+  output->println(F("(li) Set nextID"));
 #endif
   output->println(F("(lf) Format"));
-  output->println(F("(li) Set nextID"));
   output->println(F("(ll) Current log"));
   output->println(F("(lm) Multiple log"));
   output->println(F("(lr) Read (start record)"));

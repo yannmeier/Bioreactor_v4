@@ -28,7 +28,7 @@ class SST
 		void printFlashID(Print*);
 		void printStatusRegister(Print* output);	// DEBUGGING PURPOSE ONLY: Only accepts Serial as output
 		void printConfigRegister(Print* output);	// DEBUGGING PURPOSE ONLY: Only accepts Serial as output
-
+		
 		/********
 		 * READ *
 		 ********/
@@ -57,7 +57,7 @@ class SST
 		 * ERASE *
 		 *********/
 
-		void flashSectorErase(uint16_t);
+		void flashSectorErase(uint32_t);
 		void flashTotalErase();
 
 		/********************

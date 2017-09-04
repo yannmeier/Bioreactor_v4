@@ -37,16 +37,17 @@ NIL_THREADS_TABLE_BEGIN()
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadLora, NULL, waThreadLora, sizeof(waThreadLora))
 #endif
 
+// logger should have priority to prevent any corruption of flash memory
+#ifdef THR_LINEAR_LOGS
+NIL_THREADS_TABLE_ENTRY(NULL, ThreadLogger, NULL, waThreadLogger, sizeof(waThreadLogger))
+#endif
+
 #ifdef STEPPER
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadStepper, NULL, waThreadStepper, sizeof(waThreadStepper))
 #endif
 
 #if defined(FOOD_CTRL) && defined(WEIGHT_DATA) && defined(WEIGHT_CLK)
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadWeight, NULL, waThreadWeight, sizeof(waThreadWeight))
-#endif
-
-#ifdef THR_LINEAR_LOGS
-NIL_THREADS_TABLE_ENTRY(NULL, ThreadLogger, NULL, waThreadLogger, sizeof(waThreadLogger))
 #endif
 
 #ifdef TEMPERATURE_CTRL
