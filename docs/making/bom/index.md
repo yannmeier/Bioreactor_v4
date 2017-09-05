@@ -114,10 +114,19 @@
 
 | Denomination                  | Qty | Unit Price | Supplier             |
 | ----------------------------- | --- | ---------- | -------------------- |
-| Header 6 pins  KF2510-6P      | 1   | 0.3        | | | |
-| Cable 6 pins   KF2510-6P      | 1   | 0.7        |                      |
-| BSP75 SOT223                  | 4   | 0.3        | [aliexpress](https://www.aliexpress.com/item/Free-shipping-50pcs-lot-BSP75-BSP76-BSP77-SOT223/2026904236.html?spm=2114.30010308.3.10.m2zlgV&ws_ab_test=searchweb0_0,searchweb201602_3_10065_10068_10000009_10084_10083_10080_10082_10081_10060_10062_10056_10055_10037_10054_10059_10032_10099_10078_10079_10077_10000012_426_10103_10073_10102_10000015_10096_10052_10053_10107_10050_10106_10051,searchweb201603_1,afswitch_3_afChannel,single_sort_0_default&btsid=413c08f9-9370-41e8-b673-9b6507cf92a5) |  | |
-| Resistor 10k 0805             | 4   | 0.01       |                      |
+| Header 4 pins  KF2510-4P      | 1   | 0.3        |                      |
+| Cable 4 pins   KF2510-4P      | 1   | 0.7        |                      |
+| DRV8811 Motor driver          | 1   | 1          |                      |
+| Resistor 47k 0805             | 2   | 0.01       |                      |
+| Resistor 4.7k 0805            | 1   | 0.01       |                      |
+| Resistor 3.3k 0805            | 1   | 0.01       |                      |
+| Resistor 680 0805             | 1   | 0.01       |                      |
+| Resistor 10k 0805             | 9   | 0.01       |                      |
+| Capacitor 220 nF 0805         | 3   | 0.01       |                      |
+| Capacitor 100 nF 0805         | 6   | 0.01       |                      |
+| Capacitor 1 nF 0805           | 2   | 0.01       |                      |
+| Polarized capacitor 100 uF 50V| 1   | 0.8        |                      |
+| Power resistance 200 Ohm 1W   | 2   | 0.6        |                      |
 | Led Red 0805                  | 4   | 0.01       |                      |
 | Nema 17 Unipolar Stepper 12v  | 1   | 15         | [stepperonline](http://www.omc-stepperonline.com/nema-17-unipolar-stepper-031a-158ncm224ozin-17hs130316s-p-65.html) | <img src="images/stepper.jpg" width="48"> | |
 | Round magnet 20 x 5mm         | 2   | 0.75       | [ebay](http://www.ebay.com/itm/20Pcs-N50-Super-Strong-Disc-Cylinder-Round-Magnets-20x5mm-Rare-Earth-Neodymium-/371778047624?var=&hash=item568fb2ce88:m:mIjauxTTiDkmOyNvGzp6vmw) | <img src="images/magnet.jpg" width="48"> |
