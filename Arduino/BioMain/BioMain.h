@@ -66,8 +66,8 @@
 //pins 4-5 of port B and 6-7 of port F --> change for _BV (easier to manipulate)
 #define STEPPER {0b00010000,0b00100000,0b01000000,0b10000000}
 #else
-//pins 4-5 of port B (corresponds to digital pins 8 and 9). 8 = Direction pin, 9 = Stepper pin
-#define STEPPER {_BV(4),_BV(5)}
+//pinsof port B (corresponds to digital pins 8 and 9). 8 = Direction pin, 9 = Stepper pin
+#define STEPPER {8,9}
 #endif
 #define FOOD_CTRL          1
 #if defined(VERSION_43) || defined(BEFORE_43)
@@ -136,8 +136,9 @@
    CARD DEFINITION (HARD CODED)
  *******************************/
 #ifdef STEPPER
-#define PARAM_STEPPER_SPEED       26   // AA - motor speed, parameter S, IN RPM (v4.5)
-#define PARAM_STEPPER_STEPS       27   // AB  // 200 steps per full rotation (see Stepper.ino)
+#define PARAM_STEPPER_SPEED        26   // AA - motor speed, parameter S, IN RPM (v4.5)
+#define PARAM_STEPPER_SECONDS      27   // AB   200 steps per full rotation (see Stepper.ino)
+                                        //      number of seconds before changing direction
 #endif
 
 #ifdef TEMPERATURE_CTRL

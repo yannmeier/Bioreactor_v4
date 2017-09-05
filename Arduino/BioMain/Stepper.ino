@@ -30,6 +30,8 @@
 
 //We define a maximal and a minimal speed (in RPM) for safety and stability reasons
 #ifndef BEFORE_45
+#include <TimerOne.h>
+
 #define MIN_STEPPER_SPEED 5   // RPM
 #define MAX_STEPPER_SPEED 200 // RPM
 #define RPM_TO_STEP 150000    // This value is valid only if both pads on the board have been short-circuited
@@ -47,7 +49,7 @@ void stopStepper() {
   PORTB &= ~(STEPPER_TAB[0] | STEPPER_TAB[1]);
   PORTF &= ~(STEPPER_TAB[2] | STEPPER_TAB[3]);
 #else
-  PORTB &= ~(STEPPER_TAB[0] | STEPPER_TAB[1]);
+  Timer1.stop();
 #endif
 }
 
@@ -63,7 +65,8 @@ void stopStepper() {
 
 #ifdef BEFORE_43
 
-void executeStep(uint16_t numberSteps, boolean forward, byte port1, byte port2) {
+void executeStep(boolean forward, byte port1, byte port2) {
+  uint16_t numberSteps = getParameter(PARAM_STEPPER_SECONDS) * 200;
   uint8_t counter = 0;
   while (numberSteps > 0) {
 
@@ -106,11 +109,13 @@ void executeStep(uint16_t numberSteps, boolean forward, byte port1, byte port2) 
 */
 
 #elif defined(BEFORE_45)
-void executeStep(uint16_t numberSteps, boolean forward) {
+void executeStep(boolean forward) {
+  uint16_t numberSteps = getParameter(PARAM_STEPPER_SECONDS) * 200;
+
   DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;
   DDRF |= (STEPPER_TAB[2] | STEPPER_TAB[3]) ;
   uint8_t counter = 0;
-  
+
   while (numberSteps > 0) {
 
     if (isStepperStopped()) return;
@@ -145,46 +150,20 @@ void executeStep(uint16_t numberSteps, boolean forward) {
 /*
    Version 4.5
 */
-
 #else
-void executeStep(uint16_t numberSteps, boolean forward) {
-  DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;  // Set pins 8 and 9 as output
-
-  while (numberSteps > 0) {
-    if (isStepperStopped()) return;
-    // Stepper direction
-    if (forward) {
-      PORTB &= ~STEPPER_TAB[0]; // Turns pin 8 as LOW
-    } else {
-      PORTB |= STEPPER_TAB[0]; // Turns pin 8 as HIGH
-    }
-
-    // Calculate delay
-
-    // The stepper motor recquires 400 steps in order to do a full rotation
-    // Ratio to convert the amount of rotations per minute into the interval between each step
-    // = 6e4 [ms/min] / 400 [step/rotation] --> divided by RPM --> [ms/step]
-
-    // PARAM_STEPPER_SPEED must now be given in RPM
-    if (getParameter(PARAM_STEPPER_SPEED) > MAX_STEPPER_SPEED) {
-      setParameter(PARAM_STEPPER_SPEED, MAX_STEPPER_SPEED); // If the given stepper speed is higher than the maximum, the stepper will run at max authorized speed
-    }
-    if (getParameter(PARAM_STEPPER_SPEED) < MIN_STEPPER_SPEED && getParameter(PARAM_STEPPER_SPEED) > 0) {
-      setParameter(PARAM_STEPPER_SPEED, 0); // If the given stepper speed is lower than the minimum, the stepper will stop
-    }
-
-    uint32_t delayPerStep = RPM_TO_STEP / getParameter(PARAM_STEPPER_SPEED); // delay to apply between each step
-
-    // Execute step
-    numberSteps--;
-    if (getParameter(PARAM_STEPPER_SPEED) >= MIN_STEPPER_SPEED) {
-      PORTB ^= STEPPER_TAB[1];
-      nilThdSleepMicroseconds(delayPerStep);
-      stopStepper();
-    } else {
-      nilThdSleepMilliseconds(100);
-    }
+void executeStep(boolean forward) {
+  if (forward) {
+    digitalWrite(STEPPER_TAB[0], HIGH);
+  } else {
+    digitalWrite(STEPPER_TAB[0], LOW);
   }
+  for (int i = 0; i < getParameter(PARAM_STEPPER_SECONDS); i++) {
+    if (isStepperStopped()) break;
+    Timer1.setPeriod((50 * 60 / getParameter(PARAM_STEPPER_SPEED)) * 100); // 5000 is 1 rotation per seconds
+    Timer1.start();
+    nilThdSleepMilliseconds(1000);
+  }
+  stopStepper();
 }
 #endif
 
@@ -228,8 +207,12 @@ NIL_THREAD(ThreadStepper, arg) {
   DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;
   DDRF |= (STEPPER_TAB[2] | STEPPER_TAB[3]) ;
 #else
+
+  pinMode(STEPPER_TAB[0], OUTPUT);
+  pinMode(STEPPER_TAB[1], OUTPUT);
+  Timer1.initialize(5000);  // 5000ms  = 40 Hz
+  Timer1.pwm(STEPPER_TAB[1], 512); // second parameter is duty from 0 to 1023
   stopStepper();
-  DDRB |= (STEPPER_TAB[0] | STEPPER_TAB[1]) ;
 #endif
 
 
@@ -237,18 +220,14 @@ NIL_THREAD(ThreadStepper, arg) {
   while (true) {
     //first a check is performed on the motor status
 #ifdef BEFORE_43
-    executeStep((uint16_t)getParameter(PARAM_STEPPER_STEPS), forward, STEPPER_TAB[1], STEPPER_TAB[0]);
+    executeStep(forward, STEPPER_TAB[1], STEPPER_TAB[0]);
 #else
-    executeStep((uint16_t)getParameter(PARAM_STEPPER_STEPS), forward);
+    executeStep(forward);
 #endif
     forward = !forward;
     nilThdSleepMilliseconds(1000);
   }
 }
-
-
-
-
 
 #endif
 

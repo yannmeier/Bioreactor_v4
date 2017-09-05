@@ -198,8 +198,6 @@ void processWeightCommand(char command, char* data, Print * output) {
       printWeightHelp(output);
   }
 }
-
-
 #endif
 
 /********************

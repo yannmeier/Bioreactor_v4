@@ -1,23 +1,23 @@
 #include "BioMain.h"
 /*********
- * SETUP
+   SETUP
  *********/
 void setup() {
-  delay(1000); 
+  delay(1000);
   Serial.begin(9600);
   delay(1000);
-  setupParameters(); 
+  setupParameters();
 
-  #ifdef FLASH_SELECT 
-    pinMode(FLASH_SELECT,OUTPUT);
+#ifdef FLASH_SELECT
+  pinMode(FLASH_SELECT, OUTPUT);
   setupMemory();
   recoverLastEntryN();
-  loadLastEntryToParameters();   //get back the previous config  
-  #endif
+  loadLastEntryToParameters();   //get back the previous config
+#endif
 
-  #ifdef LCD_SELECT              //disable SPI modules 
-    setupLCD();
-  #endif
+#ifdef LCD_SELECT              //disable SPI modules 
+  setupLCD();
+#endif
 
   nilSysBegin();
 }
@@ -26,15 +26,15 @@ void loop() {}
 
 
 //Global Thread Locking
-bool lockTimeCriticalZone=false;
+bool lockTimeCriticalZone = false;
 void protectThread() {
-   while(lockTimeCriticalZone) {
+  while (lockTimeCriticalZone) {
     nilThdSleepMilliseconds(5);
-   }
-   lockTimeCriticalZone=true;
+  }
+  lockTimeCriticalZone = true;
 }
 
 void unprotectThread() {
-	lockTimeCriticalZone=false;
+  lockTimeCriticalZone = false;
 }
 

@@ -8,8 +8,8 @@ void resetParameters() {
 
 #ifdef STEPPER
   active |= 1 << FLAG_STEPPER_CONTROL;
-  setAndSaveParameter(PARAM_STEPPER_SPEED, 10);
-  setAndSaveParameter(PARAM_STEPPER_STEPS, 10000);
+  setAndSaveParameter(PARAM_STEPPER_SPEED, 60);
+  setAndSaveParameter(PARAM_STEPPER_SECONDS, 30);
 #endif
 
 #ifdef     TEMPERATURE_CTRL
