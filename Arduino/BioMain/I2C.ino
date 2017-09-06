@@ -1,4 +1,4 @@
-#if defined(GAS_CTRL) || defined(PH_CTRL) || defined(PH_CTRL_I2C)
+#if defined(I2C)
 
 #include <Wire.h>
 /*
@@ -21,28 +21,7 @@ NIL_THREAD(ThreadWire, arg) {
   byte* wireFlag32=&aByte;
   unsigned int wireEventStatus=0;
   Wire.begin();
-
-#ifdef I2C_LCD
-  LiquidCrystal lcd(I2C_LCD);
-#endif
-
-#ifdef GAS_CTRL
-  const byte gas_wire_write[]={
-    #ifdef TAP_GAS1 
-    0b10010000,
-    #endif
-    #ifdef TAP_GAS2
-    0b10110000,
-    #endif
-    #ifdef TAP_GAS3
-    0b11010000,
-    #endif
-    #ifdef TAP_GAS4
-    0b11110000
-    #endif
-  };
-#endif
-                    
+         
   nilThdSleepMilliseconds(10000); //wait for probe warm-up
 
   while(true) {

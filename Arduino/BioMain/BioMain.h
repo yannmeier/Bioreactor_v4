@@ -9,38 +9,6 @@
 // #define SHOW_MENU_HELP 1 // if we don't show the help we spare a lot of memory
 
 
-/******************
-   DEFINE CARD TYPE
- ******************/
-#define TYPE_MAIN     1   // card to control the basic functions: food, motor, temperature
-//#define TYPE_PH
-//#define TYPE_GAS
-
-/*******************************************
-   DEFINE CARD VERSION (default is nothing)
- ******************************************/
-//#define BEFORE_43  1
-//#define VERSION_43 1
-//#define BEFORE_45 1
-
-
-
-
-
-/******************
-   OPERATION MODE
- ******************/
-//if you choose the calibration mode, you have to select a GENERAL card type first!
-//(not the GAS card, even when you calibrate the anemometer)
-
-
-/********************
-   PIN&ADRESS MAPPING
- *********************/
-//I2C addresses
-//#define I2C_FLUX          106//B01101000 --> to be redefined (AT32u4 slave)
-//#define I2C_PH            104//B01101000 --> to be redefined (AT32u4 slave)
-
 //Pin definition
 #define D4   4  //temp probe
 #define D5   5  //food OUT in v4.4
@@ -56,56 +24,23 @@
 #define D22  22 //weight data
 #define D23  23 //weight clock
 
-/**************************************
-   ACTIVE THREAD DEPENDING CARD TYPE
- **************************************/
-#ifdef TYPE_MAIN
-#ifdef BEFORE_43
-#define STEPPER {D18,D19}
-#elif defined(BEFORE_45)
-//pins 4-5 of port B and 6-7 of port F --> change for _BV (easier to manipulate)
-#define STEPPER {0b00010000,0b00100000,0b01000000,0b10000000}
-#else
-//pinsof port B (corresponds to digital pins 8 and 9). 8 = Direction pin, 9 = Stepper pin
+
 #define STEPPER {8,9}
-#endif
+
 #define FOOD_CTRL          1
-#if defined(VERSION_43) || defined(BEFORE_43)
-#define FOOD_IN            D20
-#define FOOD_OUT           D21
-#else
 #define FOOD_IN            D10
 #define FOOD_OUT           D5
-#endif
 #define WEIGHT_DATA        D22
 #define WEIGHT_CLK         D23     //need to redefine the calibration parameters and process (see "HX711")
-#define TEMPERATURE_CTRL   1
+
 #define TEMP_LIQ         D4
 #define TEMP_PCB         D12
 #define TEMP_PID         D6
 #define THR_MONITORING     1
 #define MONITORING_LED   D13
-//#define THR_LORA         1
-#define  LCD_SELECT       D11    //LCD screen SS_SPI
-#endif
+#define LCD_SELECT       D11    //LCD screen SS_SPI
 
-
-#ifdef TYPE_GAS
-#define GAS_CTRL           1
-#define THR_MONITORING     1  // starts the blinking led and the watch dog counter
-#define MONITORING_LED     13
-#endif
-
-#ifdef MODE_CALIBRATE
-#define GAS_CTRL           1
-//undefine unused threads during calibration --> calibration mode to be removed for a dynamic one
-#undef PH_CTRL
-#undef TAP_ACID
-#undef TAP_BASE
-#undef THR_STEPPER
-#undef TEMPERATURE_CTRL
-#endif
-
+#define TEMPERATURE_CTRL   1
 #define EVENT_LOGGING
 
 /******************************
@@ -121,11 +56,7 @@
 //#define DEBUG_PID          1
 
 #ifdef THR_LINEAR_LOGS
-#if defined(VERSION_43) ||defined(BEFORE_43)
-#define FLASH_SELECT D10 //Flash SS_SPI
-#else
 #define FLASH_SELECT A3 //Flash SS_SPI
-#endif
 #define LOG_INTERVAL 10  //Interval in (s) between logs logger
 #endif
 
@@ -138,7 +69,7 @@
 #ifdef STEPPER
 #define PARAM_STEPPER_SPEED        26   // AA - motor speed, parameter S, IN RPM (v4.5)
 #define PARAM_STEPPER_SECONDS      27   // AB   200 steps per full rotation (see Stepper.ino)
-                                        //      number of seconds before changing direction
+//      number of seconds before changing direction
 #endif
 
 #ifdef TEMPERATURE_CTRL
@@ -162,63 +93,6 @@
 #define PARAM_WEIGHT_OFFSET          34  // AI - Weight calibration: digital offset value when bioreactor is empty
 #endif
 
-/*************************************/
-
-#ifdef    PH_CTRL
-#define PARAM_PH            4    // current pH
-#define PARAM_TARGET_PH     35   // desired pH
-#define PARAM_PH_FACTOR_A   36
-#define PARAM_PH_FACTOR_B   37
-#define PARAM_PH_STATE      5  // 0: Pause 1 : normal acquisition, 2 : purge of pipes,  4: calibration pH=4, 7: calibration pH=7, 10: calibration pH=10
-//#define PARAM_REF_PH4		12
-//#define PARAM_REF_PH7		13  --> TO BE REPLACED BY TEMPORRY VALUES IN THE CODE
-//#define PARAM_REF_PH10	14
-#define PARAM_CONDUCTO      10
-#endif
-
-//*************************************
-
-#ifdef     GAS_CTRL
-//Calibration
-#define PARAM_ANEMO_OFFSET1 43  // anemometer calibration: offset of the digital value (digital value when no gas is flowing)
-#define PARAM_ANEMO_OFFSET2 44
-#define PARAM_ANEMO_OFFSET3 45
-#define PARAM_ANEMO_OFFSET4 46
-#define PARAM_ANEMO_FACTOR1 47  // anemometer calibration factor: conversion between gas flux (of air) and digital unit
-#define PARAM_ANEMO_FACTOR2 48
-#define PARAM_ANEMO_FACTOR3 49
-#define PARAM_ANEMO_FACTOR4 50
-
-// Input/Output
-#define ANEMOMETER_WRITE            I2C_FLUX
-#define ANEMOMETER_READ             I2C_FLUX
-#define  TAP_GAS1                   PWM2
-//#define  TAP_GAS2                   IO2
-//#define  TAP_GAS3                   PWM3
-//#define  TAP_GAS4                   IO3
-
-// Parameters stored in memory
-#ifdef TAP_GAS1
-#define PARAM_FLUX_GAS1            6
-#define PARAM_DESIRED_FLUX_GAS1    39
-#endif
-
-#ifdef  TAP_GAS2
-#define PARAM_FLUX_GAS2            7
-#define PARAM_DESIRED_FLUX_GAS2    40
-#endif
-
-#ifdef  TAP_GAS3
-#define PARAM_FLUX_GAS3            8
-#define PARAM_DESIRED_FLUX_GAS3    41
-#endif
-
-#ifdef  TAP_GAS4
-#define PARAM_FLUX_GAS4            9
-#define PARAM_DESIRED_FLUX_GAS4    42
-#endif
-
-#endif
 
 /******************
    FLAG DEFINITION
