@@ -145,14 +145,19 @@
 | Denomination                  | Qty | Unit Price | Supplier        | Image | Remarks |
 | ----------------------------- | --- | ---------- | --------------- | ----- | ------- |
 | Atmega32U4 44TQFP             | 1   | 3.6        | [aliexpress](https://www.aliexpress.com/item/10pcs-lot-ATMEGA32U4-AU-ATMEGA32U4-TQFP-44-IC-8-bit-Microcontroller-with-16-32K-Bytes-of/32720185776.html?spm=2114.13010608.0.0.Brw1qI) | <img src="images/atmega32u4-au.jpg" width="48"> | |
-| Capacitor 100 nF 0805         | ?   | 0.01       |                      |
-| Capacitor 10 uF 0805          | 1   | 0.01       |                      |
+| Capacitor 100 nF 0805         | 5   | 0.01       |                      |
+| Capacitor 10 uF 0805          | 4   | 0.01       |                      |
 | Capacitor 22 pF 0805          | 2   | 0.02       |                      |
-| Crystal 16MHz 5032            | 1   | 0.25       | |
+| Crystal 16MHz 5032            | 1   | 0.25       |                      |
 | Resistor 1M 0805              | 1   | 0.01       |                      |
-| Resistor 10k 0805             | ?   | 0.01       |                      |
-| FPC 8-pin 1mm AWM 20624       | 1   | 0.16       | [aliexpress](https://www.aliexpress.com/snapshot/7326978877.html?orderId=72887395416335&productId=32468149160)                |
+| Resistor 10k 0805             | 4   | 0.01       |                      |
+| Resistor 22 0805              | 2   | 0.01       |                      |
+| Resistor 1k 0805              | 4   | 0.01       |                      |
+| NCP1117LPST50T3G              | 1   | 0.6        |                      |
+| Schottky 1N581 1206           | 2   | 0.03       | [ebay](http://www.ebay.com/itm/121381924838?_trksid=p2060353.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT)|
+| USB mini PCB connector        | 1   | 0.05       | [ebay](http://www.ebay.com/itm/20-Pcs-Replacement-USB-Mini-5-Pin-Female-SMT-PCB-Mount-Jacks-LW-/171817138823?hash=item2801197a87:g:KUgAAOSwEgVWT4m-) |
+| FPC 8-pin 1mm AWM 20624       | 3   | 0.16       | [aliexpress](https://www.aliexpress.com/snapshot/7326978877.html?orderId=72887395416335&productId=32468149160)                |
 | 12mm Rotary Encoder w switch  | 1   | 0.5        | [aliexpress](https://www.aliexpress.com/snapshot/7321568543.html?spm=2114.13010608.0.0.WuBkow&orderId=72780181866335&productId=32346748762)|
 | LCD 20x4 HD44780 5v           | 1   | 4          | [ebay](http://www.ebay.com/itm/2004-204-20x4-Character-LCD-Display-Module-HD44780-Controller-Blue-Blacklight-/381374605432?hash=item58cbb2a878:g:urwAAOSwj0NUjt4w) |
-| Flat cable 8-pin 1mm 20cm     | 1   | 0.3        | |
+| Flat cable 8-pin 1mm 20cm     | 2   | 0.3        | |
 
