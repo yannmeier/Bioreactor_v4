@@ -31,7 +31,9 @@ NIL_WORKING_AREA(waThreadBusy, 0);
 NIL_THREAD(ThreadBusy, arg) {
   
   while (TRUE) {
-    delayMicroseconds(200);
+    for (byte i=0; i<50; i++) {
+      writeLog(i,i);
+    }
     nilThdSleepMilliseconds(50);
   }
 }

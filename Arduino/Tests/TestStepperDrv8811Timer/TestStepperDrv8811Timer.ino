@@ -13,7 +13,7 @@ void setup(void)
 void loop(void) {
   digitalWrite(direction, HIGH);
 
- Timer1.setPeriod(5f000000); // 5000 is 1 rotation per seconds
+ Timer1.setPeriod(5000); // 5000 is 1 rotation per seconds
  delay(1000000);
   
   byte rpm = 60;
