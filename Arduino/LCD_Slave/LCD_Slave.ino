@@ -82,6 +82,7 @@ boolean isStart = false;          // flag indicating if beginning of the COM
 byte buf [2 * MAX_PARAM + 1];     // buffer for input from motherboard : maxparams + XOR
 volatile byte pos;                // position of incoming byte in SPI buffer
 uint16_t param [MAX_PARAM] = {0}; // Table to stock parameters values, initialized to an array of 0
+byte buffSize = 0;                // Size of incomming buffer
 
 //-------------------------------------------------------------------------------------------------------------------------//
 
@@ -567,20 +568,15 @@ void sendParameter(int parameter, int value) {
 ISR (SPI_STC_vect)
 {
   byte c = SPDR;  // Read entering byte on SPI Data Register
-  byte buffSize = 0;
-  
+    
   //receive Data
   if (pos == 0) {
     isStart = true;  // start sending out bytes when the first byte is received
     buffSize = c;    // first message holds the size incoming msg
-    String txt2 = String(c) + "     " + String(buffSize);
-    Serial.println(txt2);
   } else if (pos <= buffSize) { // '<='  not '<'because we have a XOR at the end
     buf[pos - 1] = c;     //read until message length is reached
     if (pos == buffSize) processIt = true; //message captured
   }
-  String txt = "buffSize: " + String(buffSize) + ", pos: " + String(pos) + ", processIt: " + String(processIt);
-  //Serial.println(txt);
 
   //send Data
   if (isStart && writeToMaster) {  // send bytes if begining of COM AND if there is something
@@ -588,11 +584,11 @@ ISR (SPI_STC_vect)
     if (pos + 1 >= OUT_BUF_SIZE) {
       writeToMaster = false;
       isStart = false;
+      buffSize = 0;
     }
   } else SPDR = 0;
   //increment counter
   pos++;
-  //Serial.println(pos);
 }
 
 
@@ -771,6 +767,7 @@ void loop() {
     bufferParse();
     valuesRefresh();
     pos = 0;
+    buffSize = 0;
     processIt = false;
   }
 
