@@ -57,12 +57,6 @@ NIL_THREADS_TABLE_ENTRY(NULL, ThreadWeight, NULL, waThreadWeight, sizeof(waThrea
   #endif       
 #endif
 
-#ifdef GAS_CTRL
-#ifndef MODE_CALIBRATE
-NIL_THREADS_TABLE_ENTRY(NULL, ThreadTap, NULL, waThreadTap, sizeof(waThreadTap))
-#endif  
-#endif
-
 #ifdef THR_SERIAL
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadSerial, NULL, waThreadSerial, sizeof(waThreadSerial))
 #endif
@@ -71,16 +65,8 @@ NIL_THREADS_TABLE_ENTRY(NULL, ThreadSerial, NULL, waThreadSerial, sizeof(waThrea
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadLCD, NULL, waThreadLCD, sizeof(waThreadLCD))
 #endif
 
-#if defined(GAS_CTRL) || defined(I2C_LCD) || defined(PH_CTRL) || defined(I2C_RELAY_FOOD)
-NIL_THREADS_TABLE_ENTRY(NULL, ThreadWire, NULL, waThreadWire, sizeof(waThreadWire))
-#endif
-
 #ifdef THR_MONITORING
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadMonitoring, NULL, waThreadMonitoring, sizeof(waThreadMonitoring))
-#endif
-
-#ifdef MODE_CALIBRATE
-NIL_THREADS_TABLE_ENTRY(NULL, ThreadCalibration, NULL, waThreadCalibration, sizeof(waThreadCalibration))
 #endif
 
 NIL_THREADS_TABLE_END()
