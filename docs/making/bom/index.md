@@ -122,11 +122,11 @@
 | Resistor 3.3k 0805            | 1   | 0.01       |                      |
 | Resistor 680 0805             | 1   | 0.01       |                      |
 | Resistor 10k 0805             | 9   | 0.01       |                      |
+| Resistor 0.2 1W 2010          | 2   | 0.6        |                      |
 | Capacitor 220 nF 0805         | 3   | 0.01       |                      |
 | Capacitor 100 nF 0805         | 6   | 0.01       |                      |
 | Capacitor 1 nF 0805           | 2   | 0.01       |                      |
-| Polarized capacitor 100 uF 50V| 1   | 0.8        |                      |
-| Power resistance 200 Ohm 1W   | 2   | 0.6        |                      |
+| Polarized capacitor 100 uF 50V PANASONIC_E| 1   | 0.8        |                      |
 | Led Red 0805                  | 4   | 0.01       |                      |
 | Nema 17 Unipolar Stepper 12v  | 1   | 15         | [stepperonline](http://www.omc-stepperonline.com/nema-17-unipolar-stepper-031a-158ncm224ozin-17hs130316s-p-65.html) | <img src="images/stepper.jpg" width="48"> | |
 | Round magnet 20 x 5mm         | 2   | 0.75       | [ebay](http://www.ebay.com/itm/20Pcs-N50-Super-Strong-Disc-Cylinder-Round-Magnets-20x5mm-Rare-Earth-Neodymium-/371778047624?var=&hash=item568fb2ce88:m:mIjauxTTiDkmOyNvGzp6vmw) | <img src="images/magnet.jpg" width="48"> |
