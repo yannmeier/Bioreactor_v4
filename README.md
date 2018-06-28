@@ -24,6 +24,7 @@ There are already a few external extra modules:
 - LCD SPI slave board on ATmega32u4
 - pH & Conductommetry regulation I2C slave, also works as a stand alone (in development phase)
 - gas flux and mix control with analogic valves, also works as a stand alone (in development phase)
+- spectrophotometer immersed in the bioreactor, also works as a stand alone (in development phase)
 
 References:
 -https://www.arduino.cc/en/Main/ArduinoBoardLeonardo
