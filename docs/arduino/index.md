@@ -15,7 +15,7 @@ cd ~/git/bioreactor/
 git clone git@github.com:Bioreactor/Bioreactor_v4.git
 ```
 
-The possiblity to clone the project will require that you have validate your public key
+The possibility to clone the project will require that you have validate your public key
 in github !
 
 ## Installing the Arduino IDE
